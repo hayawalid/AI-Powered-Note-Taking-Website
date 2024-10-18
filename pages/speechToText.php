@@ -75,7 +75,9 @@
             </div>
             <div id="content" contenteditable="true" spellcheck="false"></div>
         </div>
-        <div id="summary-section" class="summary-container"></div>
+        <div id="summary-section" class="summary-container">
+            
+        </div>
         <!-- Questions stickyNote -->
         <div class="notes">
         <div class="summary-note">
@@ -88,14 +90,14 @@
                 </div>
             </div>
 
-            <div class="questions-note">
+            <!-- <div class="questions-note">
                 <div class="box">
                     <div class="boxContent">
                         <h3>Questions based on your content</h3>
                         <p>Question 1. <br> Question 2. <br>Question 3</p>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
