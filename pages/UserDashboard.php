@@ -18,10 +18,10 @@
                 <div class="search-profile">
                     <input type="text" placeholder="Search">
                     <div class="profile-icon">👤</div>
-                    <div class="toggle-sidebar">
+                    <!-- <div class="toggle-sidebar">
                         <i class="fa-solid fa-bars" id="hamburger-icon"></i>
                         <i class="fa-solid fa-xmark" id="close-icon" style="display: none;"></i>
-                    </div>
+                    </div> -->
 
                 </div>
             </header>
@@ -137,8 +137,6 @@
         </main>
     </div>
     <script src="../assets/js/sidebar.js"></script>
-
-
 </body>
 
 </html>
