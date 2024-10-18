@@ -93,30 +93,29 @@ $current_page = 'User Profile';
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label>Address</label>
-                      <input type="text" class="form-control" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" name = "address">
+                    <div class="col-md-6 pr-1">
+                      <div class="form-group">
+                        <label for="country">Country</label>
+                        <select class="form-control" id="country" name="country">
+                            <option value="">Select Country</option>
+                            <option value="United States">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="Australia">Australia</option>
+                            <option value="Germany">Germany</option>
+                            <option value="France">France</option>
+                            <option value="Japan">Japan</option>
+                            <option value="China">China</option>
+                            <option value="India">India</option>
+                            <option value="Egypt">Egypt</option>
+                            <!-- Add more countries as needed -->
+                        </select>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-4 pr-1">
-                    <div class="form-group">
-                      <label>City</label>
-                      <input type="text" class="form-control" placeholder="City" value="Mike"  name = "city">
-                    </div>
-                  </div>
-                  <div class="col-md-4 px-1">
-                    <div class="form-group">
-                      <label>Country</label>
-                      <input type="text" class="form-control" placeholder="Country" value="Andrew"  name = "country">
-                    </div>
-                  </div>
-                  <div class="col-md-4 pl-1">
+                  <div class="col-md-6 pl-1">
                     <div class="form-group">
                       <label>Email</label>
-                      <input type="email" class="form-control" placeholder=""  name = "email">
+                      <input type="email" class="form-control" placeholder="Email"  name = "email">
                     </div>
                     <div class="row">
                       <div class="col-md-6">
@@ -126,6 +125,8 @@ $current_page = 'User Profile';
                         <button type="reset" class="btn btn-primary btn-block">Reset</button>
                       </div>
                     </div>
+                  </div>
+                </div>
               </form>
             </div>
           </div>
