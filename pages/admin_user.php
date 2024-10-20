@@ -1,4 +1,11 @@
 <?php
+//connect to database
+include '../includes/config.php';
+
+//resume user session
+session_start();
+
+//set current page to update sidebar status
 $current_page = 'User Profile';
 ?>
 
@@ -38,6 +45,17 @@ $current_page = 'User Profile';
   <link href="../assets/css/now-ui-dashboard.css" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="../assets/css/demo.css" rel="stylesheet" />
+  <style>
+    .is-invalid-label {
+      color: red;
+    }
+
+    .error-message {
+      color: red !important;
+      font-size: 0.875em !important;
+      margin-top: 5px !important;
+    }
+  </style>
 </head>
 
 <body class="user-profile">
@@ -57,116 +75,86 @@ $current_page = 'User Profile';
               <h5 class="title">Add Admin</h5>
             </div>
             <div class="card-body">
-              <form method = 'POST' onaction = "">
-                <div class="row">
-                  <div class="col-md-5 pr-1">
-                    <div class="form-group">
-                      <label>Company (disabled)</label>
-                      <input type="text" class="form-control" disabled="" placeholder="Company" value="SmartNotes Inc.">
-                    </div>
-                  </div>
-                  <div class="col-md-3 px-1">
-                    <div class="form-group">
-                      <label>Username</label>
-                      <input type="text" class="form-control" placeholder="Username" value="michael23" name = "username">
-                    </div>
-                  </div>
-                  <div class="col-md-4 pl-1">
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">Password</label>
-                      <input type="password" class="form-control" placeholder="Password"  name = "password">
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6 pr-1">
-                    <div class="form-group">
-                      <label>First Name</label>
-                      <input type="text" class="form-control" placeholder="First Name" value="Mike"  name = "firstname">
-                    </div>
-                  </div>
-                  <div class="col-md-6 pl-1">
-                    <div class="form-group">
-                      <label>Last Name</label>
-                      <input type="text" class="form-control" placeholder="Last Name" value="Andrew"  name = "lastname">
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 pr-1">
-                      <div class="form-group">
-                        <label for="country">Country</label>
-                        <select class="form-control" id="country" name="country">
-                            <option value="">Select Country</option>
-                            <option value="United States">United States</option>
-                            <option value="Canada">Canada</option>
-                            <option value="United Kingdom">United Kingdom</option>
-                            <option value="Australia">Australia</option>
-                            <option value="Germany">Germany</option>
-                            <option value="France">France</option>
-                            <option value="Japan">Japan</option>
-                            <option value="China">China</option>
-                            <option value="India">India</option>
-                            <option value="Egypt">Egypt</option>
-                            <!-- Add more countries as needed -->
-                        </select>
+              <form method="POST" action="admin_user.php">
+                  <div class="row">
+                      <div class="col-md-5 pr-1">
+                          <div class="form-group">
+                              <label for="company">Company (disabled)</label>
+                              <input type="text" class="form-control" disabled="" placeholder="Company" value="SmartNotes Inc." name="company">
+                          </div>
                       </div>
-                    </div>
-                  <div class="col-md-6 pl-1">
-                    <div class="form-group">
-                      <label>Email</label>
-                      <input type="email" class="form-control" placeholder="Email"  name = "email">
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary btn-block">Save Admin</button>
+                      <div class="col-md-3 px-1">
+                          <div class="form-group">
+                              <label for="username">Username</label>
+                              <input type="text" class="form-control" placeholder="Username" name="username">
+                              <div class="error-message" id="username-error"></div>
+                          </div>
                       </div>
-                      <div class="col-md-6">
-                        <button type="reset" class="btn btn-primary btn-block">Reset</button>
+                      <div class="col-md-4 pl-1">
+                          <div class="form-group">
+                              <label for="password">Password</label>
+                              <input type="password" class="form-control" placeholder="Password" name="password">
+                              <div class="error-message" id="password-error"></div>
+                          </div>
                       </div>
-                    </div>
                   </div>
-                </div>
+                  <div class="row">
+                      <div class="col-md-6 pr-1">
+                          <div class="form-group">
+                              <label for="firstname">First Name</label>
+                              <input type="text" class="form-control" placeholder="First Name" name="firstname">
+                              <div class="error-message" id="firstname-error"></div>
+                          </div>
+                      </div>
+                      <div class="col-md-6 pl-1">
+                          <div class="form-group">
+                              <label for="lastname">Last Name</label>
+                              <input type="text" class="form-control" placeholder="Last Name" name="lastname">
+                              <div class="error-message" id="lastname-error"></div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6 pr-1">
+                          <div class="form-group">
+                              <label for="country">Country</label>
+                              <select class="form-control" id="country" name="country">
+                                  <option value="">Select Country</option>
+                                  <option value="United States">United States</option>
+                                  <option value="Canada">Canada</option>
+                                  <option value="United Kingdom">United Kingdom</option>
+                                  <option value="Australia">Australia</option>
+                                  <option value="Germany">Germany</option>
+                                  <option value="France">France</option>
+                                  <option value="Japan">Japan</option>
+                                  <option value="China">China</option>
+                                  <option value="India">India</option>
+                                  <option value="Egypt">Egypt</option>
+                                  <!-- Add more countries as needed -->
+                              </select>
+                              <div class="error-message" id="country-error"></div>
+                          </div>
+                      </div>
+                      <div class="col-md-6 pl-1">
+                          <div class="form-group">
+                              <label for="email">Email</label>
+                              <input type="email" class="form-control" placeholder="Email" name="email">
+                              <div class="error-message" id="email-error"></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <button type="submit" class="btn btn-primary btn-block" id="submit_button">Save Admin</button>
+                              </div>
+                              <div class="col-md-6">
+                                  <button type="reset" class="btn btn-primary btn-block">Reset</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </form>
             </div>
           </div>
         </div>
-        <!-- <div class="col-md-4">
-          <div class="card card-user">
-            <div class="image">
-              <img src="./assets/img/bg5.jpg" alt="...">
-            </div>
-            <div class="card-body">
-              <div class="author">
-                <a href="#">
-                  <img class="avatar border-gray" src="./assets/img/mike.jpg" alt="...">
-                  <h5 class="title">Mike Andrew</h5>
-                </a>
-                <p class="description">
-                  michael24
-                </p>
-              </div>
-              <p class="description text-center">
-                "Lamborghini Mercy <br>
-                Your chick she so thirsty <br>
-                I'm in that two seat Lambo"
-              </p>
-            </div>
-            <hr>
-            <div class="button-container">
-              <button href="#" class="btn btn-neutral btn-icon btn-round btn-lg">
-                <i class="fab fa-facebook-f"></i>
-              </button>
-              <button href="#" class="btn btn-neutral btn-icon btn-round btn-lg">
-                <i class="fab fa-twitter"></i>
-              </button>
-              <button href="#" class="btn btn-neutral btn-icon btn-round btn-lg">
-                <i class="fab fa-google-plus-g"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>
   <!--   Core JS Files   -->
@@ -178,8 +166,29 @@ $current_page = 'User Profile';
   <!--  Notifications Plugin    -->
   <script src="../assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+  <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+  <script src="../assets/js/now-ui-dashboard.js" type="text/javascript"></script>
   <script src="../assets/js/demo.js"></script>
+  <script src="../assets/js/admin_form_validation.js"></script>
 </body>
-
 </html>
+
+<?php
+  //graph data from user if form was submitted 
+  if($_SERVER["REQUEST_METHOD"]=="POST"){ //check if form was submitted
+    $Username = htmlspecialchars($_POST["username"]);
+    $Password = htmlspecialchars($_POST["password"]);
+    //Encrypt password for additional security
+    $Hashedpassword = password_hash($Password, PASSWORD_DEFAULT);
+    $Fname = htmlspecialchars($_POST["firstname"]);
+    $Lname = htmlspecialchars($_POST["lastname"]);
+    $Email = htmlspecialchars($_POST["email"]);
+    $Country = htmlspecialchars($_POST["country"]);
+
+    //insert data to database 
+    $sql= "insert into user(username, password, first_name, last_name, email, country, user_type) 
+    values('$Username','$Hashedpassword','$Fname','$Lname','$Email', '$Country', 'admin')";
+
+    $result = mysqli_query($conn, $sql);
+  }
+?>

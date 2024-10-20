@@ -9,8 +9,8 @@
   <meta name="keywords" content="">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="../assets/images/favicon.png" rel="icon">
+  <link href="../assets/images/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -18,14 +18,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
   <!-- Main CSS File -->
-  <link href="assets/css/main.css" rel="stylesheet">
+  <link href="../assets/css/main.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: Bootslander
@@ -41,7 +41,7 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="index.php" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="assets/img/logo.png" alt=""> -->
         <h1 class="sitename">Bootslander</h1>
@@ -84,12 +84,12 @@
 
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
-      <img src="assets/img/hero-bg-2.jpg" alt="" class="hero-bg">
+      <img src="../assets/images/hero-bg-2.jpg" alt="" class="hero-bg">
 
       <div class="container">
         <div class="row gy-4 justify-content-between">
           <div class="col-lg-4 order-lg-last hero-img" data-aos="zoom-out" data-aos-delay="100">
-            <img src="assets/img/hero-imgedited.png" class="img-fluid animated" alt="">
+            <img src="../assets/images/hero-imgedited.png" class="img-fluid animated" alt="">
           </div>
 
           <div class="col-lg-6  d-flex flex-column justify-content-center" data-aos="fade-in">
@@ -332,7 +332,7 @@
 
         <div class="row gy-4 align-items-center features-item">
           <div class="col-md-5 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="100">
-            <img src="assets/img/details-1.png" class="img-fluid" alt="">
+            <img src="../assets/images/details-1.png" class="img-fluid" alt="">
           </div>
           <div class="col-md-7" data-aos="fade-up" data-aos-delay="100">
             <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
@@ -350,7 +350,7 @@
 
         <div class="row gy-4 align-items-center features-item">
           <div class="col-md-5 order-1 order-md-2 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="200">
-            <img src="assets/img/details-2.png" class="img-fluid" alt="">
+            <img src="../assets/images/details-2.png" class="img-fluid" alt="">
           </div>
           <div class="col-md-7 order-2 order-md-1" data-aos="fade-up" data-aos-delay="200">
             <h3>Corporis temporibus maiores provident</h3>
@@ -368,7 +368,7 @@
 
         <div class="row gy-4 align-items-center features-item">
           <div class="col-md-5 d-flex align-items-center" data-aos="zoom-out">
-            <img src="assets/img/details-3.png" class="img-fluid" alt="">
+            <img src="../assets/images/details-3.png" class="img-fluid" alt="">
           </div>
           <div class="col-md-7" data-aos="fade-up">
             <h3>Sunt consequatur ad ut est nulla consectetur reiciendis animi voluptas</h3>
@@ -383,7 +383,7 @@
 
         <div class="row gy-4 align-items-center features-item">
           <div class="col-md-5 order-1 order-md-2 d-flex align-items-center" data-aos="zoom-out">
-            <img src="assets/img/details-4.png" class="img-fluid" alt="">
+            <img src="../assets/images/details-4.png" class="img-fluid" alt="">
           </div>
           <div class="col-md-7 order-2 order-md-1" data-aos="fade-up">
             <h3>Quas et necessitatibus eaque impedit ipsum animi consequatur incidunt in</h3>
@@ -418,64 +418,64 @@
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-1.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-1.jpg" alt="" class="img-fluid">
+              <a href="../assets/images/gallery/gallery-1.jpg" class="glightbox" data-gallery="images-gallery">
+                <img src="../assets/images/gallery/gallery-1.jpg" alt="" class="img-fluid">
               </a>
             </div>
           </div><!-- End Gallery Item -->
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-2.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-2.jpg" alt="" class="img-fluid">
+              <a href="../assets/images/gallery/gallery-2.jpg" class="glightbox" data-gallery="images-gallery">
+                <img src="../assets/images/gallery/gallery-2.jpg" alt="" class="img-fluid">
               </a>
             </div>
           </div><!-- End Gallery Item -->
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-3.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-3.jpg" alt="" class="img-fluid">
+              <a href="../assets/images/gallery/gallery-3.jpg" class="glightbox" data-gallery="images-gallery">
+                <img src="../assets/images/gallery/gallery-3.jpg" alt="" class="img-fluid">
               </a>
             </div>
           </div><!-- End Gallery Item -->
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-4.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-4.jpg" alt="" class="img-fluid">
+              <a href="../assets/images/gallery/gallery-4.jpg" class="glightbox" data-gallery="images-gallery">
+                <img src="../assets/images/gallery/gallery-4.jpg" alt="" class="img-fluid">
               </a>
             </div>
           </div><!-- End Gallery Item -->
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-5.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-5.jpg" alt="" class="img-fluid">
+              <a href="../assets/images/gallery/gallery-5.jpg" class="glightbox" data-gallery="images-gallery">
+                <img src="../assets/images/gallery/gallery-5.jpg" alt="" class="img-fluid">
               </a>
             </div>
           </div><!-- End Gallery Item -->
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-6.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-6.jpg" alt="" class="img-fluid">
+              <a href="../assets/images/gallery/gallery-6.jpg" class="glightbox" data-gallery="images-gallery">
+                <img src="../assets/images/gallery/gallery-6.jpg" alt="" class="img-fluid">
               </a>
             </div>
           </div><!-- End Gallery Item -->
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-7.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-7.jpg" alt="" class="img-fluid">
+              <a href="../assets/images/gallery/gallery-7.jpg" class="glightbox" data-gallery="images-gallery">
+                <img src="../assets/images/gallery/gallery-7.jpg" alt="" class="img-fluid">
               </a>
             </div>
           </div><!-- End Gallery Item -->
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-8.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-8.jpg" alt="" class="img-fluid">
+              <a href="../assets/images/gallery/gallery-8.jpg" class="glightbox" data-gallery="images-gallery">
+                <img src="../assets/images/gallery/gallery-8.jpg" alt="" class="img-fluid">
               </a>
             </div>
           </div><!-- End Gallery Item -->
@@ -489,7 +489,7 @@
     <!-- Testimonials Section -->
     <section id="testimonials" class="testimonials section dark-background">
 
-      <img src="assets/img/testimonials-bg.jpg" class="testimonials-bg" alt="">
+      <img src="../assets/images/testimonials-bg.jpg" class="testimonials-bg" alt="">
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
@@ -513,7 +513,7 @@
 
             <div class="swiper-slide">
               <div class="testimonial-item">
-                <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
+                <img src="../assets/images/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
                 <h3>Saul Goodman</h3>
                 <h4>Ceo &amp; Founder</h4>
                 <div class="stars">
@@ -529,7 +529,7 @@
 
             <div class="swiper-slide">
               <div class="testimonial-item">
-                <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
+                <img src="../assets/images/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
                 <h3>Sara Wilsson</h3>
                 <h4>Designer</h4>
                 <div class="stars">
@@ -545,7 +545,7 @@
 
             <div class="swiper-slide">
               <div class="testimonial-item">
-                <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
+                <img src="../assets/images/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
                 <h3>Jena Karlis</h3>
                 <h4>Store Owner</h4>
                 <div class="stars">
@@ -561,7 +561,7 @@
 
             <div class="swiper-slide">
               <div class="testimonial-item">
-                <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
+                <img src="../assets/images/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
                 <h3>Matt Brandon</h3>
                 <h4>Freelancer</h4>
                 <div class="stars">
@@ -577,7 +577,7 @@
 
             <div class="swiper-slide">
               <div class="testimonial-item">
-                <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
+                <img src="../assets/images/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
                 <h3>John Larson</h3>
                 <h4>Entrepreneur</h4>
                 <div class="stars">
@@ -614,7 +614,7 @@
 
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
             <div class="member">
-              <div class="pic"><img src="assets/img/team/team-1.jpg" class="img-fluid" alt=""></div>
+              <div class="pic"><img src="../assets/images/team/team-1.jpg" class="img-fluid" alt=""></div>
               <div class="member-info">
                 <h4>Walter White</h4>
                 <span>Chief Executive Officer</span>
@@ -630,7 +630,7 @@
 
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
             <div class="member">
-              <div class="pic"><img src="assets/img/team/team-2.jpg" class="img-fluid" alt=""></div>
+              <div class="pic"><img src="../assets/images/team/team-2.jpg" class="img-fluid" alt=""></div>
               <div class="member-info">
                 <h4>Sarah Jhonson</h4>
                 <span>Product Manager</span>
@@ -646,7 +646,7 @@
 
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
             <div class="member">
-              <div class="pic"><img src="assets/img/team/team-3.jpg" class="img-fluid" alt=""></div>
+              <div class="pic"><img src="../assets/images/team/team-3.jpg" class="img-fluid" alt=""></div>
               <div class="member-info">
                 <h4>William Anderson</h4>
                 <span>CTO</span>
@@ -793,7 +793,7 @@
           </div>
 
           <div class="col-lg-5 order-1 order-lg-2">
-            <img src="assets/img/faq.jpg" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="100">
+            <img src="../assets/images/faq.jpg" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="100">
           </div>
         </div>
 
@@ -842,7 +842,7 @@
           </div>
 
           <div class="col-lg-8">
-            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+            <form action="./includes/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
               <div class="row gy-4">
 
                 <div class="col-md-6">
@@ -886,7 +886,7 @@
     <div class="container footer-top">
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
+          <a href="index.php" class="logo d-flex align-items-center">
             <span class="sitename">Bootslander</span>
           </a>
           <div class="footer-contact pt-3">
@@ -928,7 +928,7 @@
         <div class="col-lg-4 col-md-12 footer-newsletter">
           <h4>Our Newsletter</h4>
           <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-          <form action="forms/newsletter.php" method="post" class="php-email-form">
+          <form action="../includes/newsletter.php" method="post" class="php-email-form">
             <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
             <div class="loading">Loading</div>
             <div class="error-message"></div>
@@ -959,15 +959,15 @@
   <div id="preloader"></div>
 
   <!-- Vendor JS Files -->
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
 
   <!-- Main JS File -->
-  <script src="assets/js/main.js"></script>
+  <script src="../assets/js/main.js"></script>
 
 </body>
 

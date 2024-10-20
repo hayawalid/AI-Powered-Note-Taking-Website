@@ -1,4 +1,11 @@
 <?php
+//connect to database
+include '../includes/config.php';
+
+//start user session
+session_start();
+
+//set current page to update sidebar status
 $current_page = 'Dashboard';
 ?>
 
