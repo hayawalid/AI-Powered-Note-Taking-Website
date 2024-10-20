@@ -5,29 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Notes</title>
-    <link rel="stylesheet" href="../assets/css/user_styles.css">
+    <link rel="stylesheet" href="../assets/css/user_style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
     <div class="container">
-    <?php include '../includes/user_sidebar.php'; ?>
+        <?php include '../includes/user_sidebar.php'; ?>
         <main class="main-content">
-            <header class="header">
-                <h1>MY NOTES</h1>
-                <div class="search-profile">
-                    <input type="text" placeholder="Search">
-                    <div class="profile-icon">👤</div>
-                    <!-- <div class="toggle-sidebar">
-                        <i class="fa-solid fa-bars" id="hamburger-icon"></i>
-                        <i class="fa-solid fa-xmark" id="close-icon" style="display: none;"></i>
-                    </div> -->
-
-                </div>
-            </header>
+            
             <section class="bordered-content">
+            <div class="page-header">
+                    <h1>Recents</h1>
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search">
+                        <div class="profile-icon">👤</div>
+                    </div>
+                </div>
                 <section class="recent-folders">
-                    <h2>Recent Folders</h2>
                     <div class="filter-buttons">
                         <button>Today</button>
                         <button>This Week</button>
@@ -52,6 +47,7 @@
                             <span class="date">12/12/2021</span>
                             <i class="fa-solid fa-ellipsis ellipsis"></i>
                         </div>
+                        
                     </div>
                 </section>
 

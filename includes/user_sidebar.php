@@ -14,22 +14,33 @@
     <ul class="menu">
 
         <ul class="menu">
+            <a href="./UserDashboard.php">
+                <li>
+                    <span class="icon"><i class="fa-solid fa-house" style="font-size:20px;"></i></span> Home
+                </li>
+            </a>
+            <a href="./trash.php">
+                <li>
+                    <span class="icon">🗑️</span> Trash
+                </li>
+            </a>
 
-            <li>
-                <span class="icon"><i class="fa-solid fa-house" style="font-size:20px;"></i></span> Home
-            </li>
-            <li>
-                <span class="icon">🗑️</span> Trash
-            </li>
-            <li>
-                <span class="icon">🗂️</span> Folders
-            </li>
-            <li>
-                <span class="icon">🎤</span> Speech to Text
-            </li>
-            <li>
-                <span class="icon"><i class="fa-solid fa-upload" style="font-size:20px;"></i></span> Upload
-            </li>
+            <a href="./Folders.php">
+                <li>
+                    <span class="icon">🗂️</span> Folders
+                </li>
+            </a>
+            <a href="./.php">
+                <li>
+                    <span class="icon">🎤</span> Speech to Text
+                </li>
+            </a>
+            <a href="./uploads.php">
+                <li>
+                    <span class="icon"><i class="fa-solid fa-upload" style="font-size:20px;"></i></span> Upload
+                </li>
+            </a>
+
         </ul>
     </ul>
     <div class="pro-upgrade">
