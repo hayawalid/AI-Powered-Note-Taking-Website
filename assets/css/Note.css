@@ -1,7 +1,7 @@
 .Bootstrap-body {
     /* margin: 50px; */
     line-height: 150%;
-    display: absolute;
+    
 }
 
 
@@ -28,11 +28,20 @@
 
 .summaried-class {
     display: none;
-  }
-  
+}
 
-#container-fluid{
-    margin:10px 2px 2px 280px
+.note-content.centered {
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; */
+    margin: 50px 2px 2px 100px;
+    width: 100vh;
+}
+
+#container-fluid {
+    display:block;
+    margin: 10px 2px 2px 330px
 }
 
 @-webkit-keyframes come-in {

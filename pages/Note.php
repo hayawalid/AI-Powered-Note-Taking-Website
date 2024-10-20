@@ -13,13 +13,13 @@
 </head>
 <body class="Bootstrap-body">
 
-
+<h1 class="text-center">Esm el folder w el note el mafto7a</h1>
 <div id="container-fluid">
   <div class="row come-in">
-    <h1 class="text-center">Esm el folder w el note el mafto7a</h1>
+    
    
     
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 note-content centered">
       <div class="panel panel-info">
         <div class="panel-heading">Artifical intelligence vs machine learning</div>
         <div class="panel-body">
@@ -51,5 +51,6 @@
 
 
 </div>
+
 </body>
 </html>

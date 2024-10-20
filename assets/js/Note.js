@@ -1,59 +1,38 @@
-(function($) {
-
-    /**
-     * Copyright 2012, Digital Fusion
-     * Licensed under the MIT license.
-     * http://teamdf.com/jquery-plugins/license/
-     *
-     * @author Sam Sehnert
-     * @desc A small plugin that checks whether elements are within
-     *     the user visible viewport of a web browser.
-     *     only accounts for vertical position, not horizontal.
-     */
+document.addEventListener("DOMContentLoaded", function() {
+    var elements = document.querySelectorAll(".panel");
+    var win = window;
   
-    $.fn.visible = function(partial) {
-      
-        var $t            = $(this),
-            $w            = $(window),
-            viewTop       = $w.scrollTop(),
-            viewBottom    = viewTop + $w.height(),
-            _top          = $t.offset().top,
-            _bottom       = _top + $t.height(),
-            compareTop    = partial === true ? _bottom : _top,
-            compareBottom = partial === true ? _top : _bottom;
-      
+    function visible(el, partial) {
+      var viewTop = win.scrollY;
+      var viewBottom = viewTop + win.innerHeight;
+      var top = el.getBoundingClientRect().top + win.scrollY;
+      var bottom = top + el.clientHeight;
+      var compareTop = partial ? bottom : top;
+      var compareBottom = partial ? top : bottom;
+  
       return ((compareBottom <= viewBottom) && (compareTop >= viewTop));
+    }
   
-    };
-      
-  })(jQuery);
-  
-  var win = $(window);
-  
-  var allMods = $(".panel");
-  
-  allMods.each(function(i, el) {
-    var el = $(el);
-    if (el.visible(true)) {
-      el.addClass("already-visible"); 
-    } 
-  });
-  
-  win.scroll(function(event) {
-    
-    allMods.each(function(i, el) {
-      var el = $(el);
-      if (el.visible(true)) {
-        el.addClass("come-in"); 
-      } 
+    elements.forEach(function(el) {
+      if (visible(el, true)) {
+        el.classList.add("already-visible");
+      }
     });
-    
-  });
   
-  document.querySelector('.summarize').addEventListener('click', function() {
-    const elements = document.querySelectorAll('.col-lg-4.col-md-6.col-sm-12.col-xs-12');
-    elements.forEach(function(element) {
-      element.style.display = 'block';
+    win.addEventListener("scroll", function() {
+      elements.forEach(function(el) {
+        if (visible(el, true)) {
+          el.classList.add("come-in");
+        }
+      });
+    });
+  
+    document.querySelector('.summarize').addEventListener('click', function() {
+      const summarizedElement = document.querySelector('.summaried-class');
+      const noteContent = document.querySelector('.note-content');
+      
+      summarizedElement.style.display = 'block';
+      noteContent.classList.remove('centered');
     });
   });
   
