@@ -18,15 +18,24 @@
     gap: 20px;
     justify-content: flex-start;
 }
-
 .item {
+    flex: 1 1 300px; /* Flex-grow: 1, Flex-shrink: 1, Flex-basis: 300px */
+    padding: 30px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    max-width: calc(25% - 20px); /* Make sure this is flexible */
+    box-sizing: border-box;
+}
+
+/* .item {
     padding: 20px;
     background-color: #f0f0f0;
     border-radius: 10px;
     flex: 1 1 200px; 
     max-width: 18%;
     box-sizing: border-box;
-}
+    width: 700px;
+} */
 
 .page-header {
     display: flex;
@@ -175,8 +184,7 @@
     }
 
     .content-area {
-        padding: 15px;
-        margin-left: 0;
+        margin-left: 0; /* Avoid fixed margins on small screens */
     }
 
     .item-list,
