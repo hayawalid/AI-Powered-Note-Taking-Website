@@ -1,15 +1,18 @@
+<?php include '../includes/user_sidebar.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../assets/css/user_style.css">
     <link rel="stylesheet" href="../assets/css/SpeechToText.css">
     <script src="../assets/js/Speech-detection.js" defer></script>
+    <script src="../assets/js/sidebar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@latest/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
     <title>Text Editor</title>
 </head>
-<body>
+<body >
     <div class="page-content">
         <div class="page-title">
             <h2>English - Arabic Speech to Text</h2>
@@ -18,13 +21,13 @@
             <div class="toolbar">
                 <div class="head">
                     <input type="text" placeholder="Filename" value="untitled" id="filename">
-                    <select onchange="fileHandle(this.value); this.selectedIndex=0">
+                    <select class="selects" onchange="fileHandle(this.value); this.selectedIndex=0" >
                         <option value="" selected hidden disabled>File</option>
                         <option value="new">New file</option>
                         <option value="txt">Save as txt</option>
                         <option value="pdf">Save as pdf</option>
                     </select>
-                    <select onchange="formatDoc('formatBlock', this.value); this.selectedIndex=0;">
+                    <select class="selects" onchange="formatDoc('formatBlock', this.value); this.selectedIndex=0;">
                         <option value="" selected hidden disabled>Format</option>
                         <option value="h1">Heading 1</option>
                         <option value="h2">Heading 2</option>
@@ -34,7 +37,7 @@
                         <option value="h6">Heading 6</option>
                         <option value="p">Paragraph</option>
                     </select>
-                    <select onchange="formatDoc('fontSize', this.value); this.selectedIndex=0;">
+                    <select class="selects" onchange="formatDoc('fontSize', this.value); this.selectedIndex=0;">
                         <option value="" selected hidden disabled>Font size</option>
                         <option value="1">Extra small</option>
                         <option value="2">Small</option>
@@ -75,32 +78,30 @@
             </div>
             <div id="content" contenteditable="true" spellcheck="false"></div>
         </div>
-        <div id="summary-section" class="summary-container">
-            
-        </div>
+        <div id="summary-section" class="summary-container"></div>
         <!-- Questions stickyNote -->
-        <div class="notes">
+        <!-- <div class="notes">
         <div class="summary-note">
                 <div class="box1">
                     <div class="boxContent">
                         <h3>Summarized notes</h3>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, maiores.</p>
-                        <!-- <button>save</button> -->
+                       
                     </div>
                 </div>
             </div>
 
-            <!-- <div class="questions-note">
+            <div class="questions-note">
                 <div class="box">
                     <div class="boxContent">
                         <h3>Questions based on your content</h3>
                         <p>Question 1. <br> Question 2. <br>Question 3</p>
                     </div>
                 </div>
-            </div> -->
-        </div>
+            </div>
+        </div> -->
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="../assets/js/word-editor.js"></script>
+    <script src="../assets/js/word-editor.js" defer></script>
 </body>
 </html>

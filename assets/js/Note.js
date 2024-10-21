@@ -31,8 +31,12 @@ document.addEventListener("DOMContentLoaded", function() {
       const summarizedElement = document.querySelector('.summaried-class');
       const noteContent = document.querySelector('.note-content');
       
+      const button = this;
+
       summarizedElement.style.display = 'block';
       noteContent.classList.remove('centered');
+      button.innerHTML = 'Regenerate ✨';
+      
     });
   });
   

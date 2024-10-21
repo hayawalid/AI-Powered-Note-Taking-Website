@@ -1,6 +1,6 @@
 .Bootstrap-body {
     /* margin: 50px; */
-    line-height: 150%;
+    line-height: 230%;
     
 }
 
@@ -30,6 +30,9 @@
     display: none;
 }
 
+.note-content{
+    width: 100vh;
+}
 .note-content.centered {
     /* display: flex;
     justify-content: center;
@@ -37,6 +40,44 @@
     height: 100vh; */
     margin: 50px 2px 2px 100px;
     width: 100vh;
+}
+
+.btn-primary.summarize {
+    background-color: #31708f;
+    border-radius: 2px;
+    color: white;
+    padding: 5px 30px;
+    cursor: pointer;
+    margin-left:30vh;
+}
+
+.btn-primary.generate {
+    background-color: #31708f;
+    border-radius: 2px;
+    color: white;
+    padding: 5px 30px;
+    cursor: pointer;
+    margin-left:30vh;
+}
+
+.btn-primary.save {
+    background-color: #8a6d3b;
+    border-radius: 2px;
+    color: white;
+    padding: 5px 30px;
+    cursor: pointer;
+    margin-left:6vh;
+}
+
+
+.panel-body p {
+    font-family: Arial, sans-serif;
+    /* font-size: 1.2rem; */
+}
+
+
+.panel-heading{
+    padding-left:50px;
 }
 
 #container-fluid {

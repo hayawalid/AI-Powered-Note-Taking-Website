@@ -272,7 +272,8 @@ a {
 @import url('https://fonts.cdnfonts.com/css/handwriting');
 * {
     box-sizing: border-box;
-    font-family: 'Handwriting', cursive; /* Set the handwriting font globally */
+    
+   
 }
 
 :root {
@@ -284,13 +285,11 @@ html {
     height: 100%;
 }
 
-body {
-    background: white;
-    height: 100vh;
-}
+
 
 .page-title{
-    margin-top:15vh;
+    margin-top:1vh;
+    padding-bottom:2vh;
 }
 
 .questions-note {
@@ -326,20 +325,7 @@ body {
     filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.2));
 }
 
-.box1 {
-    display: flex;
-    width: 100vw;
-    min-height: 5vh;
-    margin: auto;
-    padding: 0;
-    padding-top: calc(var(--size)/2);
-    --size: 20px;
-    background: radial-gradient(calc(var(--size)/2) at top, transparent 90%, var(--yellow) 100%);
-    background-position: 0 0;
-    background-repeat: repeat-x;
-    background-size: calc(var(--size)*1.5) calc(var(--size)/2);
-    filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.2));
-}
+
 
 .boxContent {
     display: flex;
@@ -347,6 +333,7 @@ body {
     min-height: 100%;
     background: var(--yellow);
     padding: 2.5rem 1rem 1rem;
+    font-family: 'Handwriting', cursive; /* Set the handwriting font globally */
 }
 
 p {
@@ -359,19 +346,23 @@ p {
     background-repeat: repeat-y;
     padding: 0 1rem;
     text-wrap: pretty;
+    font-family: 'Handwriting', cursive; /* Set the handwriting font globally */
 }
 .notes{
     display:flex;
-    padding-top:10vh;
+    padding-top:60vh;
     padding-bottom:10vh;
     /* max-width:950vh; */
 }
 body {
-    background: #F9F8F8;
-    display: flex;
+    /* top:0; */
+    background: #f9f9f9; 
+    display: absolute;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    margin:0 !important;
+   
 }
 
 li {
@@ -389,6 +380,9 @@ a {
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid black;
+    position: absolute;
+   /* Shift the container to the right of the sidebar */
+   
 }
 
 .toolbar {
@@ -398,10 +392,14 @@ a {
 
 .toolbar .head {
     display: flex;
-    grid-gap: 10px;
+    flex-direction: row; /* Ensure items are in a row */
+    flex-wrap: nowrap;   /* Prevent wrapping to the next line */
+    gap: 10px;           /* Space between elements */
     margin-bottom: 16px;
-    flex-wrap: wrap;
+    align-items: center; /* Align items vertically centered */
+    justify-content: space-around; /* Distribute space evenly */
 }
+
 
 .toolbar .head > input {
     max-width: 100px;
@@ -411,13 +409,15 @@ a {
     outline: none;
 }
 
-.toolbar .head select {
+.toolbar .head .selects {
     background: #fff;
     border: 2px solid #ddd;
     border-radius: 6px;
     outline: none;
     cursor: pointer;
+    /* Allow the items to shrink and grow as needed */
 }
+
 
 .toolbar .head .color {
     background: #fff;
@@ -451,6 +451,12 @@ a {
     border-radius: 50%;
 }
 
+.uniform-size {
+    width: 120px; /* Set your desired width */
+    height: 40px; /* Set your desired height */
+}
+
+
 .toolbar .btn-toolbar {
     display: flex;
     flex-wrap: wrap;
@@ -478,9 +484,9 @@ a {
 #content {
     padding: 16px;
     outline: none;
-    max-height: 50vh;
+    max-height: 100vh;
     overflow: auto;
-    height: 35vh;
+    height: 80vh;
 }
 
 #show-code[data-active="true"] {
@@ -489,6 +495,7 @@ a {
 
 .page-content {
     display: block;
+    margin-left:50vh;
 }
 
 .FullPageHeader {

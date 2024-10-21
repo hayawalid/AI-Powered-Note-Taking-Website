@@ -3,6 +3,37 @@ const subscriptionKey = '4f464ad2de1b4cd3ad40a3675ccc82a7';
 const serviceRegion = 'eastus'; // Example: 'eastus'
 let recognizer;
 
+
+
+
+// const openAiEndpoint = "https://textgeniusai.openai.azure.com/";
+// const openAiApiKey = "f29a41d023554ef7a8f44b9db3c8e014";
+
+// async function getSummary(text) {
+//     const response = await fetch(openAiEndpoint, {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//             "Authorization": `Bearer ${openAiApiKey}`
+//         },
+//         body: JSON.stringify({
+//             prompt: `Summarize the following text: ${text}`,
+//             max_tokens: 150,
+//             temperature: 0.5
+//         })
+//     });
+
+//     const data = await response.json();
+//     return data.choices[0].text;
+// }
+
+// document.getElementById('summarize').addEventListener('click', () => {
+//     const content = document.getElementById('content').innerText; // Get the text from your editable content area
+//     getSummary(content).then(summary => {
+//         document.getElementById('summary-section').innerText = summary; // Display the summary
+//     });
+// });
+
 document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('start-recognition').addEventListener('click', function () {
         // Setup the Speech SDK
