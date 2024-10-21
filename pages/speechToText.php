@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="../assets/css/user_style.css">
     <link rel="stylesheet" href="../assets/css/SpeechToText.css">
+    <link rel="stylesheet" href="../assets/css/user_style.css">
     <script src="../assets/js/Speech-detection.js" defer></script>
     <script src="../assets/js/sidebar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@latest/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
