@@ -8,7 +8,6 @@ if (isset($_POST["submit"])) {
     // Assuming "option2" means Folder
     if ($type == "option2") {
         if (folder::create($name)) {
-            // Folder created successfully, redirect to folder contents page
             header("Location: ../pages/folder_contents.php");
             exit();
         } else {
@@ -66,7 +65,7 @@ if (isset($_POST["submit"])) {
         </ul>
     </ul>
     <div class="pro-upgrade">
-        <img src="/images/Medal free icons designed by Freepik.jpg" alt="Upgrade icon">
+        <img src="../assets/images/medal.jpg" alt="Upgrade icon">
         <p>Every day is a new badge waiting for you!</p>
     </div>
 </aside>
