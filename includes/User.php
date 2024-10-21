@@ -55,6 +55,17 @@ class User {
         return $result;
     }
 
+    static function getAllAdmins() {
+        $sql = "SELECT * FROM users WHERE user_type = 1";
+        $admins = mysqli_query($GLOBALS['con'], $sql);
+        $result = [];
+        while($row = mysqli_fetch_array($admins)) {
+            $adminObj = new User($row["id"]);
+            $result[] = $adminObj;
+        }
+        return $result;
+    }
+
     static function deleteUser($objUser) {
         $sql = "DELETE from users WHERE id = ".$objUser->id;
         if(mysqli_query($GLOBALS['con'], $sql)) {

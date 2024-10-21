@@ -7,10 +7,10 @@
   session_start();
 
   //set current page to update sidebar status
-  $current_page = 'User Profile';
+  $current_page = 'Admin Profile';
 
-  //graph data from user if form was submitted 
-  if($_SERVER["REQUEST_METHOD"]=="POST"){ //check if form was submitted
+  //graph data from user if admin form was submitted 
+  if($_SERVER["REQUEST_METHOD"]=="POST"){ 
     echo "<script>console.log('entered php post method');</script>";
     $Username = htmlspecialchars($_POST["username"]);
     $Password = htmlspecialchars($_POST["password"]);
@@ -29,6 +29,9 @@
         echo "<script>console.log('Error adding admin.');</script>";
     }
   }
+
+  //get all admins from database
+  $admins = User::getAllAdmins();
 ?>
 
 <!--
@@ -94,7 +97,7 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
-              <h5 class="title">Add Admin</h5>
+              <h5 class="title">Admin Profile</h5>
             </div>
             <div class="card-body">
               <form method="POST" action="admin_user.php" id = "form">
@@ -178,6 +181,51 @@
           </div>
         </div>
     </div>
+    <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="title">Admin Table</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th>
+                        Full Name
+                      </th>
+                      <th>
+                        Username
+                      </th>
+                      <th>
+                        Email
+                      </th>
+                    </thead>
+                    <tbody>
+                      <?php
+                        foreach ($admins as $admin) {
+                          echo "<tr>";
+                          echo "<td>" . $admin->first_name . " " . $admin->last_name . "</td>";
+                          echo "<td>" . $admin->email . "</td>";
+                          echo "<td>" . $admin->email . "</td>";
+                          echo '<td class="td-actions text-right">
+                                  <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
+                                    <i class="now-ui-icons ui-2_settings-90"></i>
+                                  </button>
+                                  <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
+                                    <i class="now-ui-icons ui-1_simple-remove"></i>
+                                  </button>
+                                </td>';
+                          echo "</tr>";
+                        }
+                      ?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
   </div>
   <!--   Core JS Files   -->
   <script src="../assets/js/core/jquery.min.js"></script>

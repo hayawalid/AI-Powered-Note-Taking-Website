@@ -12,10 +12,10 @@
           <p>Dashboard</p>
         </a>
       </li>
-      <li class="<?php echo ($current_page == 'User Profile') ? 'active' : ''; ?>">
+      <li class="<?php echo ($current_page == 'Admin Profile') ? 'active' : ''; ?>">
         <a href="./admin_user.php">
           <i class="now-ui-icons users_single-02"></i>
-          <p>User Profile</p>
+          <p>Admin Profile</p>
         </a>
       </li>
       <li class="<?php echo ($current_page == 'Users Table List') ? 'active' : ''; ?>">
