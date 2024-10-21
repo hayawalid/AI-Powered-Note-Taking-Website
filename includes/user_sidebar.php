@@ -1,6 +1,28 @@
+<?php
+include '../includes/folder_class.php';
+
+if (isset($_POST["submit"])) {
+    $name = $_POST['name'];
+    $type = $_POST['dropdown'];
+
+    // Assuming "option2" means Folder
+    if ($type == "option2") {
+        if (folder::create($name)) {
+            // Folder created successfully, redirect to folder contents page
+            header("Location: ../pages/folder_contents.php");
+            exit();
+        } else {
+            echo "ERROR!";
+        }
+    } else {
+        echo "Invalid folder type!";
+    }
+}
+?>
+
 <aside class="sidebar" id="sidebar">
     <div class="logo">
-        <h2>MINO</h2>
+        <h2>SmartNotes</h2>
     </div>
     <button class="add-new">
         <div class="add-icon">+</div> New
@@ -45,8 +67,7 @@
     </ul>
     <div class="pro-upgrade">
         <img src="/images/Medal free icons designed by Freepik.jpg" alt="Upgrade icon">
-        <p>Want to access unlimited notes taking experience?</p>
-        <button>Upgrade Pro</button>
+        <p>Every day is a new badge waiting for you!</p>
     </div>
 </aside>
 <main class="main-content">
@@ -72,34 +93,21 @@
                 <h1>Add</h1>
             </div> -->
             <div class="add-item">
-                <!-- <form>
-                        <label for="type">Type:</label>
-                        <select id="type">
-                            <option value="folder">Folder</option>
-                            <option value="file">File</option>
-                        </select>
-
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" placeholder="Enter name" required>
-
-                        <div class="buttons">
-                            <button type="submit" class="save">Save</button>
-                        </div>
-                    </form> -->
-                <form action="#">
+                
+                <form action="" method="post">
                     <h1>What's on Your Mind?💡</h1>
                     <div class="form-row">
-                        <img src="/images/flower.png" alt="Upgrade icon" width="100px">
+                        <img src="../assets/images/flower.png" alt="Upgrade icon" width="100px">
                         <div class="input-data">
-                            <input type="text" required>
-                            <div class="underline"></div>
-                            <label for="">Name</label>
-                            <select id="dropdown" name="dropdown">
-                                <option value="option1">Choose..</option>
-                                <option value="option2">Folder</option>
-                                <option value="option3">File</option>
-                            </select>
-                        </div>
+            <input type="text" id="name" name="name" required>
+            <div class="underline"></div>
+            <label for="">Name</label>
+            <select id="dropdown" name="dropdown">
+                <option value="option1">Choose..</option>
+                <option value="option2">Folder</option>
+                <option value="option3">File</option>
+            </select>
+        </div>
                     </div>
 
                     <div class="form-row">
@@ -110,7 +118,7 @@
                             <div class="form-row submit-btn">
                                 <div class="input-data">
                                     <div class="inner"></div>
-                                    <input type="submit" value="submit">
+                                    <input type="submit" value="submit" name="submit">
                                 </div>
                             </div>
                         </div>

@@ -11,9 +11,8 @@
 </head>
 
 <body>
-    <div class="main-container">
-        <?php include '../includes/user_sidebar.php'; ?>
-        <main class="content-area">
+    <!-- <div class="main-container">
+]        <main class="content-area">
             <section class="content-box">
                 <div class="page-header">
                     <h1>My Folders</h1>
@@ -30,6 +29,11 @@
 
                     </div>
                     <div class="item-list">
+                    <div class="note empty">
+                            <button class="new-note">
+                                <i class="fa-solid fa-plus"></i> New Note
+                            </button>
+                        </div>
                         <div class="item blue">
                             <i class="fa-solid fa-folder fold"></i>
                             <p>Movie Review</p>
@@ -89,42 +93,156 @@
                 </section>
             </section>
         </main>
-    </div>
-
-    <!-- <div class="folderr-container">
-        <div class="folderr blue">
-            <div class="folderr-front">
-                <div class="label">Work</div>
-            </div>
-            <div class="papers"></div>
-        </div>
-        <div class="folderr pink">
-            <div class="folderr-front">
-                <div class="label">Personal</div>
-            </div>
-            <div class="papers"></div>
-        </div>
-        <div class="folderr blue">
-            <div class="folderr-front">
-                <div class="label">Work</div>
-            </div>
-            <div class="papers"></div>
-        </div>
-        <div class="folderr pink">
-            <div class="folderr-front">
-                <div class="label">Personal</div>
-            </div>
-            <div class="papers"></div>
-        </div>
-        <div class="folderr pink">
-            <div class="folderr-front">
-                <div class="label">Personal</div>
-            </div>
-            <div class="papers"></div>
-        </div>
-
     </div> -->
+
+    <div class="container">
+        <?php include '../includes/user_sidebar.php'; ?>
+        <main class="main-content">
+
+            <section class="bordered-content">
+                <div class="page-header">
+                    <h1>My Folders</h1>
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search">
+                        <div class="profile-icon">👤</div>
+                    </div>
+                </div>
+                <section class="recent-folders">
+                    <div class="filter-buttons">
+                        <button>Today</button>
+                        <button>This Week</button>
+                        <button>This Month</button>
+                    </div>
+                    <div class="folders">
+                        <div class="folder empty" style="display: flex; justify-content: center; align-items: center; ">
+                            <button class="new-note" style="margin: auto;">
+                                <i class="fa-solid fa-plus"></i> New Note
+                            </button>
+                        </div>
+
+                        <div class="folder blue">
+                            <i class="fa-solid fa-folder fold"></i>
+                            <p>Movie Review</p>
+                            <span class="date">12/12/2021</span>
+                            <i class="fa-solid fa-ellipsis ellipsis"></i>
+                        </div>
+                        <div class="folder red">
+                            <i class="fa-solid fa-folder fold"></i>
+                            Class Notes
+                            <span class="date">12/12/2021</span>
+                            <i class="fa-solid fa-ellipsis ellipsis"></i>
+                        </div>
+                        <div class="folder yellow">
+                            <i class="fa-solid fa-folder fold"></i>
+                            Book Lists
+                            <span class="date">12/12/2021</span>
+                            <i class="fa-solid fa-ellipsis ellipsis"></i>
+                        </div>
+                        <div class="folder blue" style="width: 200px;">
+                            <i class="fa-solid fa-folder fold"></i>
+                            <p>Movie Review</p>
+                            <span class="date">12/12/2021</span>
+                            <i class="fa-solid fa-ellipsis ellipsis"></i>
+                        </div>
+                        <div class="folder red">
+                            <i class="fa-solid fa-folder fold"></i>
+                            Class Notes
+                            <span class="date">12/12/2021</span>
+                            <i class="fa-solid fa-ellipsis ellipsis"></i>
+                        </div>
+                        <div class="folder yellow">
+                            <i class="fa-solid fa-folder fold"></i>
+                            Book Lists
+                            <span class="date">12/12/2021</span>
+                            <i class="fa-solid fa-ellipsis ellipsis"></i>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- <section class="my-notes">
+                    <h2>My Notes</h2>
+                    <div class="filter-buttons">
+                        <button>Today</button>
+                        <button>This Week</button>
+                        <button>This Month</button>
+                        <button>Sort by</button>
+                    </div>
+                    <div class="notes">
+                        <div class="note empty">
+                            <button class="new-note">
+                                <i class="fa-solid fa-plus"></i> New Note
+                            </button>
+                        </div>
+                        <div class="note blue">
+                            <span>12/12/2021</span>
+                            <h3>Mid test exam <i class="fa-solid fa-pen-to-square"></i></h3>
+                            <hr>
+                            <p>Details about mid test exam content and notes. This content will be truncated if it
+                                exceeds a certain number of words.</p>
+                            <span class="bottom">⏱️ 10:30 PM, Monday</span>
+                        </div>
+                        <div class="note yellow">
+                            <span>12/12/2021</span>
+                            <h3>Mid test exam <i class="fa-solid fa-pen-to-square"></i></h3>
+                            <hr>
+                            <p>Details about mid test exam content and notes. This content will also be truncated if it
+                                exceeds the word limit.Details about mid test exam content and notes. This content will
+                                also be truncated if it exceeds the word limit.</p>
+                            <span class="bottom">⏱️ 10:30 PM, Monday</span>
+                        </div>
+                        <div class="note red">
+                            <span>12/12/2021</span>
+                            <h3>Jonas's Notes <i class="fa-solid fa-pen-to-square"></i></h3>
+                            <hr>
+                            <p>Details about mid test exam content and notes. This content will be truncated if it
+                                exceeds a certain number of wordsDetails about mid test exam content and notes. This
+                                content will also be truncated if it exceeds the word limit.</p>
+                            <span class="bottom">⏱️ 10:30 PM, Monday</span>
+                        </div>
+                        <div class="note blue">
+                            <span>12/12/2021</span>
+                            <h3>Jonas's Notes <i class="fa-solid fa-pen-to-square"></i></h3>
+                            <hr>
+                            <p>Details about mid test exam content and notes. This content will be truncated if it
+                                exceeds a certain number of words.Details about mid test exam content and notes. This
+                                content will also be truncated if it exceeds the word limit.</p>
+                            <span class="bottom">⏱️ 10:30 PM, Monday</span>
+                        </div>
+                        <div class="note yellow">
+                            <span>12/12/2021</span>
+                            <h3>Jonas's Notes <i class="fa-solid fa-pen-to-square"></i></h3>
+                            <hr>
+                            <p>Details about mid test exam content and notes. This content will be truncated if it
+                                exceeds a certain number of words.Details about mid test exam content and notes. This
+                                content will also be truncated if it exceeds the word limit.</p>
+                            <span class="bottom">⏱️ 10:30 PM, Monday</span>
+                        </div>
+                        <div class="note red">
+                            <span>12/12/2021</span>
+                            <h3>Jonas's Notes <i class="fa-solid fa-pen-to-square"></i></h3>
+                            <hr>
+                            <p>Details about mid test exam content and notes. This content will be truncated if it
+                                exceeds a certain number of words.Details about mid test exam content and notes. This
+                                content will also be truncated if it exceeds the word limit.</p>
+                            <span class="bottom">⏱️ 10:30 PM, Monday</span>
+                        </div>
+                        <div class="note blue">
+                            <span>12/12/2021</span>
+                            <h3>Jonas's Notes <i class="fa-solid fa-pen-to-square"></i></h3>
+                            <hr>
+                            <p>Details about mid test exam content and notes. This content will be truncated if it
+                                exceeds a certain number of words.Details about mid test exam content and notes. This
+                                content will also be truncated if it exceeds the word limit.</p>
+                            <span class="bottom">⏱️ 10:30 PM, Monday</span>
+                        </div>
+                    </div>
+                </section> -->
+            </section>
+        </main>
+    </div>
     <script src="../assets/js/sidebar.js"></script>
+
 </body>
 
 

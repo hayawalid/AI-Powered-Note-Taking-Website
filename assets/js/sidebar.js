@@ -24,6 +24,15 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector('.pop-up').classList.add('open');
         document.body.classList.add('body-blur');
     });
+    document.querySelector('.new-note').addEventListener('click', function () {
+        if (sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+            hamburgerIcon.style.display = 'inline';
+            closeIcon.style.display = 'none';
+        }
+        document.querySelector('.pop-up').classList.add('open');
+        document.body.classList.add('body-blur');
+    });
 
     document.querySelector('.pop-up .close').addEventListener('click', function () {
         document.querySelector('.pop-up').classList.remove('open');
@@ -31,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.querySelector('.add-item form').addEventListener('submit', function (event) {
-        event.preventDefault();
+        // event.preventDefault();
         const type = document.getElementById('type').value;
         const name = document.getElementById('name').value;
         const description = document.getElementById('description').value;

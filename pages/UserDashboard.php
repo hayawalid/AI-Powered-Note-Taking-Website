@@ -60,11 +60,7 @@
                         <button>Sort by</button>
                     </div>
                     <div class="notes">
-                        <div class="note empty">
-                            <button class="new-note">
-                                <i class="fa-solid fa-plus"></i> New Note
-                            </button>
-                        </div>
+                        
                         <div class="note blue">
                             <span>12/12/2021</span>
                             <h3>Mid test exam <i class="fa-solid fa-pen-to-square"></i></h3>
