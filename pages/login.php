@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>SmartNotes</title>
 
     <!-- Fonts and CSS Libraries -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,18 +30,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Karla:wght@200;300;400;500&display=swap" rel="stylesheet">
     
     <!-- Custom CSS -->
-    <link href="login.css" rel="stylesheet">
+    <link href="../assets/css/login.css" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6 col-md-7 intro-section">
                 <div class="brand-wrapper">
-                    <h1><a href="https://stackfindover.com/">Logo</a></h1>
+                    <h1><a href="https://stackfindover.com/">SmartNotes</a></h1>
                 </div>
                 <div class="intro-content-wrapper">
-                    <h1 class="intro-title">Welcome to website!</h1>
-                    <p class="intro-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
+                    <h3 class="intro-title">Welcome to SmartNotes!</h3>
+                    <p class="intro-text">
+                    Log in to access powerful tools like speech-to-text, summarization, and question generation, all designed to boost your note-taking and productivity.</p>
                     <a href="#!" class="btn btn-read-more">Read more</a>
                 </div>
             </div>
@@ -109,6 +110,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- jQuery and Bootstrap Bundle JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="login.js"></script>
+    <script src="../assets/js/login.js"></script>
 </body>
 </html>
