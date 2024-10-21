@@ -1,12 +1,34 @@
 <?php
-//connect to database
-include '../includes/config.php';
+  //connect to database
+  include '../includes/config.php';
+  include '../includes/User.php';
 
-//resume user session
-session_start();
+  //resume user session
+  session_start();
 
-//set current page to update sidebar status
-$current_page = 'User Profile';
+  //set current page to update sidebar status
+  $current_page = 'User Profile';
+
+  //graph data from user if form was submitted 
+  if($_SERVER["REQUEST_METHOD"]=="POST"){ //check if form was submitted
+    echo "<script>console.log('entered php post method');</script>";
+    $Username = htmlspecialchars($_POST["username"]);
+    $Password = htmlspecialchars($_POST["password"]);
+    //Encrypt password for additional security
+    $Hashedpassword = password_hash($Password, PASSWORD_DEFAULT);
+    $Fname = htmlspecialchars($_POST["firstname"]);
+    $Lname = htmlspecialchars($_POST["lastname"]);
+    $Email = htmlspecialchars($_POST["email"]);
+    $Country = htmlspecialchars($_POST["country"]);
+
+    $result = User::insertUser($Username, $Fname, $Lname, $Email, $Hashedpassword, $Country, '1');
+
+    if ($result) {
+        echo "<script>console.log('Admin added successfully.');</script>";
+    } else {
+        echo "<script>console.log('Error adding admin.');</script>";
+    }
+  }
 ?>
 
 <!--
@@ -75,25 +97,25 @@ $current_page = 'User Profile';
               <h5 class="title">Add Admin</h5>
             </div>
             <div class="card-body">
-              <form method="POST" action="admin_user.php">
+              <form method="POST" action="admin_user.php" id = "form">
                   <div class="row">
                       <div class="col-md-5 pr-1">
                           <div class="form-group">
                               <label for="company">Company (disabled)</label>
-                              <input type="text" class="form-control" disabled="" placeholder="Company" value="SmartNotes Inc." name="company">
+                              <input type="text" class="form-control" disabled="" placeholder="Company" value="SmartNotes Inc." name="company" id="company">
                           </div>
                       </div>
                       <div class="col-md-3 px-1">
                           <div class="form-group">
                               <label for="username">Username</label>
-                              <input type="text" class="form-control" placeholder="Username" name="username">
+                              <input type="text" class="form-control" placeholder="Username" name="username" id="username">
                               <div class="error-message" id="username-error"></div>
                           </div>
                       </div>
                       <div class="col-md-4 pl-1">
                           <div class="form-group">
                               <label for="password">Password</label>
-                              <input type="password" class="form-control" placeholder="Password" name="password">
+                              <input type="password" class="form-control" placeholder="Password" name="password" id="password">
                               <div class="error-message" id="password-error"></div>
                           </div>
                       </div>
@@ -102,14 +124,14 @@ $current_page = 'User Profile';
                       <div class="col-md-6 pr-1">
                           <div class="form-group">
                               <label for="firstname">First Name</label>
-                              <input type="text" class="form-control" placeholder="First Name" name="firstname">
+                              <input type="text" class="form-control" placeholder="First Name" name="firstname" id="firstname">
                               <div class="error-message" id="firstname-error"></div>
                           </div>
                       </div>
                       <div class="col-md-6 pl-1">
                           <div class="form-group">
                               <label for="lastname">Last Name</label>
-                              <input type="text" class="form-control" placeholder="Last Name" name="lastname">
+                              <input type="text" class="form-control" placeholder="Last Name" name="lastname" id="lastname">
                               <div class="error-message" id="lastname-error"></div>
                           </div>
                       </div>
@@ -118,7 +140,7 @@ $current_page = 'User Profile';
                       <div class="col-md-6 pr-1">
                           <div class="form-group">
                               <label for="country">Country</label>
-                              <select class="form-control" id="country" name="country">
+                              <select class="form-control" id="country" name="country" id="country">
                                   <option value="">Select Country</option>
                                   <option value="United States">United States</option>
                                   <option value="Canada">Canada</option>
@@ -138,7 +160,7 @@ $current_page = 'User Profile';
                       <div class="col-md-6 pl-1">
                           <div class="form-group">
                               <label for="email">Email</label>
-                              <input type="email" class="form-control" placeholder="Email" name="email">
+                              <input type="email" class="form-control" placeholder="Email" name="email" id="email">
                               <div class="error-message" id="email-error"></div>
                           </div>
                           <div class="row">
@@ -172,23 +194,3 @@ $current_page = 'User Profile';
   <script src="../assets/js/admin_form_validation.js"></script>
 </body>
 </html>
-
-<?php
-  //graph data from user if form was submitted 
-  if($_SERVER["REQUEST_METHOD"]=="POST"){ //check if form was submitted
-    $Username = htmlspecialchars($_POST["username"]);
-    $Password = htmlspecialchars($_POST["password"]);
-    //Encrypt password for additional security
-    $Hashedpassword = password_hash($Password, PASSWORD_DEFAULT);
-    $Fname = htmlspecialchars($_POST["firstname"]);
-    $Lname = htmlspecialchars($_POST["lastname"]);
-    $Email = htmlspecialchars($_POST["email"]);
-    $Country = htmlspecialchars($_POST["country"]);
-
-    //insert data to database 
-    $sql= "insert into user(username, password, first_name, last_name, email, country, user_type) 
-    values('$Username','$Hashedpassword','$Fname','$Lname','$Email', '$Country', 'admin')";
-
-    $result = mysqli_query($conn, $sql);
-  }
-?>

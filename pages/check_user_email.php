@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $input = key($_POST);
     $value = $_POST[$input];
 
-    $sql = "SELECT * FROM user WHERE $input = ?";
+    $sql = "SELECT * FROM users WHERE $input = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $value);
     $stmt->execute();
