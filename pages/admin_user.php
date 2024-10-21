@@ -204,7 +204,7 @@
                     <tbody>
                       <?php
                         foreach ($admins as $admin) {
-                          echo "<tr>";
+                          echo "<tr id='admin-row-{$admin->id}'>";
                           echo "<td>" . $admin->first_name . " " . $admin->last_name . "</td>";
                           echo "<td>" . $admin->email . "</td>";
                           echo "<td>" . $admin->email . "</td>";
@@ -212,7 +212,7 @@
                                   <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
                                     <i class="now-ui-icons ui-2_settings-90"></i>
                                   </button>
-                                  <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
+                                  <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove" data-user-id="' . $admin->id . '" onclick="deleteUser(' . $admin->id . ', this)">
                                     <i class="now-ui-icons ui-1_simple-remove"></i>
                                   </button>
                                 </td>';
@@ -240,5 +240,31 @@
   <script src="../assets/js/now-ui-dashboard.js" type="text/javascript"></script>
   <script src="../assets/js/demo.js"></script>
   <script src="../assets/js/admin_form_validation.js"></script>
+  <script>
+    function deleteUser(userId, button) {
+      if (confirm('Are you sure you want to delete this user?')) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'delete_user.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            try {
+              const response = JSON.parse(xhr.responseText);
+              if (response.status === 'success') {
+                document.getElementById('admin-row-' + userId).remove();
+                console.log(response.message);
+              } else {
+                console.error(response.message);
+              }
+            } catch (e) {
+              console.error("Invalid JSON response:", xhr.responseText);
+              alert("An error occurred while processing the response.");
+            }
+          }
+        };
+        xhr.send('delete_user_id=' + userId);
+      }
+    }
+  </script>
 </body>
 </html>
