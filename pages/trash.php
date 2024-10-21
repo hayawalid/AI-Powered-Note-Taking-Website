@@ -17,6 +17,7 @@
     <div class="wrapper"></div>
     <div class="content-page">
         <div class="container-fluid">
+            
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card card-block card-stretch card-height note-table">
@@ -27,7 +28,7 @@
                                         <tr class="ligth">
                                             <th>Title</th>
                                             <!-- <th>Created By</th> -->
-                                            <th>Updated</th>
+                                            <th>deleted</th>
                                             <!-- <th>Shared With</th> -->
                                             <th>Action</th>
                                         </tr>
