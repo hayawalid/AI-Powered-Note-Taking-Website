@@ -19,7 +19,7 @@
                     <h1>Recents</h1>
                     <div class="search-bar">
                         <input type="text" placeholder="Search">
-                        <div class="profile-icon">👤</div>
+                        <div class="profile-icon"><i class="fa-regular fa-user"></i></div>
                     </div>
                 </div>
                 <section class="recent-folders">
@@ -29,24 +29,31 @@
                         <button>This Month</button>
                     </div>
                     <div class="folders">
-                        <div class="folder blue">
-                            <i class="fa-solid fa-folder fold"></i>
-                            <p>Movie Review</p>
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis ellipsis"></i>
-                        </div>
-                        <div class="folder red">
-                            <i class="fa-solid fa-folder fold"></i>
-                            Class Notes
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis ellipsis"></i>
-                        </div>
-                        <div class="folder yellow">
-                            <i class="fa-solid fa-folder fold"></i>
-                            Book Lists
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis ellipsis"></i>
-                        </div>
+                    <?php
+                        $obj = folder::readRecent();
+                        $colors = ['blue', 'yellow', 'red']; 
+                        
+                        if ($obj) {
+                            for ($j = 0; $j < count($obj); $j++) {
+                                $color = $colors[$j % count($colors)]; 
+                                ?>
+                                <div class="folder <?php echo $color; ?>">
+                                    <i class="fa-solid fa-folder fold"></i>
+                                    <?php
+                                    echo "<p>" . $obj[$j]['name'] . "</p>";
+                                    echo "<span>" . $obj[$j]['created_at'] . "</span>";
+                                    ?>
+                                    <i class="fa-solid fa-ellipsis ellipsis"></i>
+                                    <div class="popover">
+                                        <button class="popover-btn">Edit</button>
+                                        <button class="popover-btn">Move</button>
+                                        <button class="popover-btn delete">Delete</button>
+                                    </div>
+                                </div>
+                                <?php
+                            }
+                        }
+                        ?>
                         
                     </div>
                 </section>
@@ -128,7 +135,9 @@
             </section>
         </main>
     </div>
+    
     <script src="../assets/js/sidebar.js"></script>
+    
 </body>
 
 </html>

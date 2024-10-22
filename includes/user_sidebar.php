@@ -1,13 +1,18 @@
 <?php
 include '../includes/folder_class.php';
 
-if (isset($_POST["submit"])) {
+// Create folder function
+if (isset($_POST["submit"]) && isset($_POST['name']) && isset($_POST['dropdown'])) {
     $name = $_POST['name'];
     $type = $_POST['dropdown'];
+    $parent_folder_id = 1;
 
-    // Assuming "option2" means Folder
+    if ($con->connect_error) {
+        die("Connection failed: " . $con->connect_error);
+    }
+
     if ($type == "option2") {
-        if (folder::create($name)) {
+        if (folder::create($name, $parent_folder_id)) {
             header("Location: ../pages/folder_contents.php");
             exit();
         } else {
@@ -17,7 +22,23 @@ if (isset($_POST["submit"])) {
         echo "Invalid folder type!";
     }
 }
+// Delete folder function
+if (isset($_POST['id'])) {
+    echo '1';
+    $id = $_POST['id'];
+    echo '2';
+    $folder = new folder($id);
+    if (folder::delete($folder)) {
+        echo '4';
+        echo "deleted successfully";
+        exit();
+    } else {
+        echo '5';
+        echo "error";
+    }
+}
 ?>
+
 
 <aside class="sidebar" id="sidebar">
     <div class="logo">
@@ -92,21 +113,21 @@ if (isset($_POST["submit"])) {
                 <h1>Add</h1>
             </div> -->
             <div class="add-item">
-                
+
                 <form action="" method="post">
                     <h1>What's on Your Mind?💡</h1>
                     <div class="form-row">
                         <img src="../assets/images/flower.png" alt="Upgrade icon" width="100px">
                         <div class="input-data">
-            <input type="text" id="name" name="name" required>
-            <div class="underline"></div>
-            <label for="">Name</label>
-            <select id="dropdown" name="dropdown">
-                <option value="option1">Choose..</option>
-                <option value="option2">Folder</option>
-                <option value="option3">File</option>
-            </select>
-        </div>
+                            <input type="text" id="name" name="name" required>
+                            <div class="underline"></div>
+                            <label for="">Name</label>
+                            <select id="dropdown" name="dropdown">
+                                <option value="option1">Choose..</option>
+                                <option value="option2">Folder</option>
+                                <option value="option3">File</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="form-row">
@@ -127,3 +148,15 @@ if (isset($_POST["submit"])) {
         </div>
     </div>
 </div>
+<div id="deleteModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <p>Are you sure you want to delete this folder?</p><br><br>
+        <form id="deleteForm" method="post" action="">
+        <input type="hidden" id="folder_id" name="id">
+            <button type="submit" class="btn-confirm">Yes, delete</button>
+            <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+        </form>
+    </div>
+</div>
+
+

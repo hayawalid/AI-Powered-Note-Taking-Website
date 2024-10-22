@@ -8,103 +8,19 @@
     <link rel="stylesheet" href="../assets/css/user_style.css">
     <link rel="stylesheet" href="../assets/css/folders.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 
 <body>
-    <!-- <div class="main-container">
-]        <main class="content-area">
-            <section class="content-box">
-                <div class="page-header">
-                    <h1>My Folders</h1>
-                    <div class="search-bar">
-                        <input type="text" placeholder="Search">
-                        <div class="profile-icon">👤</div>
-                    </div>
-                </div>
-                <section class="recent-items">
-                    <div class="filter-options">
-                        <button>Today</button>
-                        <button>This Week</button>
-                        <button>This Month</button>
-
-                    </div>
-                    <div class="item-list">
-                    <div class="note empty">
-                            <button class="new-note">
-                                <i class="fa-solid fa-plus"></i> New Note
-                            </button>
-                        </div>
-                        <div class="item blue">
-                            <i class="fa-solid fa-folder fold"></i>
-                            <p>Movie Review</p>
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis options-menu"></i>
-                        </div>
-                        <div class="item red">
-                            <i class="fa-solid fa-folder fold"></i>
-                            Class Notes
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis options-menu"></i>
-                        </div>
-                        <div class="item yellow">
-                            <i class="fa-solid fa-folder fold"></i>
-                            Book Lists
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis options-menu"></i>
-                        </div>
-                        <div class="item blue">
-                            <i class="fa-solid fa-folder fold"></i>
-                            <p>Movie Review</p>
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis options-menu"></i>
-                        </div>
-                        <div class="item red">
-                            <i class="fa-solid fa-folder fold"></i>
-                            Class Notes
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis options-menu"></i>
-                        </div>
-                        <div class="item yellow">
-                            <i class="fa-solid fa-folder fold"></i>
-                            Book Lists
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis options-menu"></i>
-                        </div>
-                        <div class="item blue">
-                            <i class="fa-solid fa-folder fold"></i>
-                            <p>Movie Review</p>
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis options-menu"></i>
-                        </div>
-                        <div class="item red">
-                            <i class="fa-solid fa-folder fold"></i>
-                            Class Notes
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis options-menu"></i>
-                        </div>
-                        <div class="item yellow">
-                            <i class="fa-solid fa-folder fold"></i>
-                            Book Lists
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis options-menu"></i>
-                        </div>
-                        
-                    </div>
-                </section>
-            </section>
-        </main>
-    </div> -->
-
     <div class="container">
         <?php include '../includes/user_sidebar.php'; ?>
         <main class="main-content">
-
             <section class="bordered-content">
                 <div class="page-header">
                     <h1>My Folders</h1>
                     <div class="search-bar">
                         <input type="text" placeholder="Search">
-                        <div class="profile-icon">👤</div>
+                        <div class="profile-icon"><i class="fa-regular fa-user"></i></div>
                     </div>
                 </div>
                 <section class="recent-folders">
@@ -119,45 +35,34 @@
                                 <i class="fa-solid fa-plus"></i> New Note
                             </button>
                         </div>
+                        <?php
+                        $obj = folder::read();
+                        $colors = ['blue', 'yellow', 'red'];
 
-                        <div class="folder blue">
-                            <i class="fa-solid fa-folder fold"></i>
-                            <p>Movie Review</p>
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis ellipsis"></i>
-                        </div>
-                        <div class="folder red">
-                            <i class="fa-solid fa-folder fold"></i>
-                            Class Notes
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis ellipsis"></i>
-                        </div>
-                        <div class="folder yellow">
-                            <i class="fa-solid fa-folder fold"></i>
-                            Book Lists
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis ellipsis"></i>
-                        </div>
-                        <div class="folder blue" style="width: 200px;">
-                            <i class="fa-solid fa-folder fold"></i>
-                            <p>Movie Review</p>
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis ellipsis"></i>
-                        </div>
-                        <div class="folder red">
-                            <i class="fa-solid fa-folder fold"></i>
-                            Class Notes
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis ellipsis"></i>
-                        </div>
-                        <div class="folder yellow">
-                            <i class="fa-solid fa-folder fold"></i>
-                            Book Lists
-                            <span class="date">12/12/2021</span>
-                            <i class="fa-solid fa-ellipsis ellipsis"></i>
-                        </div>
+                        if ($obj) {
+                            for ($j = 0; $j < count($obj); $j++) {
+                                $color = $colors[$j % count($colors)];
+                                ?>
+                                <div class="folder <?php echo $color; ?>">
+                                    <i class="fa-solid fa-folder fold"></i>
+                                    <?php
+                                    echo "<p>" . $obj[$j]['name'] . "</p>";
+                                    echo "<span>" . $obj[$j]['created_at'] . "</span>";
+                                    ?>
+                                    <i class="fa-solid fa-ellipsis ellipsis"></i>
+                                    <div class="popover">
+                                        <button class="popover-btn">Edit</button>
+                                        <button class="popover-btn">Move</button>
+                                        <button class="popover-btn delete" data-folder-id="<?php echo $obj[$j]['ID']; ?>">Delete</button>
+                                    </div>
 
+                                </div>
+                                <?php
+                            }
+                        }
+                        ?>
                     </div>
+
                 </section>
 
                 <!-- <section class="my-notes">
@@ -241,8 +146,9 @@
             </section>
         </main>
     </div>
+    
     <script src="../assets/js/sidebar.js"></script>
-
+   
 </body>
 
 

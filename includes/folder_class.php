@@ -1,46 +1,80 @@
 <?php
 $con = new mysqli("localhost", "root", "", "smartnotes_db");
 
+if ($con->connect_error) {
+    die("Connection failed: " . $con->connect_error);
+}
+
 class folder {
     public $ID;
     public $name;
     public $created_at;
+    public $folder_id;
 
-    public function __construct($id, $name, $created_at) {
-        if($id != 0) {
+    public function __construct($id) {
+        if ($id != 0) {
             $sql = "SELECT * FROM folders WHERE ID = $id";
             $folders = mysqli_query($GLOBALS['con'], $sql);
             if ($row = mysqli_fetch_array($folders)) {
                 $this->ID = $id;
-                $this->name = $name;
-                $this->created_at = $created_at;
+                $this->name = $row['name'];
+                $this->created_at = $row['created_at'];
+                $this->folder_id = $row['folder_id'];
             }
         }
-        $this->ID = $id;
-        $this->name = $name;
-        $this->created_at = $created_at;
     }
 
-    static function create($name) {
-        global $con; // Ensure $con is globally accessible
-
-        // Check if folder name already exists
-        $check_sql = "SELECT * FROM folders WHERE name = '$name'";
-        $check_result = mysqli_query($con, $check_sql);
-        if (mysqli_num_rows($check_result) > 0) {
-            echo "Folder name already exists.";
-            return false;
-        }
-
-        // Insert new folder into database
-        $sql = "INSERT INTO folders (name) VALUES ('$name')";
+    static function create($name, $folder_id) {
+        global $con;
+        $sql = "INSERT INTO folders (name, folder_id) VALUES ('$name', $folder_id)";
         if (mysqli_query($con, $sql)) {
-            echo "Folder created successfully.";
             return true;
         } else {
-            echo "Error: " . mysqli_error($con); // Add error feedback
+            echo "Error: " . mysqli_error($con);
+            return false;
+        }
+    }
+
+    static function read() {
+        global $con;
+        $sql = "SELECT ID, name, DATE_FORMAT(created_at, '%Y-%m-%d') as created_at FROM folders";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            $folders = [];
+            while ($row = mysqli_fetch_assoc($result)) {
+                $folders[] = $row;
+            }
+            return $folders;
+        } else {
+            echo "Error: " . mysqli_error($con);
+            return false;
+        }
+    }
+
+    static function readRecent() {
+        global $con;
+        $sql = "SELECT ID, name, DATE_FORMAT(created_at, '%Y-%m-%d') as created_at FROM folders ORDER BY created_at DESC LIMIT 3";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            $folders = [];
+            while ($row = mysqli_fetch_assoc($result)) {
+                $folders[] = $row;
+            }
+            return $folders;
+        } else {
+            echo "Error: " . mysqli_error($con);
+            return false;
+        }
+    }
+
+    static function delete($folder) {
+        global $con;
+        $sql = "DELETE FROM folders WHERE ID=" . $folder->ID;
+        if (mysqli_query($con, $sql)) {
+            return true;
+        } else {
+            echo "Failed: " . mysqli_error($con);
             return false;
         }
     }
 }
-?>
