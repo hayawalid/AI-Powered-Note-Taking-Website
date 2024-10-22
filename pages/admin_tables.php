@@ -1,12 +1,15 @@
 <?php
 //connect to database
 include '../includes/config.php';
+include '../includes/User.php';
 
 //resume user session
 session_start();
 
 //set current page to update sidebar status
 $current_page = 'Users Table List';
+
+$users = User::getAllUsers();
 ?>
 
 <!--
@@ -77,139 +80,20 @@ $current_page = 'Users Table List';
                       </th>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          Dakota Rice
-                        </td>
-                        <td>
-                          Niger
-                        </td>
-                        <td>
-                          Oud-Turnhout
-                        </td>
-                        <td class="td-actions text-right">
-                          <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
-                            <i class="now-ui-icons ui-2_settings-90"></i>
-                          </button>
-                          <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
-                            <i class="now-ui-icons ui-1_simple-remove"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Minerva Hooper
-                        </td>
-                        <td>
-                          Curaçao
-                        </td>
-                        <td>
-                          Sinaai-Waas
-                        </td>
-                        <td class="td-actions text-right">
-                          <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
-                            <i class="now-ui-icons ui-2_settings-90"></i>
-                          </button>
-                          <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
-                            <i class="now-ui-icons ui-1_simple-remove"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Sage Rodriguez
-                        </td>
-                        <td>
-                          Netherlands
-                        </td>
-                        <td>
-                          Baileux
-                        </td>
-                        <td class="td-actions text-right">
-                          <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
-                            <i class="now-ui-icons ui-2_settings-90"></i>
-                          </button>
-                          <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
-                            <i class="now-ui-icons ui-1_simple-remove"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Philip Chaney
-                        </td>
-                        <td>
-                          Korea, South
-                        </td>
-                        <td>
-                          Overland Park
-                        </td>
-                        <td class="td-actions text-right">
-                          <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
-                            <i class="now-ui-icons ui-2_settings-90"></i>
-                          </button>
-                          <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
-                            <i class="now-ui-icons ui-1_simple-remove"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Doris Greene
-                        </td>
-                        <td>
-                          Malawi
-                        </td>
-                        <td>
-                          Feldkirchen in Kärnten
-                        </td>
-                        <td class="td-actions text-right">
-                          <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
-                            <i class="now-ui-icons ui-2_settings-90"></i>
-                          </button>
-                          <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
-                            <i class="now-ui-icons ui-1_simple-remove"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Mason Porter
-                        </td>
-                        <td>
-                          Chile
-                        </td>
-                        <td>
-                          Gloucester
-                        </td>
-                        <td class="td-actions text-right">
-                          <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
-                            <i class="now-ui-icons ui-2_settings-90"></i>
-                          </button>
-                          <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
-                            <i class="now-ui-icons ui-1_simple-remove"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Jon Porter
-                        </td>
-                        <td>
-                          Portugal
-                        </td>
-                        <td>
-                          Gloucester
-                        </td>
-                        <td class="td-actions text-right">
-                          <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
-                            <i class="now-ui-icons ui-2_settings-90"></i>
-                          </button>
-                          <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
-                            <i class="now-ui-icons ui-1_simple-remove"></i>
-                          </button>
-                        </td>
-                      </tr>
+                    <?php
+                        foreach ($users as $user) {
+                          echo "<tr id='admin-row-{$user->id}'>";
+                          echo "<td>" . $user->first_name . " " . $user->last_name . "</td>";
+                          echo "<td>" . $user->username . "</td>";
+                          echo "<td>" . $user->email . "</td>";
+                          echo '<td class="td-actions text-right">
+                                  <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove" data-user-id="' . $user->id . '" onclick="deleteUser(' . $user->id . ', this)">
+                                    <i class="now-ui-icons ui-1_simple-remove"></i>
+                                  </button>
+                                </td>';
+                          echo "</tr>";
+                        }
+                      ?>
                     </tbody>
                   </table>
                 </div>
@@ -232,6 +116,7 @@ $current_page = 'Users Table List';
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
   <script src="../assets/js/demo.js"></script>
+  <script src="../assets/js/delete_user.js"></script>
 </body>
 
 </html>

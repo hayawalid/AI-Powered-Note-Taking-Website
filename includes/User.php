@@ -43,15 +43,13 @@ class User {
         return NULL;
     }
 
-    static function selectAllUsersInDB() {
-        $sql = "SELECT * FROM users";
-        $users = mysqli_query($con, $sql);
-        $i = 0;
-        $result;
-        while($row = mysql_fetch_array(users)) {
+    static function getAllUsers() {
+        $sql = "SELECT * FROM users WHERE user_type = 2";
+        $users = mysqli_query($GLOBALS['con'], $sql);
+        $result = [];
+        while($row = mysqli_fetch_array($users)) {
             $userObj = new User($row["id"]);
-            $result[$i] = $userObj;
-            $i++;
+            $result[] = $userObj;
         }
         return $result;
     }
