@@ -33,12 +33,16 @@ class User {
             }
         }
     }
+    //ghaiart el login function el adima ashan el adim kan bi compare hashed password to plain password 
+    
 
     static function login($email, $password) {
-        $sql = "SELECT * FROM  users WHERE email = '$email' AND password = '$password'";
+        $sql = "SELECT * FROM users WHERE email = '$email'";
         $result = mysqli_query($GLOBALS['con'], $sql);
-        if($row = mysqli_fetch_array($result)) {
-            return new User($row[0]);
+        if ($row = mysqli_fetch_array($result)) {
+            if (password_verify($password, $row['password'])) {
+                return new User($row[0]);
+            }
         }
         return NULL;
     }
@@ -105,6 +109,25 @@ class User {
             user_type = '".$this->userType_obj->id."' 
             WHERE id = $this->id";
         return mysqli_query($GLOBALS['con'], $sql);
+    }
+
+    static function getUserById($id) {
+        $sql = "SELECT * FROM users WHERE id = $id";
+        $result = mysqli_query($GLOBALS['con'], $sql);
+        
+        if ($row = mysqli_fetch_array($result)) {
+            return new User($row["id"]);
+        }
+        return null;
+    }
+
+    static function getUserByEmail($email) {
+        $sql = "SELECT * FROM users WHERE email = '$email'";
+        $result = mysqli_query($GLOBALS['con'], $sql);
+        if ($row = mysqli_fetch_array($result)) {
+            return new User($row["id"]);
+        }
+        return null;
     }
 }
 ?>

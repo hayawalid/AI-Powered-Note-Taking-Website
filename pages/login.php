@@ -1,16 +1,27 @@
 <?php
+// include config and User class files
+include '../includes/config.php';
+include '../includes/User.php';
+
+// resume user session
+session_start();
+
+// handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = htmlspecialchars($_POST["email"]);
+    $password = htmlspecialchars($_POST["password"]);
 
-    // Example user data (replace with database logic)
-    $stored_email = "user@example.com";
-    $stored_password = "password123"; // Replace with hashed password for production
+    // authenticate user
+    $user = User::login($email, $password);
 
-    if ($email === $stored_email && $password === $stored_password) {
-        header("Location: dashboard.php"); // Redirect to a dashboard page
+    if ($user) {
+        $_SESSION['user_id'] = $user->id;
+        echo "<script>alert('Login successful');</script>";
+        // Redirect to the dashboard or desired page after login
+        header("Location: admin_dashboard.php");
+        exit();
     } else {
-        echo "<script>alert('Invalid email or password.'); window.location.href='login.php';</script>";
+        echo "<script>alert('Invalid email or password');</script>";
     }
 }
 ?>
@@ -37,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row">
             <div class="col-sm-6 col-md-7 intro-section">
                 <div class="brand-wrapper">
-                    <h1><a href="https://stackfindover.com/">SmartNotes</a></h1>
+                    <h1 ><a href="https://stackfindover.com/">SmartNotes</a></h1>
                 </div>
                 <div class="intro-content-wrapper">
                     <h3 class="intro-title">Welcome to SmartNotes!</h3>
