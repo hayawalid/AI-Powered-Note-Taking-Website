@@ -1,4 +1,9 @@
-<?php include '../includes/user_sidebar.php'; ?>
+<?php 
+include '../includes/config.php';
+include '../includes/FileContent_class.php';
+include '../includes/user_sidebar.php'; 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,7 +73,8 @@
 					<input type="color" oninput="formatDoc('hiliteColor', this.value); this.value='#000000';">
 				</div>
                 <button id="start-recognition" class="color">Start</button>
-                    <button id="stop-recognition" class="color" disabled>Stop</button>
+                <button id="stop-recognition" class="color" disabled>Stop</button>
+				<button id="save-content" class="color">Save</button>
 			</div>
 			<div class="btn-toolbar">
 				<button onclick="formatDoc('undo')"><i class='bx bx-undo' ></i></button>

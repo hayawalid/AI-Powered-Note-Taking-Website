@@ -48,9 +48,16 @@
     color: white;
     padding: 5px 30px;
     cursor: pointer;
-    margin-left:30vh;
 }
 
+.btn-primary.Edit {
+    background-color: #31708f;
+    border-radius: 2px;
+    color: white;
+    padding: 5px 30px;
+    cursor: pointer;
+    margin-left:18vh;
+}
 .btn-primary.generate {
     background-color: #31708f;
     border-radius: 2px;

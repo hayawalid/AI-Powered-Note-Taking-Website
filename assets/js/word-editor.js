@@ -101,17 +101,17 @@ content.addEventListener('mouseenter', function () {
 const showCode = document.getElementById('show-code');
 let active = false;
 
-showCode.addEventListener('click', function () {
-	showCode.dataset.active = !active;
-	active = !active
-	if(active) {
-		content.textContent = content.innerHTML;
-		content.setAttribute('contenteditable', false);
-	} else {
-		content.innerHTML = content.textContent;
-		content.setAttribute('contenteditable', true);
-	}
-})
+// showCode.addEventListener('click', function () {
+// 	showCode.dataset.active = !active;
+// 	active = !active
+// 	if(active) {
+// 		content.textContent = content.innerHTML;
+// 		content.setAttribute('contenteditable', false);
+// 	} else {
+// 		content.innerHTML = content.textContent;
+// 		content.setAttribute('contenteditable', true);
+// 	}
+// })
 
 
 
@@ -138,3 +138,4 @@ fontSelect.addEventListener('change', function() {
     formatDoc('fontName', this.value);
     this.selectedIndex = 0; // Reset the select box
 });
+
