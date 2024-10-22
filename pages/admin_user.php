@@ -10,23 +10,39 @@
   $current_page = 'Admin Profile';
 
   //graph data from user if admin form was submitted 
-  if($_SERVER["REQUEST_METHOD"]=="POST"){ 
-    echo "<script>console.log('entered php post method');</script>";
+  // Handle form submission for adding or editing an admin
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : null;
     $Username = htmlspecialchars($_POST["username"]);
     $Password = htmlspecialchars($_POST["password"]);
-    //Encrypt password for additional security
+    // Encrypt password for additional security
     $Hashedpassword = password_hash($Password, PASSWORD_DEFAULT);
     $Fname = htmlspecialchars($_POST["firstname"]);
     $Lname = htmlspecialchars($_POST["lastname"]);
     $Email = htmlspecialchars($_POST["email"]);
     $Country = htmlspecialchars($_POST["country"]);
+    $UserType = new UserType(1);
 
-    $result = User::insertUser($Username, $Fname, $Lname, $Email, $Hashedpassword, $Country, '1');
+    if ($user_id) {
+        // Update existing user
+        $user = new User($user_id);
+        $user->first_name = $Fname;
+        $user->last_name = $Lname;
+        $user->username = $Username;
+        $user->email = $Email;
+        $user->password = $Hashedpassword;
+        $user->country = $Country;
+        $user->user_type = $UserType->id;
+        $result = $user->updateUser();
+    } else {
+        // Insert new user
+        $result = User::insertUser($Username, $Fname, $Lname, $Email, $Hashedpassword, $Country, '1');
+    }
 
     if ($result) {
-        echo "<script>console.log('Admin added successfully.');</script>";
+        echo "<script>console.log('Admin saved successfully.');</script>";
     } else {
-        echo "<script>console.log('Error adding admin.');</script>";
+        echo "<script>console.log('Error saving admin.');</script>";
     }
   }
 
@@ -101,6 +117,7 @@
             </div>
             <div class="card-body">
               <form method="POST" action="admin_user.php" id = "form">
+                <input type="hidden" name="user_id" id="user_id">
                   <div class="row">
                       <div class="col-md-5 pr-1">
                           <div class="form-group">
@@ -206,10 +223,10 @@
                         foreach ($admins as $admin) {
                           echo "<tr id='admin-row-{$admin->id}'>";
                           echo "<td>" . $admin->first_name . " " . $admin->last_name . "</td>";
-                          echo "<td>" . $admin->email . "</td>";
+                          echo "<td>" . $admin->username . "</td>";
                           echo "<td>" . $admin->email . "</td>";
                           echo '<td class="td-actions text-right">
-                                  <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
+                                  <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task" onclick="editUser(' . $admin->id . ', \'' . $admin->first_name . '\', \'' . $admin->last_name . '\', \'' . $admin->username . '\', \'' . $admin->email . '\', \'' . $admin->country . '\')">
                                     <i class="now-ui-icons ui-2_settings-90"></i>
                                   </button>
                                   <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove" data-user-id="' . $admin->id . '" onclick="deleteUser(' . $admin->id . ', this)">
@@ -241,6 +258,7 @@
   <script src="../assets/js/demo.js"></script>
   <script src="../assets/js/admin_form_validation.js"></script>
   <script>
+    
     function deleteUser(userId, button) {
       if (confirm('Are you sure you want to delete this user?')) {
         const xhr = new XMLHttpRequest();

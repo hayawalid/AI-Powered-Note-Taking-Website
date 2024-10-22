@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById("form");
+    const userIdInput = document.getElementById("user_id");
     const username = document.querySelector("input[name='username']");
     const password = document.querySelector("input[name='password']");
     const firstname = document.querySelector("input[name='firstname']");
@@ -8,6 +9,9 @@ document.addEventListener("DOMContentLoaded", function() {
     const country = document.querySelector("select[name='country']");
     const submit_btn = document.getElementById("submit_button");
     const reset_btn = document.querySelector("button[type='reset']");
+
+    let originalUsername = '';
+    let originalEmail = '';
 
     const showError = (input, message) => {
         input.style.borderColor = "red";
@@ -55,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (username.value.trim() === "") {
             showError(username, "This field cannot be empty.");
             isValid = false;
-        } else {
+        } else if (username.value !== originalUsername) {
             const usernameValid = await checkUsernameEmailExists(username);
             if (!usernameValid) isValid = false;
         }
@@ -102,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
         } else if (!emailPattern.test(email.value)) {
             showError(email, "Invalid email format.");
             isValid = false;
-        } else {
+        } else if (email.value !== originalEmail) {
             const emailValid = await checkUsernameEmailExists(email);
             if (!emailValid) isValid = false;
         }
@@ -118,7 +122,6 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log(isValid);
         return isValid;
     };
-    
 
     submit_btn.addEventListener("click", async function(event) {
         console.log("Submit button clicked");
@@ -134,7 +137,6 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("Form is invalid, submission prevented.");
         }
     });
-    
 
     // Real-time validation for username and email
     [username, email].forEach(input => {
@@ -163,4 +165,20 @@ document.addEventListener("DOMContentLoaded", function() {
             clearError(input);
         });
     });
+
+    // Edit user function
+    window.editUser = function(id, firstName, lastName, usernameValue, emailValue, countryValue) {
+        userIdInput.value = id;
+        firstname.value = firstName;
+        lastname.value = lastName;
+        username.value = usernameValue;
+        email.value = emailValue;
+        country.value = countryValue;
+        password.value = ''; // Clear the password field for security reasons
+        submit_btn.innerText = 'Update Admin';
+
+        // Store original values
+        originalUsername = usernameValue;
+        originalEmail = emailValue;
+    };
 });

@@ -22,12 +22,13 @@ class User {
             $User = mysqli_query($GLOBALS['con'], $sql);
             if($row = mysqli_fetch_array($User)) {
                 $this->id = $row["id"];
+                $this->username = $row["username"];
                 $this->first_name = $row["first_name"];
                 $this->last_name = $row["last_name"];
                 $this->email = $row["email"];
                 $this->password = $row["password"];
                 $this->country = $row["country"];
-                $this->userType_obj = new UserType($row["id"]);
+                $this->userType_obj = new UserType($row["user_type"]);
                 $this->created_at = $row["created_at"];
             }
         }
@@ -95,13 +96,17 @@ class User {
     }
     
 
-    static function updateUser() {
-        $sql = "UPDATE users set first_name = '".$this->first_name."', last_name = '".$this->last_name."', $email = '".$this->email."', $password = '".$this->password."', $country = '".$this->country."', $user_type = '".$this->userType_obj.id."'";
-        if(mysqli_query($GLOBALS['con'], $sql)) {
-            return true;
-        }
-        else 
-            return false;
+    public function updateUser() {
+        $sql = "UPDATE users SET 
+            username = '$this->username',
+            first_name = '$this->first_name', 
+            last_name = '$this->last_name', 
+            email = '$this->email', 
+            password = '$this->password', 
+            country = '$this->country', 
+            user_type = '".$this->userType_obj->id."' 
+            WHERE id = $this->id";
+        return mysqli_query($GLOBALS['con'], $sql);
     }
 }
 ?>
