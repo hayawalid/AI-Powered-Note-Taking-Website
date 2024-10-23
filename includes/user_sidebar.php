@@ -1,11 +1,12 @@
 <?php
+
 include '../includes/folder_class.php';
 
 // Create folder function
-if (isset($_POST["submit"]) && isset($_POST['name']) && isset($_POST['dropdown'])) {
+if (isset($_POST["submit"])) {
     $name = $_POST['name'];
     $type = $_POST['dropdown'];
-    $parent_folder_id = 1;
+    $parent_folder_id = 1; 
 
     if ($con->connect_error) {
         die("Connection failed: " . $con->connect_error);
@@ -22,22 +23,25 @@ if (isset($_POST["submit"]) && isset($_POST['name']) && isset($_POST['dropdown']
         echo "Invalid folder type!";
     }
 }
-// Delete folder function
 if (isset($_POST['id'])) {
-    echo '1';
     $id = $_POST['id'];
-    echo '2';
-    $folder = new folder($id);
-    if (folder::delete($folder)) {
-        echo '4';
-        echo "deleted successfully";
-        exit();
+    echo "Received Folder ID: " . $id . "<br>";
+    if ($id) {
+        $folder = new folder($id);
+        echo "Folder ID: " . $folder->ID . "<br>"; // Debugging statement
+        if (folder::delete($folder)) {
+            header("Location: ../pages/Folders.php");
+            exit();
+        } else {
+            echo "Error deleting folder.";
+        }
     } else {
-        echo '5';
-        echo "error";
+        echo "No folder ID provided.";
     }
 }
-?>
+
+
+?> 
 
 
 <aside class="sidebar" id="sidebar">
@@ -148,15 +152,17 @@ if (isset($_POST['id'])) {
         </div>
     </div>
 </div>
+
 <div id="deleteModal" class="modal" style="display:none;">
     <div class="modal-content">
         <p>Are you sure you want to delete this folder?</p><br><br>
         <form id="deleteForm" method="post" action="">
-        <input type="hidden" id="folder_id" name="id">
+            <input type="hidden" id="folder_id" name="id">
             <button type="submit" class="btn-confirm">Yes, delete</button>
             <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
         </form>
     </div>
 </div>
+
 
 

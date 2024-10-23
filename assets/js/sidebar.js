@@ -95,3 +95,10 @@ window.addEventListener('click', function(event) {
         closeModal();
     }
 });
+document.getElementById('deleteForm').addEventListener('submit', function() {
+    const folderId = document.getElementById('folder_id').value;
+    console.log("Folder ID being submitted: ", folderId);
+});
+
+
+

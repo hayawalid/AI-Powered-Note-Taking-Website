@@ -12,25 +12,33 @@ class folder {
     public $folder_id;
 
     public function __construct($id) {
+        global $con;
+        $this->ID = $id; // Always set the ID
+    
         if ($id != 0) {
             $sql = "SELECT * FROM folders WHERE ID = $id";
-            $folders = mysqli_query($GLOBALS['con'], $sql);
+            $folders = mysqli_query($con, $sql);
             if ($row = mysqli_fetch_array($folders)) {
-                $this->ID = $id;
                 $this->name = $row['name'];
                 $this->created_at = $row['created_at'];
                 $this->folder_id = $row['folder_id'];
+            } else {
+                echo "Error: Folder not found.<br>";
             }
         }
     }
+    
 
-    static function create($name, $folder_id) {
+    static function create($name, $folder_id = null) {
         global $con;
+        $folder_id = isset($folder_id) ? $folder_id : 'NULL';
         $sql = "INSERT INTO folders (name, folder_id) VALUES ('$name', $folder_id)";
+        echo "SQL: $sql<br>"; // Debugging statement
         if (mysqli_query($con, $sql)) {
+            echo "Folder created successfully.<br>";
             return true;
         } else {
-            echo "Error: " . mysqli_error($con);
+            echo "Error: " . mysqli_error($con) . "<br>";
             return false;
         }
     }
@@ -69,12 +77,20 @@ class folder {
 
     static function delete($folder) {
         global $con;
-        $sql = "DELETE FROM folders WHERE ID=" . $folder->ID;
-        if (mysqli_query($con, $sql)) {
-            return true;
+        if (isset($folder->ID)) {
+            $sql = "DELETE FROM folders WHERE ID={$folder->ID}";
+            echo "SQL: $sql<br>"; // Debugging statement
+            if (mysqli_query($con, $sql)) {
+                echo "Folder deleted successfully.<br>";
+                return true;
+            } else {
+                echo "Failed: " . mysqli_error($con) . "<br>";
+                return false;
+            }
         } else {
-            echo "Failed: " . mysqli_error($con);
+            echo "Invalid folder ID.<br>";
             return false;
         }
     }
+    
 }

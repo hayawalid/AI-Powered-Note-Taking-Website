@@ -29,12 +29,14 @@
                         <button>This Week</button>
                         <button>This Month</button>
                     </div>
+
                     <div class="folders">
                         <div class="folder empty" style="display: flex; justify-content: center; align-items: center; ">
                             <button class="new-note" style="margin: auto;">
                                 <i class="fa-solid fa-plus"></i> New Note
                             </button>
                         </div>
+                        
                         <?php
                         $obj = folder::read();
                         $colors = ['blue', 'yellow', 'red'];
@@ -53,7 +55,9 @@
                                     <div class="popover">
                                         <button class="popover-btn">Edit</button>
                                         <button class="popover-btn">Move</button>
-                                        <button class="popover-btn delete" data-folder-id="<?php echo $obj[$j]['ID']; ?>">Delete</button>
+
+                                        <button class="popover-btn delete"
+                                            data-folder-id="<?php echo $obj[$j]['ID']; ?>">Delete</button>
                                     </div>
 
                                 </div>
@@ -148,7 +152,7 @@
     </div>
     
     <script src="../assets/js/sidebar.js"></script>
-   
+
 </body>
 
 
