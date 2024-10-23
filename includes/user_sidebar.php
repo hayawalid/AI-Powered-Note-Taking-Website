@@ -23,6 +23,7 @@ if (isset($_POST["submit"])) {
         echo "Invalid folder type!";
     }
 }
+//delete function
 if (isset($_POST['id'])) {
     $id = $_POST['id'];
     echo "Received Folder ID: " . $id . "<br>";
@@ -39,6 +40,7 @@ if (isset($_POST['id'])) {
         echo "No folder ID provided.";
     }
 }
+
 
 
 ?> 

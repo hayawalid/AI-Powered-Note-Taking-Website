@@ -36,7 +36,7 @@
                                 <i class="fa-solid fa-plus"></i> New Note
                             </button>
                         </div>
-                        
+
                         <?php
                         $obj = folder::read();
                         $colors = ['blue', 'yellow', 'red'];
@@ -52,16 +52,19 @@
                                     echo "<span>" . $obj[$j]['created_at'] . "</span>";
                                     ?>
                                     <i class="fa-solid fa-ellipsis ellipsis"></i>
+                                    
                                     <div class="popover">
-                                        <button class="popover-btn">Edit</button>
-                                        <button class="popover-btn">Move</button>
 
+                                        <button class="popover-btn rename"
+                                            data-folder-id="<?php echo $obj[$j]['ID']; ?>">Rename</button> <button
+                                            class="popover-btn">Move</button>
                                         <button class="popover-btn delete"
                                             data-folder-id="<?php echo $obj[$j]['ID']; ?>">Delete</button>
                                     </div>
 
                                 </div>
                                 <?php
+                                
                             }
                         }
                         ?>
@@ -150,7 +153,7 @@
             </section>
         </main>
     </div>
-    
+
     <script src="../assets/js/sidebar.js"></script>
 
 </body>

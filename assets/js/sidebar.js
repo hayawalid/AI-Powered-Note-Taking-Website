@@ -99,6 +99,46 @@ document.getElementById('deleteForm').addEventListener('submit', function() {
     const folderId = document.getElementById('folder_id').value;
     console.log("Folder ID being submitted: ", folderId);
 });
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.popover-btn.rename').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const folderElement = button.closest('.folder');
+            const folderNameElement = folderElement.querySelector('p');
+            const currentName = folderNameElement.textContent;
 
+            // Replace folder name with an input field
+            const inputField = document.createElement('input');
+            inputField.type = 'text';
+            inputField.value = currentName;
+            inputField.classList.add('rename-input');
+            folderNameElement.replaceWith(inputField);
 
+            // Focus on the input field
+            inputField.focus();
 
+            // Handle blur event to save changes
+            inputField.addEventListener('blur', function() {
+                const newName = inputField.value;
+
+                // Send AJAX request to update the folder name
+                const folderId = button.getAttribute('data-folder-id');
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '../includes/update_folder.php', true); // Correct path here
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200 && xhr.responseText.trim() === 'success') {
+                            const newFolderNameElement = document.createElement('p');
+                            newFolderNameElement.textContent = newName;
+                            inputField.replaceWith(newFolderNameElement);
+                        } else {
+                            alert(`Error: ${xhr.responseText}`);
+                        }
+                    }
+                };
+                xhr.send(`id=${folderId}&name=${newName}`);
+            });
+        });
+    });
+});

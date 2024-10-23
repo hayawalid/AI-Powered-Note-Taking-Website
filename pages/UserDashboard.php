@@ -13,9 +13,9 @@
     <div class="container">
         <?php include '../includes/user_sidebar.php'; ?>
         <main class="main-content">
-            
+
             <section class="bordered-content">
-            <div class="page-header">
+                <div class="page-header">
                     <h1>Recents</h1>
                     <div class="search-bar">
                         <input type="text" placeholder="Search">
@@ -29,13 +29,13 @@
                         <button>This Month</button>
                     </div>
                     <div class="folders">
-                    <?php
+                        <?php
                         $obj = folder::readRecent();
-                        $colors = ['blue', 'yellow', 'red']; 
-                        
+                        $colors = ['blue', 'yellow', 'red'];
+
                         if ($obj) {
                             for ($j = 0; $j < count($obj); $j++) {
-                                $color = $colors[$j % count($colors)]; 
+                                $color = $colors[$j % count($colors)];
                                 ?>
                                 <div class="folder <?php echo $color; ?>">
                                     <i class="fa-solid fa-folder fold"></i>
@@ -47,14 +47,15 @@
                                     <div class="popover">
                                         <button class="popover-btn">Edit</button>
                                         <button class="popover-btn">Move</button>
-                                        <button class="popover-btn delete">Delete</button>
+                                        <button class="popover-btn delete"
+                                            data-folder-id="<?php echo $obj[$j]['ID']; ?>">Delete</button>
                                     </div>
                                 </div>
                                 <?php
                             }
                         }
                         ?>
-                        
+
                     </div>
                 </section>
 
@@ -67,7 +68,7 @@
                         <button>Sort by</button>
                     </div>
                     <div class="notes">
-                        
+
                         <div class="note blue">
                             <span>12/12/2021</span>
                             <h3>Mid test exam <i class="fa-solid fa-pen-to-square"></i></h3>
@@ -135,9 +136,9 @@
             </section>
         </main>
     </div>
-    
+
     <script src="../assets/js/sidebar.js"></script>
-    
+
 </body>
 
 </html>

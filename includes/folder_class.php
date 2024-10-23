@@ -28,12 +28,13 @@ class folder {
         }
     }
     
+    
 
     static function create($name, $folder_id = null) {
         global $con;
         $folder_id = isset($folder_id) ? $folder_id : 'NULL';
         $sql = "INSERT INTO folders (name, folder_id) VALUES ('$name', $folder_id)";
-        echo "SQL: $sql<br>"; // Debugging statement
+        echo "SQL: $sql<br>";
         if (mysqli_query($con, $sql)) {
             echo "Folder created successfully.<br>";
             return true;
@@ -93,4 +94,22 @@ class folder {
         }
     }
     
+    public static function update($id, $newName) {
+        global $con; // Assuming $con is the connection object
+        $stmt = $con->prepare("UPDATE folders SET name = ? WHERE ID = ?");
+        $stmt->bind_param("si", $newName, $id);
+    
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            // Print detailed error
+            echo "Error: " . $stmt->error;
+            return false;
+        }
+    }
+    
+    
+    
+    
 }
+?>
