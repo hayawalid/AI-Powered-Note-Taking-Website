@@ -27,63 +27,22 @@
     </style> -->
 </head>
 <body>
-<div class="container">
-<aside class="sidebar" id="sidebar">
-            <div class="logo">
-                <h2> MINO</h2>
-            </div>
-            <button class="add-new">
-                <div class="add-icon">+</div> New
-                <div class="color-options">
-                    <span class="dot yellow"></span>
-                    <span class="dot green"></span>
-                    <span class="dot red"></span>
-                </div>
-            </button>
-
-            <ul class="menu">
-
-                <li>
-                    <span class="icon">📦</span> Archive
-                </li>
-                <li>
-                    <span class="icon">🗑️</span> Trash
-                </li>
-                <li>
-                    <span class="icon">🗂️</span> Folders
-                </li>
-                <li>
-                    <span class="icon">🎤</span> Speech to Text
-                </li>
-                <li>
-                    <span class="icon"><i class="fa-solid fa-upload" style="font-size:20px;"></i></span> Upload
-                </li>
-            </ul>
-            <div class="pro-upgrade">
-                <!-- <img src="/images/Medal free icons designed by Freepik.jpg" alt="Upgrade icon"> -->
-                <p>Want to access unlimited notes taking experience?</p>
-                <button>Upgrade Pro</button>
-            </div>
-        </aside>
-    <div class = "main-content">
-      <header class="header">
-          <div class="search-profile">
-              <div class="toggle-sidebar"><i class="fa-solid fa-bars"></i></div>
-          </div>
-      </header>
+<?php include '../includes/user_sidebar.php'; ?>
+<div class="main-container">
+    <div class = "main--content">
       <div class="main-body">
             <div class="row gutters-sm">
               <div class="col-md-4 mb-3">
                 <div class="card blue-card">
                   <div class="card-body">
                     <div class="d-flex flex-column align-items-center text-center">
-                      <img src="avatar3.jpg" alt="Admin" class="rounded-circle" width="150">
+                      <img src="../assets/images/avatar3.jpg" alt="Admin" class="rounded-circle" width="150">
                       <div class="mt-3">
                         <h4 style= "font-weight: 600;">John Doe</h4>
                         <p class="text-secondary mb-1">Full Stack Developer</p>
                         <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
-                        <button class="btn btn-primary button">Log out</button>
-                        <button class="btn btn-outline-primary button">Deactivate Account</button>
+                        <button class="btn btn-primary">Log out</button>
+                        <button class="btn btn-outline-primary">Deactivate Account</button>
                       </div>
                     </div>
                   </div>
@@ -184,7 +143,7 @@
                             <hr>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <button type="submit" class="btn btn-primary button">Save Changes</button>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
                                 </div>
                             </div>
                         </form>

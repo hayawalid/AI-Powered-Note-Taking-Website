@@ -1,9 +1,32 @@
+body {
+    background-color: white;
+}
+
+.main-container{
+    margin-left: 150px;
+}
+
+.main--content{
+    display: flex; 
+    flex-wrap: wrap;
+    padding: 20px;
+    margin-top: -40px;
+    background-color: white;
+    align-content: center;
+    justify-content: center;
+}
+
 .main-body {
-    padding: 30px;
+    border: 1px solid #f9f8f8;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    margin-left: 100px;
+    height: auto;
     align-content: center;
     justify-content: center;
     background-color: #f9f8f8;
-    width: calc(100vw - 202px);
+    width: calc(100vw - 250px);
 }
 
 .card {
@@ -28,12 +51,14 @@
     background-color: #D4E7FE !important;
 }
 
+/* FDE2E1 */
 .pink-card {
-    background-color: #FDE2E1 !important;
+    background-color: #f4a9a7 !important;
 }
 
+/* FEFND4 */
 .yellow-card {
-    background-color: #FEF9D4 !important;
+    background-color: #efe594 !important;
 }
 
 .green-card {
