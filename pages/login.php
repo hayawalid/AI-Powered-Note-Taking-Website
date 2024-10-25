@@ -2,14 +2,20 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ?>
-
 <?php
+
+
 // Include config and User class files
 include '../includes/config.php';
 include '../includes/User.php';
 
 // Resume user session
 session_start();
+
+// Ensure database connection
+if ($GLOBALS['con']->connect_error) {
+    die("Connection failed: " . $GLOBALS['con']->connect_error);
+}
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -34,9 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = htmlspecialchars(trim($_POST["username"]));
         $first_name = htmlspecialchars(trim($_POST["first_name"]));
         $last_name = htmlspecialchars(trim($_POST["last_name"]));
-        $email = htmlspecialchars(trim($_POST["signup_email"])); // Match the input name
-        $password = htmlspecialchars(trim($_POST["signup_password"])); // Match the input name
-        $confirm_password = htmlspecialchars(trim($_POST["confirm_password"])); // Match the input name
+        $email = htmlspecialchars(trim($_POST["signup_email"]));
+        $password = htmlspecialchars(trim($_POST["signup_password"]));
+        $confirm_password = htmlspecialchars(trim($_POST["confirm_password"]));
         $country = htmlspecialchars(trim($_POST["country"]));
         $usertype_id = 2; // Regular user ID
 
@@ -47,7 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<script>alert('Please fill in all fields.');</script>";
         } else {
             // Insert new user into the database
-            $isInserted = User::insertUser($username, $first_name, $last_name, $email, $password, $country, $usertype_id);
+            $Hashedpassword = password_hash($password, PASSWORD_DEFAULT);
+            $isInserted = User::insertUser($username, $first_name, $last_name, $email, $Hashedpassword, $country, $usertype_id);
 
             if ($isInserted) {
                 echo "<script>alert('Signup successful! Please log in.');</script>";
