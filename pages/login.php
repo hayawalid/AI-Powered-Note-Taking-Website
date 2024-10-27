@@ -22,8 +22,8 @@ if ($GLOBALS['con']->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['login'])) {
         // Handle login
-        $email = htmlspecialchars(trim($_POST["email"]));
-        $password = htmlspecialchars(trim($_POST["password"]));
+        $email = htmlspecialchars(trim($_POST["email1"]));
+        $password = htmlspecialchars(trim($_POST["password1"]));
 
         // Authenticate user
         $user = User::login($email, $password);
@@ -34,7 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: admin_dashboard.php");
             exit();
         } else {
-            $error = "Invalid email or password";         }
+            $error = "Invalid email or password";         
+        }
     } elseif (isset($_POST['signup'])) {
         // Handle signup
         $username = htmlspecialchars(trim($_POST["username"]));
@@ -104,14 +105,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2 class="login-title">Sign in</h2>
         <form action="login.php" method="POST" id="login-form">
             <div class="form-group">
-                <label for="email" class="sr-only">Email</label>
-                <input type="email" name="email" id="email" class="form-control" placeholder="Email">
-                <span id="email-error" class="text-danger"></span> <!-- Error message for email -->
+                <label for="email1" class="sr-only">Email</label>
+                <input type="email" name="email1" id="email1" class="form-control" placeholder="Email">
+                <span id="email-error1" class="text-danger"></span> <!-- Error message for email -->
             </div>
             <div class="form-group mb-3">
-                <label for="password" class="sr-only">Password</label>
-                <input type="password" name="password" id="password" class="form-control" placeholder="Password">
-                <span id="password-error" class="text-danger"></span> <!-- Error message for password -->
+                <label for="password1" class="sr-only">Password</label>
+                <input type="password" name="password1" id="password1" class="form-control" placeholder="Password">
+                <span id="password-error1" class="text-danger"></span> <!-- Error message for password -->
             </div>
             <?php if (!empty($error)): ?>
                 <p class="text-danger"><?php echo $error; ?></p> <!-- Server-side error message -->
@@ -132,7 +133,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <label for="username" class="sr-only">Username</label>
                             <input type="text" name="username" id="username" class="form-control" placeholder="Username" required>
                             <div class="error-message" id="username-error"></div>
-
                         </div>
 
                         <!-- First Name and Last Name on the same row -->
@@ -141,13 +141,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <label for="first_name" class="sr-only">First Name</label>
                                 <input type="text" name="firstname" id="first_name" class="form-control" placeholder="First Name" required>
                                 <div class="error-message" id="firstname-error"></div>
-
                             </div>
                             <div style="flex: 1; margin-left: 10px;">
                                 <label for="last_name" class="sr-only">Last Name</label>
                                 <input type="text" name="lastname" id="last_name" class="form-control" placeholder="Last Name" required>
                                 <div class="error-message" id="lastname-error"></div>
-
                             </div>
                         </div>
                         <!-- Country dropdown for major countries -->
@@ -203,7 +201,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </label>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-5">
-                            <input name="signup" id="submit_btn" class="btn login-btn" type="submit" value="Sign Up">
+                            <input name="signup" id="submit_button" class="btn login-btn" type="submit" value="Sign Up">
                         </div>
                     </form>
                     <p class="login-wrapper-footer-text">Already have an account? <a href="#" id="signin-toggle" class="text-reset">Sign in here</a></p>
@@ -214,13 +212,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <!-- jQuery and Bootstrap Bundle JS -->
+    <script src="../assets/js/admin_form_validation.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/login.js"></script>
-    <script src="../assets/js/admin_form_validation.js"></script>
-
-
-    
-
 </body>
 </html>
