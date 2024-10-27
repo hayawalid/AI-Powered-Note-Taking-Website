@@ -65,7 +65,7 @@
                                 </a>
                                 <span><?php echo htmlspecialchars($obj[$j]['created_at']); ?></span>
                                 <i class="fa-solid fa-ellipsis ellipsis"></i>
-                                <div class="popover">
+                                <div class="popover" style='z-index: 300000;'>
                                     <!-- Rename Button -->
                                     <button class="popover-btn rename"
                                             data-folder-id="<?php echo $folderId; ?>"

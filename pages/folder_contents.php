@@ -69,7 +69,7 @@
                         echo "<span class='date'>" . htmlspecialchars($folder['created_at']) . "</span>";
                         echo "</a>";
                         echo "<i class='fa-solid fa-ellipsis ellipsis'></i>";
-                        echo "<div class='popover'>";
+                        echo "<div class='popover'> style='z-index: 300000;' ";
                         echo "<button class='popover-btn rename' data-folder-id='" . $folder['ID'] . "' " . ($isGeneral ? 'disabled title="Cannot rename General folder"' : '') . ">Rename</button>";
                         echo "<button class='popover-btn move' data-folder-id='" . $folder['ID'] . "' " . ($isGeneral ? 'disabled title="Cannot move General folder"' : '') . ">Move</button>";
                         echo "<button class='popover-btn delete' data-folder-id='" . $folder['ID'] . "' " . ($isGeneral ? 'disabled title="Cannot delete General folder"' : '') . " onclick='" . (!$isGeneral ? "openTrashModal('{$folder['ID']}')" : '') . "'>Delete</button>";
