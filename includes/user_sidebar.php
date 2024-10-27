@@ -74,7 +74,7 @@ if (isset($_POST['id'])) {
                     <span class="icon">🗂️</span> Folders
                 </li>
             </a>
-            <a href="./.php">
+            <a href="./speech.php">
                 <li>
                     <span class="icon">🎤</span> Speech to Text
                 </li>

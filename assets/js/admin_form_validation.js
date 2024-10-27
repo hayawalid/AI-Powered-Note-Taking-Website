@@ -123,20 +123,22 @@ document.addEventListener("DOMContentLoaded", function() {
         return isValid;
     };
 
-    submit_btn.addEventListener("click", async function(event) {
-        console.log("Submit button clicked");
-        event.preventDefault(); // Prevent form submission
-
-        const isValid = await validateForm();
-        console.log("Validation result:", isValid);
+    if(submit_btn) {
+        submit_btn.addEventListener("click", async function(event) {
+            console.log("Submit button clicked");
+            event.preventDefault(); // Prevent form submission
     
-        if (isValid) {
-            console.log("Form is valid, submitting now...");
-            form.submit(); // Submit the form
-        } else {
-            console.log("Form is invalid, submission prevented.");
-        }
-    });
+            const isValid = await validateForm();
+            console.log("Validation result:", isValid);
+        
+            if (isValid) {
+                console.log("Form is valid, submitting now...");
+                form.submit(); // Submit the form
+            } else {
+                console.log("Form is invalid, submission prevented.");
+            }
+        });
+    }
 
     // Real-time validation for username and email
     [username, email].forEach(input => {
@@ -169,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
  
     // Edit user function
-    window.editUser = function(id, firstName, lastName, usernameValue, emailValue, countryValue) {
+    window.editUser = function(id, firstName, lastName, usernameValue, emailValue, countryValue, userType) {
         userIdInput.value = id;
         firstname.value = firstName;
         lastname.value = lastName;
@@ -177,10 +179,28 @@ document.addEventListener("DOMContentLoaded", function() {
         email.value = emailValue;
         country.value = countryValue;
         password.value = ''; // Clear the password field for security reasons
-        submit_btn.innerText = 'Update Admin';
+        if(userType == '1') {
+            submit_btn.innerText = 'Update Admin';
+        }
 
         // Store original values
         originalUsername = usernameValue;
         originalEmail = emailValue;
     };
+
+    window.saveChanges = async function(usernameValue, emailValue){
+        // Store original values
+        originalUsername = usernameValue;
+        originalEmail = emailValue;
+
+        const isValid = await validateForm();
+        console.log("Validation result:", isValid);
+    
+        if (isValid) {
+            console.log("Form is valid, submitting now...");
+            form.submit(); // Submit the form
+        } else {
+            console.log("Form is invalid, submission prevented.");
+        }
+    }
 });

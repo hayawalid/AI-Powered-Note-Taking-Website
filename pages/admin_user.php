@@ -226,7 +226,7 @@
                           echo "<td>" . $admin->username . "</td>";
                           echo "<td>" . $admin->email . "</td>";
                           echo '<td class="td-actions text-right">
-                                  <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task" onclick="editUser(' . $admin->id . ', \'' . $admin->first_name . '\', \'' . $admin->last_name . '\', \'' . $admin->username . '\', \'' . $admin->email . '\', \'' . $admin->country . '\')">
+                                  <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task" onclick="editUser(' . $admin->id . ', \'' . $admin->first_name . '\', \'' . $admin->last_name . '\', \'' . $admin->username . '\', \'' . $admin->email . '\', \'' . $admin->country . '\', \'' . $admin->userType_obj->id . '\')">
                                     <i class="now-ui-icons ui-2_settings-90"></i>
                                   </button>
                                   <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove" data-user-id="' . $admin->id . '" onclick="deleteUser(' . $admin->id . ', this)">

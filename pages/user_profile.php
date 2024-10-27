@@ -2,15 +2,36 @@
 session_start();	
 include_once "../includes/User.php";
 
-if (isset($_SESSION["id"])) {
-  $UserObject = new User($_SESSION["id"]);
+if (isset($_SESSION["UserID"])) {
+  $UserObject = new User($_SESSION["UserID"]);
   // Proceed with the rest of your code
 } else {
   echo "User is not logged in.";
-  // header("Location: login.php");
-  // exit();
+  header("Location: login.php");
+  exit();
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $Username = htmlspecialchars($_POST["username"]);
+  $Password = htmlspecialchars($_POST["password"]);
+  // Encrypt password for additional security
+  $Hashedpassword = password_hash($Password, PASSWORD_DEFAULT);
+  $Fname = htmlspecialchars($_POST["firstname"]);
+  $Lname = htmlspecialchars($_POST["lastname"]);
+  $Email = htmlspecialchars($_POST["email"]);
+  $Country = htmlspecialchars($_POST["country"]);
+  $UserType = new UserType(1);
+
+  $UserObject->first_name = $Fname;
+  $UserObject->last_name = $Lname;
+  $UserObject->username = $Username;
+  $UserObject->email = $Email;
+  $UserObject->password = $Hashedpassword;
+  $UserObject->country = $Country;
+  $UserObject->user_type = $UserType->id;
+  $result = $UserObject->updateUser();
+  echo "alert('User updated successfully');";
+}
 ?>
 
 
@@ -37,16 +58,16 @@ if (isset($_SESSION["id"])) {
                     <div class="d-flex flex-column align-items-center text-center">
                       <i class="fa-regular fa-address-card" style="font-size: 50px; color: #95c3fc;"></i>
                       <div class="mt-3">
-                        <h4 style= "font-weight: 600;">John Doe</h4>
-                        <p class="text-secondary mb-1">Full Stack Developer</p>
-                        <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
-                        <button class="btn btn-primary">Log out</button>
-                        <button class="btn btn-outline-primary">Deactivate Account</button>
+                        <h4 style= "font-weight: 600;"><?php echo $UserObject->username?></h4>
+                        <p class="text-secondary mb-1"><?php echo $UserObject->first_name." ".$UserObject->last_name.", ".$UserObject->country?></p>
+                        <p class="text-muted font-size-sm"><?php echo $UserObject->email?></p>
+                        <button id="logout-btn" class="btn btn-primary">Log out</button>
+                        <button id="deactivate-btn" class="btn btn-outline-primary">Deactivate Account</button>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row gutters-sm">
+                <!-- <div class="row gutters-sm">
                   <button class="card mt-3"  style= "width: 186px; margin-left: 10px;">
                     <div class="card-body">
                       <div class="d-flex flex-column align-items-center text-center">
@@ -71,7 +92,7 @@ if (isset($_SESSION["id"])) {
                       </div>
                     </div>
                   </button>
-                </div>
+                </div> -->
                 <div class="card mt-3">
                   <div class="card-header" style= "background-color: black;">
                     <h6 class="d-flex align-items-center" style="margin: 0px; color: #d5fed4;">Survey Answers</h6>
@@ -122,13 +143,15 @@ if (isset($_SESSION["id"])) {
               <div class="col-md-8">
                 <div class="card mb-3 purple-card">
                     <div class="card-body">
-                        <form>
+                      <form action="" method="POST" id="form">
+                        <input type="hidden" name="user_id" id="user_id">
                             <div class="row">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">Username</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
                                     <input type="text" class="form-control" value="<?php echo $UserObject->username ?>" name="username">
+                                    <div class="error-message" id="username-error"></div>
                                 </div>
                             </div>
                             <hr>
@@ -138,6 +161,7 @@ if (isset($_SESSION["id"])) {
                                 </div>
                                 <div class="col-sm-9 text-secondary">
                                     <input type="password" class="form-control" name="password">
+                                    <div class="error-message" id="password-error"></div>
                                 </div>
                             </div>
                             <hr>
@@ -149,9 +173,11 @@ if (isset($_SESSION["id"])) {
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <input name="firstname" type="text" class="form-control" value="<?php echo $UserObject->first_name ?>">
+                                            <div class="error-message" id="firstname-error"></div>
                                         </div>
                                         <div class="col-sm-6">
                                             <input name="lastname" type="text" class="form-control" value="<?php echo $UserObject->last_name ?>">
+                                            <div class="error-message" id="lastname-error"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -163,6 +189,7 @@ if (isset($_SESSION["id"])) {
                                 </div>
                                 <div class="col-sm-9 text-secondary">
                                     <input name="email" type="email" class="form-control" value="<?php echo $UserObject->email ?>">
+                                    <div class="error-message" id="email-error"></div>
                                 </div>
                             </div>
                             <hr>
@@ -171,41 +198,30 @@ if (isset($_SESSION["id"])) {
                                     <h6 class="mb-0">Country</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                  <select class="form-control" id="country" name="country" value="<?php echo $UserObject->country ?>">
-                                      <option value="">Select Country</option>
-                                      <option value="United States">United States</option>
-                                      <option value="Canada">Canada</option>
-                                      <option value="United Kingdom">United Kingdom</option>
-                                      <option value="Australia">Australia</option>
-                                      <option value="Germany">Germany</option>
-                                      <option value="France">France</option>
-                                      <option value="Japan">Japan</option>
-                                      <option value="China">China</option>
-                                      <option value="India">India</option>
-                                      <option value="Egypt">Egypt</option>
-                                      <!-- Add more countries as needed -->
-                                  </select>
+                                <select class="form-control" id="country" name="country">
+                                  <option value="">Select Country</option>
+                                  <?php 
+                                  $countries = ["United States", "Canada", "United Kingdom", "Australia", "Germany", "France", "Japan", "China", "India", "Egypt"];
+                                  foreach ($countries as $country) {
+                                      $selected = ($UserObject->country === $country) ? 'selected' : '';
+                                      echo "<option value='$country' $selected>$country</option>";
+                                  }
+                                  ?>
+                                </select>
                                   <div class="error-message" id="country-error"></div>
                                 </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="col-sm-12">
-                                <button type="submit" class="btn btn-primary"
-                                    onclick="editUser(
-                                        <?php echo htmlspecialchars($userObj->id, ENT_QUOTES, 'UTF-8'); ?>, 
-                                        '<?php echo htmlspecialchars($userObj->first_name, ENT_QUOTES, 'UTF-8'); ?>', 
-                                        '<?php echo htmlspecialchars($userObj->last_name, ENT_QUOTES, 'UTF-8'); ?>', 
-                                        '<?php echo htmlspecialchars($userObj->username, ENT_QUOTES, 'UTF-8'); ?>', 
-                                        '<?php echo htmlspecialchars($userObj->email, ENT_QUOTES, 'UTF-8'); ?>', 
-                                        '<?php echo htmlspecialchars($userObj->country, ENT_QUOTES, 'UTF-8'); ?>'
-                                    )">Save Changes</button>
+                                <button type="button" class="btn btn-primary" onclick="saveChanges('<?php echo htmlspecialchars($UserObject->username, ENT_QUOTES, 'UTF-8'); ?>', 
+                                        '<?php echo htmlspecialchars($UserObject->email, ENT_QUOTES, 'UTF-8'); ?>')">Save Changes</button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="row gutters-sm">
+                <!-- <div class="row gutters-sm">
                   <div class="col-sm-6 mb-3">
                     <div class="card h-100 pink-card">
                       <div class="card-body">
@@ -234,22 +250,23 @@ if (isset($_SESSION["id"])) {
                             </h6>
                             <div class="circle-container">
                                 <div class="circle">
-                                    <span class="note-count">42</span> <!-- Example count -->
+                                    <span class="note-count">42</span> 
                                 </div>
                             </div>
                             <button class="btn btn-primary btn-block mt-3" onclick="window.location.href='/notes'">View Notes</button>
                         </div>
                     </div>
-                  </div>
-
+                  </div> -->
                 </div>
               </div>
             </div>
           </div>
       </div>
     </div>
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="../assets/js/user_profile.js"></script>
+    <script src="../assets/js/admin_form_validation.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>
