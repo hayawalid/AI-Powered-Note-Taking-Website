@@ -4,7 +4,7 @@ include '../includes/config.php';
 include '../includes/session.php';
 
 //start user session
-session_start();
+//session_start();
 
 //set current page to update sidebar status
 $current_page = 'Dashboard';
