@@ -1,9 +1,6 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-?>
-<?php
-
 
 // Include config and User class files
 include '../includes/config.php';
@@ -36,13 +33,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $error = "Invalid email or password";         
         }
-    } elseif (isset($_POST['signup'])) {
+    } 
+
+    if (isset($_POST['username'])) {
+        // echo "<script>alert('form submitted.');</script>";
         // Handle signup
         $username = htmlspecialchars(trim($_POST["username"]));
-        $first_name = htmlspecialchars(trim($_POST["first_name"]));
-        $last_name = htmlspecialchars(trim($_POST["last_name"]));
-        $email = htmlspecialchars(trim($_POST["signup_email"]));
-        $password = htmlspecialchars(trim($_POST["signup_password"]));
+        $first_name = htmlspecialchars(trim($_POST["firstname"]));
+        $last_name = htmlspecialchars(trim($_POST["lastname"]));
+        $email = htmlspecialchars(trim($_POST["email"]));
+        $password = htmlspecialchars(trim($_POST["password"]));
         $confirm_password = htmlspecialchars(trim($_POST["confirm_password"]));
         $country = htmlspecialchars(trim($_POST["country"]));
         $usertype_id = 2; // Regular user ID
@@ -50,8 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Validate signup form
         if ($password !== $confirm_password) {
             echo "<script>alert('Passwords do not match.');</script>";
-        } elseif (empty($username) || empty($first_name) || empty($last_name) || empty($email) || empty($password) || empty($country)) {
-            echo "<script>alert('Please fill in all fields.');</script>";
         } else {
             // Insert new user into the database
             $Hashedpassword = password_hash($password, PASSWORD_DEFAULT);
@@ -59,8 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($isInserted) {
                 echo "<script>alert('Signup successful! Please log in.');</script>";
-                header("Location: login.php");
-                exit();
+                
             } else {
                 echo "<script>alert('Signup failed. Email might already be in use.');</script>";
             }
@@ -128,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <!-- Sign Up Form -->
                 <div class="sign-up-form" style="display: none;">
                     <h2 class="login-title">Sign Up</h2>
-                    <form action="login.php" method="POST"> <!-- Ensure the form submits to login.php -->
+                    <form action="login.php" method="POST" id="form"> <!-- Ensure the form submits to login.php -->
                         <div class="form-group">
                             <label for="username" class="sr-only">Username</label>
                             <input type="text" name="username" id="username" class="form-control" placeholder="Username" required>
@@ -138,13 +135,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <!-- First Name and Last Name on the same row -->
                         <div class="form-group d-flex justify-content-between">
                             <div style="flex: 1; margin-right: 10px;">
-                                <label for="first_name" class="sr-only">First Name</label>
-                                <input type="text" name="firstname" id="first_name" class="form-control" placeholder="First Name" required>
+                                <label for="firstname" class="sr-only">First Name</label>
+                                <input type="text" name="firstname" id="firstname" class="form-control" placeholder="First Name" required>
                                 <div class="error-message" id="firstname-error"></div>
                             </div>
                             <div style="flex: 1; margin-left: 10px;">
-                                <label for="last_name" class="sr-only">Last Name</label>
-                                <input type="text" name="lastname" id="last_name" class="form-control" placeholder="Last Name" required>
+                                <label for="lastname" class="sr-only">Last Name</label>
+                                <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Last Name" required>
                                 <div class="error-message" id="lastname-error"></div>
                             </div>
                         </div>
@@ -179,20 +176,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         </div>
                         <div class="form-group">
-                            <label for="signup-email" class="sr-only">Email</label>
-                            <input type="email" name="email" id="signup-email" class="form-control" placeholder="Email" required>
+                            <label for="email" class="sr-only">Email</label>
+                            <input type="email" name="email" id="email" class="form-control" placeholder="Email" required>
                             <div class="error-message" id="email-error"></div>
 
                         </div>
                         <div class="form-group mb-3">
-                            <label for="signup-password" class="sr-only">Password</label>
-                            <input type="password" name="password" id="signup-password" class="form-control" placeholder="Password" required>
+                            <label for="password" class="sr-only">Password</label>
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
                             <div class="error-message" id="password-error"></div>
 
                         </div>
                         <div class="form-group mb-3">
-                            <label for="confirm-password" class="sr-only">Confirm Password</label>
-                            <input type="password" name="confirm_password" id="confirm-password" class="form-control" placeholder="Confirm Password" required>
+                            <label for="confirm_password" class="sr-only">Confirm Password</label>
+                            <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Confirm Password" required>
                         </div>
                         <div class="form-group">
                             <input type="checkbox" id="terms-checkbox" required>
@@ -206,7 +203,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </form>
                     <p class="login-wrapper-footer-text">Already have an account? <a href="#" id="signin-toggle" class="text-reset">Sign in here</a></p>
                 </div>
-
             </div>
         </div>
     </div>
