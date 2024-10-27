@@ -6,6 +6,11 @@ body {
       text-decoration:none;
       color:#fff !important;
   }
+  .error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+}
   .container-fluid {
       height: 100vh;
       display: flex;

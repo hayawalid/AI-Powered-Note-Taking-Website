@@ -33,8 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: admin_dashboard.php");
             exit();
         } else {
-            echo "<script>alert('Invalid email or password');</script>";
-        }
+            $error = "Invalid email or password";         }
     } elseif (isset($_POST['signup'])) {
         // Handle signup
         $username = htmlspecialchars(trim($_POST["username"]));
@@ -111,6 +110,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <label for="password" class="sr-only">Password</label>
                             <input type="password" name="password" id="password" class="form-control" placeholder="Password">
                         </div>
+                        <?php if (!empty($error)): ?>
+        <p class="error-message"><?php echo $error; ?></p>
+    <?php endif; ?>
                         <div class="d-flex justify-content-between align-items-center mb-5">
                             <input name="login" id="login" class="btn login-btn" type="submit" value="Login">
                             <a href="#!" class="forgot-password-link">Forgot Password?</a>
@@ -200,5 +202,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/login.js"></script>
+    <script src="../assets/js/signup_validation.js"></script>
+
 </body>
 </html>
