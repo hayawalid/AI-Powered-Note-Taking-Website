@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <h3 class="intro-title">Welcome to SmartNotes!</h3>
                     <p class="intro-text">
                     Log in to access powerful tools like speech-to-text, summarization, and question generation, all designed to boost your note-taking and productivity.</p>
-                    <a href="#!" class="btn btn-read-more">Read more</a>
+                    <a href="index.php" class="btn btn-read-more">Read more</a>
                 </div>
             </div>
             <div class="col-sm-6 col-md-5 form-section">
@@ -114,7 +114,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php endif; ?>
             <div class="d-flex justify-content-between align-items-center mb-5">
                 <input name="login" id="login-btn" class="btn login-btn" type="submit" value="Login">
-                <a href="#!" class="forgot-password-link">Forgot Password?</a>
             </div>
         </form>
         <p class="login-wrapper-footer-text">Need an account? <a href="#" id="signup-toggle">Signup here</a></p>
@@ -192,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="form-group">
                             <input type="checkbox" id="terms-checkbox" required>
                             <label for="terms-checkbox">
-                                <a href="terms.html" target="_blank" class="terms-link">I agree to the terms and conditions</a>
+                                <a href="terms.php" target="_blank" class="terms-link">I agree to the terms and conditions</a>
                             </label>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-5">

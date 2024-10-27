@@ -75,9 +75,9 @@
 
           <div class="col-lg-6  d-flex flex-column justify-content-center" data-aos="fade-in">
             <h1>Study smarter and save time with <span>SmartNotes</span></h1>
-            <p>We are team of talented designers making websites with Bootstrap</p>
+            <p>Unlock a world of efficient note-taking and learning tools designed to help you succeed. With SmartNotes, you can convert speech to text, summarize lengthy content, generate questions, and organize your thoughts—all in one place. Our platform empowers students, professionals, and lifelong learners to work more effectively and make the most of their time.</p>
             <div class="d-flex">
-              <a href="#about" class="btn-get-started">Get Started</a>
+              <a href="login.php" class="btn-get-started">Get Started</a>
             </div>
           </div>
 
