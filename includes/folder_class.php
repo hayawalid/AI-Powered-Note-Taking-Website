@@ -132,20 +132,6 @@ class folder {
             return false;
         }
     }
-    
-    
-    
-    public static function deleteFromTrash($id) {
-        global $con;
-        $sql = "DELETE FROM trash WHERE folder_id = $id";
-        if (mysqli_query($con, $sql)) {
-            return true;
-        } else {
-            echo "Failed to permanently delete folder: " . mysqli_error($con);
-            return false;
-        }
-    }
-    
     public static function readTrash() {
         global $con;
         $sql = "SELECT folder_id, name, DATE_FORMAT(deleted_at, '%Y-%m-%d %H:%i:%s') as deleted_at FROM trash";

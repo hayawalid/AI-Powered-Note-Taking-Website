@@ -39,19 +39,19 @@ if (isset($_POST['id'])) {
     }
 }
 
-//delete from trash
-if (isset($_POST['id'])) {
+// Check if 'action' and 'id' are set in the POST request
+if (isset($_POST['action']) && $_POST['action'] === 'delete_from_trash' && isset($_POST['id'])) {
     $id = $_POST['id'];
-    echo "Received Folder ID: " . $id . "<br>";
-    if ($id) {
-        if (folder::deleteFromTrash($id)) {
-            header("Location: ../pages/trash.php");
-            exit();
-        } else {
-            echo "Error permanently deleting folder.";
-        }
+
+    // Instantiate the trash object with the given ID
+    $trashItem = new trash($id);
+
+    // Attempt to delete the item
+    if ($trashItem->delete()) {
+        header("Location: ../pages/trash.php");
+        exit();
     } else {
-        echo "No folder ID provided.";
+        echo "Error permanently deleting folder.";
     }
 }
 
@@ -178,15 +178,23 @@ if (isset($_POST['id'])) {
         </form>
     </div>
 </div>
-<!-- Delete Modal -->
+
 <div id="deleteModal" class="modal" style="display:none;">
     <div class="modal-content">
         <p>Are you sure you want to delete this folder permanently?</p><br><br>
         <form id="deleteForm" method="post" action="">
-            <input type="hidden" id="folder_id" name="id">
+            <input type="hidden" name="id" id="folder_id">
+            <input type="hidden" name="action" value="delete_from_trash">
             <button type="submit" class="btn-confirm">Yes, delete</button>
             <button type="button" class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
         </form>
     </div>
 </div>
 
+<!-- Restriction Popup Modal -->
+<div id="restrictionPopup" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('restrictionPopup')">&times;</span>
+        <p id="restrictionMessage"></p>
+    </div>
+</div>

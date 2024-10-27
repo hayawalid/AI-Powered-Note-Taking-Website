@@ -8,7 +8,23 @@
     <link rel="stylesheet" href="../assets/css/user_style.css">
     <link rel="stylesheet" href="../assets/css/folders.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Style for disabled buttons */
+button:disabled {
+    background-color: #e0e0e0; /* Light gray background */
+    color: #777; /* Dark gray text */
+    cursor: not-allowed; /* Changes cursor to indicate disabled state */
+    opacity: 0.6; /* Optional: Make button slightly transparent */
+    border: none; /* Gray border */
+}
 
+/* Optional: More specific targeting if needed */
+.popover-btn:disabled {
+    background-color: #e0e0e0;
+    color: #888;
+}
+
+    </style>
 </head>
 
 <body>
@@ -38,35 +54,57 @@
                         </div>
 
                         <?php
-                        $obj = folder::read();
-                        $colors = ['blue', 'yellow', 'red'];
+// Fetch folders
+$obj = folder::read();
+$colors = ['blue', 'yellow', 'red'];
 
-                        if ($obj) {
-                            for ($j = 0; $j < count($obj); $j++) {
-                                $color = $colors[$j % count($colors)];
-                                ?>
-                                <div class="folder <?php echo $color; ?>">
-                                    <i class="fa-solid fa-folder fold"></i>
-                                    <?php
-                                    echo "<p>" . $obj[$j]['name'] . "</p>";
-                                    echo "<span>" . $obj[$j]['created_at'] . "</span>";
-                                    ?>
-                                    <i class="fa-solid fa-ellipsis ellipsis"></i>
+if ($obj) {
+    for ($j = 0; $j < count($obj); $j++) {
+        $color = $colors[$j % count($colors)];
+        $folderId = $obj[$j]['ID'];
+        $folderName = strtolower($obj[$j]['name']); // Normalize name for comparison
 
-                                    <div class="popover">
-                                        <button class="popover-btn rename"
-                                            data-folder-id="<?php echo $obj[$j]['ID']; ?>">Rename</button> <button
-                                            class="popover-btn">Move</button>
-                                            <button class="popover-btn delete" data-folder-id="<?php echo $obj[$j]['ID']; ?>" onclick="openTrashModal('<?php echo $obj[$j]['ID']; ?>')">Delete</button>
+        // Check if the folder is the restricted "user guide" folder
+        $isUserGuide = ($folderId == 1 && $folderName == 'user guide');
+        ?>
 
-                                    </div>
+        <div class="folder <?php echo $color; ?>">
+            <i class="fa-solid fa-folder fold"></i>
+            <?php
+            echo "<p>" . htmlspecialchars($obj[$j]['name']) . "</p>";
+            echo "<span>" . htmlspecialchars($obj[$j]['created_at']) . "</span>";
+            ?>
+            <i class="fa-solid fa-ellipsis ellipsis"></i>
 
-                                </div>
-                                <?php
+            <div class="popover">
+                <!-- Rename Button -->
+                <button class="popover-btn rename"
+                        data-folder-id="<?php echo $folderId; ?>"
+                        <?php echo $isUserGuide ? 'disabled title="Cannot rename user guide folder"' : ''; ?>>
+                    Rename
+                </button>
 
-                            }
-                        }
-                        ?>
+                <button class="popover-btn move"
+        data-folder-id="<?php echo $folderId; ?>"
+        <?php echo $isUserGuide ? 'disabled title="Cannot move user guide folder"' : ''; ?>>
+    Move
+</button>
+
+                <!-- Delete Button -->
+                <button class="popover-btn delete"
+                        data-folder-id="<?php echo $folderId; ?>"
+                        <?php echo $isUserGuide ? 'disabled title="Cannot delete user guide folder"' : ''; ?>
+                        onclick="<?php echo !$isUserGuide ? "openTrashModal('$folderId')" : ''; ?>">
+                    Delete
+                </button>
+            </div>
+        </div>
+
+        <?php
+    }
+}
+?>
+
                     </div>
 
                 </section>
