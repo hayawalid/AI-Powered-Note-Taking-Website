@@ -1,3 +1,10 @@
+<?php
+include_once 'User.php';
+session_start();	
+
+$user = new User($_SESSION['UserID']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,7 +30,7 @@
                         <img src="assets/images/404.png" class="img-fluid iq-error-img" alt="">
                         <h2 class="mb-0 mt-4">Oops! This Page is Not Found.</h2>
                         <p>The requested page does not exist.</p>
-                        <a class="btn btn-primary d-inline-flex align-items-center mt-3" href="pages/UserDashboard.php">
+                        <a class="btn btn-primary d-inline-flex align-items-center mt-3" href="<?php echo "/AI-Powered-Note-Taking-Website/pages/".$user->userType_obj->pages_array[0]->link_address; ?>">
                             <i class="ri-home-4-line"></i>Back to Home
                         </a>
                     </div>
