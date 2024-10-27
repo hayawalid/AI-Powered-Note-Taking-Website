@@ -1,5 +1,9 @@
+<?php
+include_once 'User.php';
+session_start();	
 
-
+$user = new User($_SESSION['UserID']);
+?>
 
 <!doctype html>
 <html lang="en">
@@ -34,7 +38,7 @@
                      <img src="../assets/images/02.png" class="img-fluid iq-error-img" alt="">
                      <h2 class="mb-0">Oops! You Are Not Authorized.</h2>
                      <p>The requested Page Requires Authorization.</p>
-                     <a class="btn btn-primary d-inline-flex align-items-center mt-3" href="../pages/UserDashboard.php"><i class="ri-home-4-line"></i>Back to Home</a>
+                     <a class="btn btn-primary d-inline-flex align-items-center mt-3" href="<?php echo "/AI-Powered-Note-Taking-Website/pages/".$user->userType_obj->pages_array[0]->link_address; ?>"><i class="ri-home-4-line"><i class="ri-home-4-line"></i>Back to Home</a>
                      
                </div>
             </div>
