@@ -45,8 +45,8 @@
                                     ?>
                                     <i class="fa-solid fa-ellipsis ellipsis"></i>
                                     <div class="popover">
-                                        <button class="popover-btn">Edit</button>
-                                        <button class="popover-btn">Move</button>
+                                    <button class="popover-btn rename"
+                                            data-folder-id="<?php echo $obj[$j]['ID']; ?>">Rename</button>                                        <button class="popover-btn">Move</button>
                                         <button class="popover-btn delete"
                                             data-folder-id="<?php echo $obj[$j]['ID']; ?>">Delete</button>
                                     </div>
