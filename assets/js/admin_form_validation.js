@@ -160,12 +160,14 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Clear validation styles and messages on reset
-    reset_btn.addEventListener("click", function() {
-        inputs.forEach(input => {
-            clearError(input);
+    if(reset_btn) {
+        reset_btn.addEventListener("click", function() {
+            inputs.forEach(input => {
+                clearError(input);
+            });
         });
-    });
-
+    }
+ 
     // Edit user function
     window.editUser = function(id, firstName, lastName, usernameValue, emailValue, countryValue) {
         userIdInput.value = id;

@@ -23,7 +23,7 @@ $(document).ready(function() {
     
 
     // Login button click event
-    $('#login').click(function(event) {
+    $('#login-btn').click(function(event) {
         event.preventDefault();
 
         // Clear previous error messages
@@ -33,13 +33,13 @@ $(document).ready(function() {
         let isValid = true;
 
         // Check for empty fields
-        if ($('#email').val().trim() === '') {
-            $('#email-error').text('Email cannot be empty').show();
+        if ($('#email1').val().trim() === '') {
+            $('#email-error1').text('Email cannot be empty').show();
             isValid = false;
         }
 
-        if ($('#password').val().trim() === '') {
-            $('#password-error').text('Password cannot be empty').show();
+        if ($('#password1').val().trim() === '') {
+            $('#password-error1').text('Password cannot be empty').show();
             isValid = false;
         }
 

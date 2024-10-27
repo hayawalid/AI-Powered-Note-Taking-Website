@@ -1,3 +1,19 @@
+<?php
+session_start();	
+include_once "../includes/User.php";
+
+if (isset($_SESSION["id"])) {
+  $UserObject = new User($_SESSION["id"]);
+  // Proceed with the rest of your code
+} else {
+  echo "User is not logged in.";
+  // header("Location: login.php");
+  // exit();
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,23 +24,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="../assets/css/user_style.css" rel="stylesheet">
     <link href="../assets/css/user_profile.css" rel="stylesheet">
-    <!-- <style>
-        .col-sm-12 .button {
-          background-color: #c8a6e0  !important;
-          border: 1px solid #a880c4  !important;
-          border-radius: 12px !important;
-          color: #fff !important;
-          padding: 10px 20px !important;
-          font-size: 16px !important;
-          cursor: pointer !important;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
-          transition: background-color 0.3s ease !important;
-      }
-
-      .col-sm-12 .button:hover {
-          background-color: #ffb3c1 !important; /* Slightly darker pastel pink */
-      }
-    </style> -->
 </head>
 <body>
 <?php include '../includes/user_sidebar.php'; ?>
@@ -36,7 +35,7 @@
                 <div class="card blue-card">
                   <div class="card-body">
                     <div class="d-flex flex-column align-items-center text-center">
-                      <img src="../assets/images/avatar3.jpg" alt="Admin" class="rounded-circle" width="150">
+                      <i class="fa-regular fa-address-card" style="font-size: 50px; color: #95c3fc;"></i>
                       <div class="mt-3">
                         <h4 style= "font-weight: 600;">John Doe</h4>
                         <p class="text-secondary mb-1">Full Stack Developer</p>
@@ -46,6 +45,32 @@
                       </div>
                     </div>
                   </div>
+                </div>
+                <div class="row gutters-sm">
+                  <button class="card mt-3"  style= "width: 186px; margin-left: 10px;">
+                    <div class="card-body">
+                      <div class="d-flex flex-column align-items-center text-center">
+                        <div class="mt-0">
+                          <div class="row">
+                            <i class="fa-solid fa-phone" style="font-size: 30px; color: #95c3fc; margin-right: 20px"></i>
+                            <p style="font-size: 20px; font-weight: 600;">Contact Us</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                  <button class="card mt-3" style= "width: 186px; margin-left: 10px;">
+                    <div class="card-body">
+                      <div class="d-flex flex-column align-items-center text-center">
+                        <div class="mt-0">
+                          <div class= "row">
+                            <i class="fa-solid fa-circle-question" style="font-size: 30px; color: #dbf79b; margin-right: 20px"></i>
+                            <p style="font-size: 20px; font-weight: 600;">FAQ</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </button>
                 </div>
                 <div class="card mt-3">
                   <div class="card-header" style= "background-color: black;">
@@ -85,7 +110,7 @@
                               </svg>
                               Source
                           </h6>
-                          <select class="form-control text-secondary ml-3" style="width: 250px;">
+                          <select class="form-control text-secondary ml-3" style="width: 230px;">
                               <option value="online">Online/App store search</option>
                               <option value="recommended">It was recommended</option>
                               <option value="ad">An ad</option>
@@ -103,7 +128,16 @@
                                     <h6 class="mb-0">Username</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    <input type="text" class="form-control" value="Kenneth123">
+                                    <input type="text" class="form-control" value="<?php echo $UserObject->username ?>" name="username">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Password</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <input type="password" class="form-control" name="password">
                                 </div>
                             </div>
                             <hr>
@@ -114,10 +148,10 @@
                                 <div class="col-sm-9 text-secondary">
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <input name="firstname" type="text" class="form-control" value="Kenneth">
+                                            <input name="firstname" type="text" class="form-control" value="<?php echo $UserObject->first_name ?>">
                                         </div>
                                         <div class="col-sm-6">
-                                            <input name="lastname" type="text" class="form-control" value="Valdez">
+                                            <input name="lastname" type="text" class="form-control" value="<?php echo $UserObject->last_name ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -128,34 +162,54 @@
                                     <h6 class="mb-0">Email</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    <input name="email" type="email" class="form-control" value="fip@jukmuh.al">
+                                    <input name="email" type="email" class="form-control" value="<?php echo $UserObject->email ?>">
                                 </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <h6 class="mb-0">Address</h6>
+                                    <h6 class="mb-0">Country</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    <input name="address" type="text" class="form-control" value="Bay Area, San Francisco, CA">
+                                  <select class="form-control" id="country" name="country" value="<?php echo $UserObject->country ?>">
+                                      <option value="">Select Country</option>
+                                      <option value="United States">United States</option>
+                                      <option value="Canada">Canada</option>
+                                      <option value="United Kingdom">United Kingdom</option>
+                                      <option value="Australia">Australia</option>
+                                      <option value="Germany">Germany</option>
+                                      <option value="France">France</option>
+                                      <option value="Japan">Japan</option>
+                                      <option value="China">China</option>
+                                      <option value="India">India</option>
+                                      <option value="Egypt">Egypt</option>
+                                      <!-- Add more countries as needed -->
+                                  </select>
+                                  <div class="error-message" id="country-error"></div>
                                 </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="submit" class="btn btn-primary"
+                                    onclick="editUser(
+                                        <?php echo htmlspecialchars($userObj->id, ENT_QUOTES, 'UTF-8'); ?>, 
+                                        '<?php echo htmlspecialchars($userObj->first_name, ENT_QUOTES, 'UTF-8'); ?>', 
+                                        '<?php echo htmlspecialchars($userObj->last_name, ENT_QUOTES, 'UTF-8'); ?>', 
+                                        '<?php echo htmlspecialchars($userObj->username, ENT_QUOTES, 'UTF-8'); ?>', 
+                                        '<?php echo htmlspecialchars($userObj->email, ENT_QUOTES, 'UTF-8'); ?>', 
+                                        '<?php echo htmlspecialchars($userObj->country, ENT_QUOTES, 'UTF-8'); ?>'
+                                    )">Save Changes</button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-
-
                 <div class="row gutters-sm">
                   <div class="col-sm-6 mb-3">
                     <div class="card h-100 pink-card">
                       <div class="card-body">
-                        <h6 class="d-flex align-items-center mb-3">Badges<i class="material-icons text-info mr-2"> badges icon</i></h6>
+                        <h6 class="d-flex align-items-center mb-3">Support and Feedback</h6>
                         <small>Web Design</small>
                         <div class="progress mb-3" style="height: 5px">
                           <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
@@ -168,7 +222,6 @@
                         <div class="progress mb-3" style="height: 5px">
                           <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <small>Mobile Template</small>
                       </div>
                     </div>
                   </div>
@@ -198,13 +251,5 @@
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-  <script>
-      const sidebar = document.getElementById('sidebar');
-      const toggleButton = document.querySelector('.toggle-sidebar');
-
-      toggleButton.addEventListener('click', () => {
-          sidebar.classList.toggle('open');
-      });
-  </script>
 </body>
 </html>
