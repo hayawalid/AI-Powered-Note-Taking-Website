@@ -11,6 +11,7 @@ include '../includes/User.php';
 
 // Resume user session
 session_start();
+$error = '';
 
 // Ensure database connection
 if ($GLOBALS['con']->connect_error) {
@@ -99,27 +100,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <div class="col-sm-6 col-md-5 form-section">
-                <div class="login-wrapper">
-                    <h2 class="login-title">Sign in</h2>
-                    <form action="login.php" method="POST">
-                        <div class="form-group">
-                            <label for="email" class="sr-only">Email</label>
-                            <input type="email" name="email" id="email" class="form-control" placeholder="Email">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="password" class="sr-only">Password</label>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="Password">
-                        </div>
-                        <?php if (!empty($error)): ?>
-        <p class="error-message"><?php echo $error; ?></p>
-    <?php endif; ?>
-                        <div class="d-flex justify-content-between align-items-center mb-5">
-                            <input name="login" id="login" class="btn login-btn" type="submit" value="Login">
-                            <a href="#!" class="forgot-password-link">Forgot Password?</a>
-                        </div>
-                    </form>
-                    <p class="login-wrapper-footer-text">Need an account? <a href="#" id="signup-toggle" class="text-reset">Signup here</a></p>
-                </div>
+            <div class="login-wrapper">
+        <h2 class="login-title">Sign in</h2>
+        <form action="login.php" method="POST" id="login-form">
+            <div class="form-group">
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="Email">
+                <span id="email-error" class="text-danger"></span> <!-- Error message for email -->
+            </div>
+            <div class="form-group mb-3">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Password">
+                <span id="password-error" class="text-danger"></span> <!-- Error message for password -->
+            </div>
+            <?php if (!empty($error)): ?>
+                <p class="text-danger"><?php echo $error; ?></p> <!-- Server-side error message -->
+            <?php endif; ?>
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <input name="login" id="login-btn" class="btn login-btn" type="submit" value="Login">
+                <a href="#!" class="forgot-password-link">Forgot Password?</a>
+            </div>
+        </form>
+        <p class="login-wrapper-footer-text">Need an account? <a href="#" id="signup-toggle">Signup here</a></p>
+    </div>
 
                 <!-- Sign Up Form -->
                 <div class="sign-up-form" style="display: none;">
@@ -128,17 +131,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="form-group">
                             <label for="username" class="sr-only">Username</label>
                             <input type="text" name="username" id="username" class="form-control" placeholder="Username" required>
+                            <div class="error-message" id="username-error"></div>
+
                         </div>
 
                         <!-- First Name and Last Name on the same row -->
                         <div class="form-group d-flex justify-content-between">
                             <div style="flex: 1; margin-right: 10px;">
                                 <label for="first_name" class="sr-only">First Name</label>
-                                <input type="text" name="first_name" id="first_name" class="form-control" placeholder="First Name" required>
+                                <input type="text" name="firstname" id="first_name" class="form-control" placeholder="First Name" required>
+                                <div class="error-message" id="firstname-error"></div>
+
                             </div>
                             <div style="flex: 1; margin-left: 10px;">
                                 <label for="last_name" class="sr-only">Last Name</label>
-                                <input type="text" name="last_name" id="last_name" class="form-control" placeholder="Last Name" required>
+                                <input type="text" name="lastname" id="last_name" class="form-control" placeholder="Last Name" required>
+                                <div class="error-message" id="lastname-error"></div>
+
                             </div>
                         </div>
                         <!-- Country dropdown for major countries -->
@@ -168,14 +177,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <option value="United Kingdom">United Kingdom</option>
                                 <option value="United States">United States</option>
                             </select>
+                            <div class="error-message" id="country-error"></div>
+
                         </div>
                         <div class="form-group">
                             <label for="signup-email" class="sr-only">Email</label>
-                            <input type="email" name="signup_email" id="signup-email" class="form-control" placeholder="Email" required>
+                            <input type="email" name="email" id="signup-email" class="form-control" placeholder="Email" required>
+                            <div class="error-message" id="email-error"></div>
+
                         </div>
                         <div class="form-group mb-3">
                             <label for="signup-password" class="sr-only">Password</label>
-                            <input type="password" name="signup_password" id="signup-password" class="form-control" placeholder="Password" required>
+                            <input type="password" name="password" id="signup-password" class="form-control" placeholder="Password" required>
+                            <div class="error-message" id="password-error"></div>
+
                         </div>
                         <div class="form-group mb-3">
                             <label for="confirm-password" class="sr-only">Confirm Password</label>
@@ -188,7 +203,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </label>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-5">
-                            <input name="signup" id="signup-btn" class="btn login-btn" type="submit" value="Sign Up">
+                            <input name="signup" id="submit_btn" class="btn login-btn" type="submit" value="Sign Up">
                         </div>
                     </form>
                     <p class="login-wrapper-footer-text">Already have an account? <a href="#" id="signin-toggle" class="text-reset">Sign in here</a></p>
@@ -202,7 +217,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/login.js"></script>
-    <script src="../assets/js/signup_validation.js"></script>
+    <script src="../assets/js/admin_form_validation.js"></script>
+
+
+    
 
 </body>
 </html>

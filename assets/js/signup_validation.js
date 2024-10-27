@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.querySelector(".sign-up-form form");
-    const username = document.querySelector("input[name='username']");
-    const password = document.querySelector("input[name='signup-password']");
-    const confirmPassword = document.querySelector("input[name='confirm-password']");
-    const firstname = document.querySelector("input[name='first_name']");
-    const lastname = document.querySelector("input[name='last_name']");
-    const email = document.querySelector("input[name='signup_email']");
-    const country = document.querySelector("select[name='country']");
+    const username = document.getElementById("username");
+    const password = document.getElementById("signup-password");
+    const confirmPassword = document.getElementById("confirm-password");
+    const firstname = document.getElementById("first_name");
+    const lastname = document.getElementById("last_name");
+    const email = document.getElementById("signup-email");
+    const country = document.getElementById("country");
     const termsCheckbox = document.getElementById("terms-checkbox");
     const signupBtn = document.getElementById("signup-btn");
 
@@ -15,24 +15,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const showError = (input, message) => {
         input.style.borderColor = "red";
-        const errorElement = document.getElementById(`${input.name}-error`);
-        if (errorElement) {
-            errorElement.textContent = message;
-        } else {
-            const newErrorElement = document.createElement("p");
-            newErrorElement.id = `${input.name}-error`;
-            newErrorElement.className = "error-message";
-            newErrorElement.style.color = "red";
-            newErrorElement.textContent = message;
-            input.parentNode.appendChild(newErrorElement);
+        let errorElement = document.getElementById(`${input.id}-error`);
+        if (!errorElement) {
+            errorElement = document.createElement("p");
+            errorElement.id = `${input.id}-error`;
+            errorElement.className = "error-message";
+            errorElement.style.color = "red";
+            input.parentNode.appendChild(errorElement);
         }
+        errorElement.textContent = message;
     };
 
     const clearError = (input) => {
         input.style.borderColor = "";
-        const errorElement = document.getElementById(`${input.name}-error`);
+        const errorElement = document.getElementById(`${input.id}-error`);
         if (errorElement) {
-            errorElement.textContent = "";
+            errorElement.remove();
         }
     };
 
@@ -52,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function() {
                             resolve(true);
                         }
                     } else {
-                        console.error("Error: " + xhr.status);
                         resolve(false);
                     }
                 }
@@ -64,28 +61,25 @@ document.addEventListener("DOMContentLoaded", function() {
     const validateForm = async () => {
         let isValid = true;
 
-        // Validate username
         if (username.value.trim() === "") {
-            showError(username, "This field cannot be empty.");
+            showError(username, "Username cannot be empty.");
             isValid = false;
         } else if (username.value !== originalUsername) {
             const usernameValid = await checkUsernameEmailExists(username);
             if (!usernameValid) isValid = false;
         }
 
-        // Validate password
         const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
         if (password.value.trim() === "") {
-            showError(password, "This field cannot be empty.");
+            showError(password, "Password cannot be empty.");
             isValid = false;
         } else if (!passwordPattern.test(password.value)) {
-            showError(password, "Password must be at least 8 characters long and contain both letters and numbers.");
+            showError(password, "Password must contain at least 8 characters, including letters and numbers.");
             isValid = false;
         } else {
             clearError(password);
         }
 
-        // Confirm password
         if (confirmPassword.value !== password.value) {
             showError(confirmPassword, "Passwords do not match.");
             isValid = false;
@@ -93,9 +87,8 @@ document.addEventListener("DOMContentLoaded", function() {
             clearError(confirmPassword);
         }
 
-        // Validate first name
         if (firstname.value.trim() === "") {
-            showError(firstname, "This field cannot be empty.");
+            showError(firstname, "First name cannot be empty.");
             isValid = false;
         } else if (/\d/.test(firstname.value)) {
             showError(firstname, "First name cannot contain numbers.");
@@ -104,9 +97,8 @@ document.addEventListener("DOMContentLoaded", function() {
             clearError(firstname);
         }
 
-        // Validate last name
         if (lastname.value.trim() === "") {
-            showError(lastname, "This field cannot be empty.");
+            showError(lastname, "Last name cannot be empty.");
             isValid = false;
         } else if (/\d/.test(lastname.value)) {
             showError(lastname, "Last name cannot contain numbers.");
@@ -115,10 +107,9 @@ document.addEventListener("DOMContentLoaded", function() {
             clearError(lastname);
         }
 
-        // Validate email
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (email.value.trim() === "") {
-            showError(email, "This field cannot be empty.");
+            showError(email, "Email cannot be empty.");
             isValid = false;
         } else if (!emailPattern.test(email.value)) {
             showError(email, "Invalid email format.");
@@ -128,49 +119,43 @@ document.addEventListener("DOMContentLoaded", function() {
             if (!emailValid) isValid = false;
         }
 
-        // Validate country
         if (country.value === "") {
-            showError(country, "This field cannot be empty.");
+            showError(country, "Please select a country.");
             isValid = false;
         } else {
             clearError(country);
         }
 
-        // Validate terms checkbox
         if (!termsCheckbox.checked) {
-            showError(termsCheckbox, "You must agree to the terms and conditions.");
+            if (!document.getElementById("terms-error")) {
+                const termsError = document.createElement("p");
+                termsError.id = "terms-error";
+                termsError.className = "error-message";
+                termsError.style.color = "red";
+                termsError.textContent = "You must agree to the terms and conditions.";
+                termsCheckbox.parentNode.appendChild(termsError);
+            }
             isValid = false;
         } else {
-            clearError(termsCheckbox);
+            const termsError = document.getElementById("terms-error");
+            if (termsError) termsError.remove();
         }
 
         return isValid;
     };
 
     signupBtn.addEventListener("click", async function(event) {
-        event.preventDefault(); // Prevent form submission
+        event.preventDefault();
         const isValid = await validateForm();
         if (isValid) {
-            form.submit(); // Submit the form if valid
+            form.submit();
         }
     });
 
-    // Real-time validation for username and email
-    [username, email].forEach(input => {
-        input.addEventListener("input", function() {
-            if (input.value.trim() !== "") {
-                checkUsernameEmailExists(input).then(() => {});
-            } else {
-                showError(input, "This field cannot be empty.");
-            }
-        });
-    });
-
-    // Remove validation styles on input
-    const inputs = [username, password, confirmPassword, firstname, lastname, email, country, termsCheckbox];
+    const inputs = [username, password, confirmPassword, firstname, lastname, email, country];
     inputs.forEach(input => {
         input.addEventListener("input", function() {
-            if (input.type !== "checkbox" && input.value.trim() !== "") {
+            if (input.value.trim() !== "") {
                 clearError(input);
             }
         });
