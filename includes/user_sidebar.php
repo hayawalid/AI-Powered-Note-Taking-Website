@@ -59,7 +59,7 @@ if (isset($_POST['id'])) {
 ?>
 
 
-<aside class="sidebar" id="sidebar">
+<aside class="sidebar" id="sidebar" style="z-index: 100000;">
     <div class="logo">
         <h2>SmartNotes</h2>
     </div>
@@ -109,7 +109,7 @@ if (isset($_POST['id'])) {
         <p>Every day is a new badge waiting for you!</p>
     </div>
 </aside>
-<main class="main-content">
+<main class="main-content" >
     <header class="header">
         <div class="search-profile">
             <div class="toggle-sidebar">

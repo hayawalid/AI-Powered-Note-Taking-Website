@@ -151,11 +151,14 @@ body {
     flex-direction: column;
     justify-content: space-between;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
 }
 
 .toggle-sidebar {
     display: none;
     cursor: pointer;
+    z-index: 10000;
+
 }
 
 .logo h2 {
@@ -514,17 +517,23 @@ body {
     .container {
         flex-direction: column;
         height: auto;
+        z-index: 10000;
+
     }
 
     .sidebar {
         width: 100%;
         height: auto;
         padding: 15px;
+        z-index: 10000;
+
     }
 
     .main-content {
         padding: 15px;
         margin-left: 0;
+        z-index: 10000;
+
     }
 
     .folders,
@@ -595,14 +604,20 @@ body {
         top: 18px;
         left: 20px;
         font-size: 25px;
+        z-index: 10000;
+
     }
 
     .sidebar {
         display: none;
+        z-index: 10000;
+
     }
 
     .sidebar.open {
         display: flex;
+        z-index: 10000;
+
 
     }
 
