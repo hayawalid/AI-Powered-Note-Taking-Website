@@ -92,7 +92,7 @@
     margin: 10px 2px 2px 330px
 }
 
-@-webkit-keyframes come-in {
+/* @-webkit-keyframes come-in {
     to {
         -webkit-transform: translateY(0);
         transform: translateY(0);
@@ -104,4 +104,4 @@
         -webkit-transform: translateY(0);
         transform: translateY(0);
     }
-}
+} */
