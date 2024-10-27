@@ -6,15 +6,14 @@ include '../includes/folder_class.php';
 if (isset($_POST["submit"])) {
     $name = $_POST['name'];
     $type = $_POST['dropdown'];
-    $parent_folder_id = 1;
-
+    $parent_folder_id = $_GET['folder_id'] ?? 1;
     if ($con->connect_error) {
         die("Connection failed: " . $con->connect_error);
     }
-
     if ($type == "option2") {
-        if (folder::create($name, $parent_folder_id)) {
-            header("Location: ../pages/folder_contents.php");
+        $new_folder_id = folder::create($name, $parent_folder_id);
+        if ($new_folder_id) {
+            header("Location: ../pages/folder_contents.php?folder_id=$new_folder_id");
             exit();
         } else {
             echo "ERROR!";
@@ -23,13 +22,12 @@ if (isset($_POST["submit"])) {
         echo "Invalid folder type!";
     }
 }
-//move to trash
 if (isset($_POST['id'])) {
     $id = $_POST['id'];
     echo "Received Folder ID: " . $id . "<br>";
     if ($id) {
         if (folder::moveToTrash($id)) {
-            header("Location: ../pages/Folders.php");
+            header("Location: ../pages/folders.php");
             exit();
         } else {
             echo "Error moving folder to trash.";
@@ -39,21 +37,6 @@ if (isset($_POST['id'])) {
     }
 }
 
-// Check if 'action' and 'id' are set in the POST request
-if (isset($_POST['action']) && $_POST['action'] === 'delete_from_trash' && isset($_POST['id'])) {
-    $id = $_POST['id'];
-
-    // Instantiate the trash object with the given ID
-    $trashItem = new trash($id);
-
-    // Attempt to delete the item
-    if ($trashItem->delete()) {
-        header("Location: ../pages/trash.php");
-        exit();
-    } else {
-        echo "Error permanently deleting folder.";
-    }
-}
 
 
 ?>
