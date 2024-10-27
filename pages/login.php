@@ -26,10 +26,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = User::login($email, $password);
 
         if ($user) {
-            $_SESSION['user_id'] = $user->id;
-            echo "<script>alert('Login successful');</script>";
-            header("Location: user_profile.php");
-            exit();
+             $_SESSION['UserID'] = $user->id;
+            // echo "<script>alert('Login successful');</script>";
+            // header("Location: user_profile.php");
+            // exit();
+            $firstPage = $user->userType_obj->pages_array[0]->link_address;
+                        // echo "<script>alert('Login successful');</script>";
+
+            header("Location: " . htmlspecialchars($firstPage));
         } else {
             $error = "Invalid email or password";         
         }
