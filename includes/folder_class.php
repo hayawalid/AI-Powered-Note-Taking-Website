@@ -27,26 +27,12 @@ class folder {
             }
         }
     }
-    static function readByParent($parent_id = null) {
-        global $con;
-        $parent_id = isset($parent_id) ? $parent_id : 'NULL';
-        $sql = "SELECT ID, name, DATE_FORMAT(created_at, '%Y-%m-%d') as created_at FROM folders WHERE folder_id = $parent_id";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $folders = [];
-            while ($row = mysqli_fetch_assoc($result)) {
-                $folders[] = $row;
-            }
-            return $folders;
-        } else {
-            echo "Error: " . mysqli_error($con);
-            return false;
-        }
-    }
+    
+        //... existing methods
     
         static function create($name, $folder_id = null) {
             global $con;
-            $folder_id = isset($folder_id) ? $folder_id : 'NULL';
+            $folder_id = isset($folder_id) ? $folder_id : '1';  // Use '0' to indicate the root
             $sql = "INSERT INTO folders (name, folder_id) VALUES ('$name', $folder_id)";
             if (mysqli_query($con, $sql)) {
                 $new_id = mysqli_insert_id($con);
@@ -58,6 +44,21 @@ class folder {
             }
         }
     
+        static function readByParent($parent_id = '1') {
+            global $con;
+            $sql = "SELECT ID, name, DATE_FORMAT(created_at, '%Y-%m-%d') as created_at FROM folders WHERE folder_id = $parent_id";
+            $result = mysqli_query($con, $sql);
+            if ($result) {
+                $folders = [];
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $folders[] = $row;
+                }
+                return $folders;
+            } else {
+                echo "Error: " . mysqli_error($con);
+                return false;
+            }
+        }
         
     
 
