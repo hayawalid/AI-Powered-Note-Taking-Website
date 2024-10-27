@@ -56,8 +56,7 @@
                             $color = $colors[$j % count($colors)];
                             $folderId = $obj[$j]['ID'];
                             $folderName = strtolower($obj[$j]['name']); // Normalize name for comparison
-                            // Check if the folder is the restricted "user guide" folder
-                            $isUserGuide = ($folderId == 1 && $folderName == 'user guide');
+                            $isGeneral = ($folderId == 1 && $folderName == 'general');
                             ?>
                             <div class="folder <?php echo $color; ?>">
                                 <i class="fa-solid fa-folder fold"></i>
@@ -66,23 +65,23 @@
                                 </a>
                                 <span><?php echo htmlspecialchars($obj[$j]['created_at']); ?></span>
                                 <i class="fa-solid fa-ellipsis ellipsis"></i>
-                                <div class="popover">
+                                <div class="popover" style='z-index: 300000;'>
                                     <!-- Rename Button -->
                                     <button class="popover-btn rename"
                                             data-folder-id="<?php echo $folderId; ?>"
-                                            <?php echo $isUserGuide ? 'disabled title="Cannot rename user guide folder"' : ''; ?>>
+                                            <?php echo $isGeneral ? 'disabled title="Cannot rename General folder"' : ''; ?>>
                                         Rename
                                     </button>
                                     <button class="popover-btn move"
                                             data-folder-id="<?php echo $folderId; ?>"
-                                            <?php echo $isUserGuide ? 'disabled title="Cannot move user guide folder"' : ''; ?>>
+                                            <?php echo $isGeneral ? 'disabled title="Cannot move General folder"' : ''; ?>>
                                         Move
                                     </button>
                                     <!-- Delete Button -->
                                     <button class="popover-btn delete"
                                             data-folder-id="<?php echo $folderId; ?>"
-                                            <?php echo $isUserGuide ? 'disabled title="Cannot delete user guide folder"' : ''; ?>
-                                            onclick="<?php echo !$isUserGuide ? "openTrashModal('$folderId')" : ''; ?>">
+                                            <?php echo $isGeneral ? 'disabled title="Cannot delete General folder"' : ''; ?>
+                                            onclick="<?php echo !$isGeneral ? "openTrashModal('$folderId')" : ''; ?>">
                                         Delete
                                     </button>
                                 </div>
