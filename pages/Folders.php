@@ -52,19 +52,18 @@
                                     echo "<span>" . $obj[$j]['created_at'] . "</span>";
                                     ?>
                                     <i class="fa-solid fa-ellipsis ellipsis"></i>
-                                    
-                                    <div class="popover">
 
+                                    <div class="popover">
                                         <button class="popover-btn rename"
                                             data-folder-id="<?php echo $obj[$j]['ID']; ?>">Rename</button> <button
                                             class="popover-btn">Move</button>
-                                        <button class="popover-btn delete"
-                                            data-folder-id="<?php echo $obj[$j]['ID']; ?>">Delete</button>
+                                            <button class="popover-btn delete" data-folder-id="<?php echo $obj[$j]['ID']; ?>" onclick="openTrashModal('<?php echo $obj[$j]['ID']; ?>')">Delete</button>
+
                                     </div>
 
                                 </div>
                                 <?php
-                                
+
                             }
                         }
                         ?>

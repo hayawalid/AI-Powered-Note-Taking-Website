@@ -75,7 +75,18 @@ document.addEventListener('click', function (event) {
     }
 });
 document.addEventListener('DOMContentLoaded', function() {
+    // Open the trash modal when ".popover-btn.delete" is clicked
     document.querySelectorAll('.popover-btn.delete').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const folderId = this.getAttribute('data-folder-id');
+            document.getElementById('folder_id').value = folderId;
+            document.getElementById('trashModal').style.display = 'flex';
+        });
+    });
+
+    // Open the delete modal when ".fa-solid.fa-trash" is clicked
+    document.querySelectorAll('.fa-solid.fa-trash').forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.stopPropagation();
             const folderId = this.getAttribute('data-folder-id');
@@ -85,16 +96,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function closeModal() {
-    document.getElementById('deleteModal').style.display = 'none';
+// Close modal function for both modals
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
 }
 
+// Close modal when clicking outside
 window.addEventListener('click', function(event) {
-    const modal = document.getElementById('deleteModal');
-    if (modal.style.display === 'flex' && !modal.contains(event.target)) {
-        closeModal();
-    }
+    ['deleteModal', 'trashModal'].forEach(modalId => {
+        const modal = document.getElementById(modalId);
+        if (modal.style.display === 'flex' && !modal.contains(event.target)) {
+            closeModal(modalId);
+        }
+    });
 });
+
 document.getElementById('deleteForm').addEventListener('submit', function() {
     const folderId = document.getElementById('folder_id').value;
     console.log("Folder ID being submitted: ", folderId);

@@ -75,25 +75,6 @@ class folder {
             return false;
         }
     }
-
-    static function delete($folder) {
-        global $con;
-        if (isset($folder->ID)) {
-            $sql = "DELETE FROM folders WHERE ID={$folder->ID}";
-            echo "SQL: $sql<br>"; // Debugging statement
-            if (mysqli_query($con, $sql)) {
-                echo "Folder deleted successfully.<br>";
-                return true;
-            } else {
-                echo "Failed: " . mysqli_error($con) . "<br>";
-                return false;
-            }
-        } else {
-            echo "Invalid folder ID.<br>";
-            return false;
-        }
-    }
-    
     public static function update($id, $newName) {
         global $con; // Assuming $con is the connection object
         $stmt = $con->prepare("UPDATE folders SET name = ? WHERE ID = ?");
@@ -107,9 +88,79 @@ class folder {
             return false;
         }
     }
+    public static function moveToTrash($id) {
+        global $con;
+        $sql = "SELECT * FROM folders WHERE ID = $id";
+        $result = mysqli_query($con, $sql);
+        if ($folder = mysqli_fetch_assoc($result)) {
+            echo "Folder found: " . json_encode($folder) . "<br>";
+            
+            // Assign ID and name correctly
+            $folder_id = $folder['id'];
+            $folder_name = $folder['name'];
+            
+            // Begin transaction
+            mysqli_begin_transaction($con);
+    
+            try {
+                // Move to trash
+                $trash_sql = "INSERT INTO trash (folder_id, name) VALUES ($folder_id, '$folder_name')";
+                echo $trash_sql . "<br>";
+                if (!mysqli_query($con, $trash_sql)) {
+                    throw new Exception("Error moving folder to trash: " . mysqli_error($con));
+                }
+    
+                // Delete from folders
+                $delete_sql = "DELETE FROM folders WHERE ID = $id";
+                echo $delete_sql . "<br>";
+                if (!mysqli_query($con, $delete_sql)) {
+                    throw new Exception("Error deleting folder: " . mysqli_error($con));
+                }
+    
+                // Commit transaction
+                mysqli_commit($con);
+                echo "Deleted from folders<br>";
+                return true;
+            } catch (Exception $e) {
+                // Rollback transaction on error
+                mysqli_rollback($con);
+                echo $e->getMessage() . "<br>";
+                return false;
+            }
+        } else {
+            echo "Error: Folder not found.<br>";
+            return false;
+        }
+    }
     
     
     
+    public static function deleteFromTrash($id) {
+        global $con;
+        $sql = "DELETE FROM trash WHERE folder_id = $id";
+        if (mysqli_query($con, $sql)) {
+            return true;
+        } else {
+            echo "Failed to permanently delete folder: " . mysqli_error($con);
+            return false;
+        }
+    }
+    
+    public static function readTrash() {
+        global $con;
+        $sql = "SELECT folder_id, name, DATE_FORMAT(deleted_at, '%Y-%m-%d %H:%i:%s') as deleted_at FROM trash";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            $trash = [];
+            while ($row = mysqli_fetch_assoc($result)) {
+                $trash[] = $row;
+            }
+            return $trash;
+        } else {
+            echo "Error: " . mysqli_error($con);
+            return false;
+        }
+    }
     
 }
 ?>

@@ -58,7 +58,6 @@
 
                     </div>
                 </section>
-
                 <section class="my-notes">
                     <h2>My Notes</h2>
                     <div class="filter-buttons">
