@@ -45,7 +45,7 @@ $(document).ready(function() {
 
         // If all validations pass, submit the form
         if (isValid) {
-            $('form[action="login.php"]').submit(); // Submits the login form
+            $('#login-form').submit(); // Submits the login form
         }
     });
     

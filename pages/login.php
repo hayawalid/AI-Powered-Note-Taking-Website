@@ -17,7 +17,7 @@ if ($GLOBALS['con']->connect_error) {
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['login'])) {
+    if (isset($_POST['email1'])) {
         // Handle login
         $email = htmlspecialchars(trim($_POST["email1"]));
         $password = htmlspecialchars(trim($_POST["password1"]));
@@ -28,14 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($user) {
             $_SESSION['user_id'] = $user->id;
             echo "<script>alert('Login successful');</script>";
-            header("Location: admin_dashboard.php");
+            header("Location: user_profile.php");
             exit();
         } else {
             $error = "Invalid email or password";         
         }
-    } 
-
-    if (isset($_POST['username'])) {
+    } elseif (isset($_POST['username'])) {
         // echo "<script>alert('form submitted.');</script>";
         // Handle signup
         $username = htmlspecialchars(trim($_POST["username"]));
