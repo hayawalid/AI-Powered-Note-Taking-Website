@@ -1,2 +1,3 @@
 ErrorDocument 404 /AI-Powered-Note-Taking-Website/includes/page_not_found.php
 ErrorDocument 401 /AI-Powered-Note-Taking-Website/includes/401.php
+ErrorDocument 500 /AI-Powered-Note-Taking-Website/includes/401.php
