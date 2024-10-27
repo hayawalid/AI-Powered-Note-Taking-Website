@@ -22,7 +22,8 @@ if (!empty($_SESSION['UserID'])) {
     } else {
         // Unauthorized access
         http_response_code(500);
-        echo "<h1>500 - Unauthorized Access</h1>";
+        // echo "<h1>500 - Unauthorized Access</h1>";
+        header("Location: ../includes/401.php");
         exit;
     }
 } else {
@@ -48,7 +49,7 @@ if (!empty($_SESSION['UserID'])) {
         }
         // If no match found, unauthorized
         http_response_code(500);
-        header("Location: 401.php");
+        header("Location:  ../includes/401.php");
         exit;
     } else {
         echo "Error fetching pages: " . mysqli_error($con);
