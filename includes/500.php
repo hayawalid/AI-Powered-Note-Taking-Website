@@ -1,7 +1,9 @@
 <?php
 include_once 'User.php';
 session_start();	
-
+if(!$_SESSION['UserID']){
+  Header('Location: ../pages/login.php');
+}
 $user = new User($_SESSION['UserID']);
 ?>
 
