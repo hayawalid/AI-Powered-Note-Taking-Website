@@ -39,10 +39,11 @@ a {
 	overflow: hidden;
     position: absolute;
     margin-left:20%;
+	
 }
 .toolbar {
 	padding: 16px;
-	background: #b8c0c4;
+	background: #dae7ee;
 }
 .toolbar .head {
 	display: flex !important;
