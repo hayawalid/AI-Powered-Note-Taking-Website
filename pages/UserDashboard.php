@@ -1,8 +1,6 @@
 <?php 
-include '../includes/session.php';
-
+include_once '../includes/session.php';
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,15 +10,14 @@ include '../includes/session.php';
     <link rel="stylesheet" href="../assets/css/user_style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Style for disabled buttons */
+        
         button:disabled {
-            background-color: #e0e0e0; /* Light gray background */
-            color: #777; /* Dark gray text */
-            cursor: not-allowed; /* Changes cursor to indicate disabled state */
-            opacity: 0.6; /* Optional: Make button slightly transparent */
-            border: none; /* Gray border */
+            background-color: #e0e0e0;
+            color: #777;
+            cursor: not-allowed; 
+            opacity: 0.6;
+            border: none;
         }
-        /* Optional: More specific targeting if needed */
         .popover-btn:disabled {
             background-color: #e0e0e0;
             color: #888;
@@ -47,13 +44,16 @@ include '../includes/session.php';
                 </div>
                 <div class="folders">
                     <?php
-                    $obj = folder::readRecent();
+                    include_once '../includes/folder_class.php'; 
+                    include_once '../includes/session.php'; 
+                    $user_id = $_SESSION['UserID']; 
+                    $obj = folder::readRecent($user_id); 
                     $colors = ['blue', 'yellow', 'red'];
                     if ($obj) {
                         for ($j = 0; $j < count($obj); $j++) {
                             $color = $colors[$j % count($colors)];
                             $folderId = $obj[$j]['ID'];
-                            $folderName = strtolower($obj[$j]['name']); // Normalize name for comparison
+                            $folderName = strtolower($obj[$j]['name']);
                             $isGeneral = ($folderId == 1 && $folderName == 'general');
                             ?>
                             <div class="folder <?php echo $color; ?>">

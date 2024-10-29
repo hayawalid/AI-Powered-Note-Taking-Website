@@ -1,19 +1,25 @@
 <?php
-
 include '../includes/folder_class.php';
 
-// Create folder function
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 if (isset($_POST["submit"])) {
     $name = $_POST['name'];
     $type = $_POST['dropdown'];
     $parent_folder_id = $_GET['folder_id'] ?? 1;
+    $user_id = $_SESSION['UserID']; 
+
     if ($con->connect_error) {
         die("Connection failed: " . $con->connect_error);
     }
     if ($type == "option2") {
-        $new_folder_id = folder::create($name, $parent_folder_id);
+        $new_folder_id = folder::create($name, $user_id, $parent_folder_id); 
         if ($new_folder_id) {
-            header("Location: ../pages/folder_contents.php?folder_id=$new_folder_id");
+            
+            header("Location:../pages/folder_contents.php?folder_id=$new_folder_id");
+            // header("Location:../pages/UserDashboard.php");
             exit();
         } else {
             echo "ERROR!";
@@ -27,7 +33,7 @@ if (isset($_POST['id'])) {
     echo "Received Folder ID: " . $id . "<br>";
     if ($id) {
         if (folder::moveToTrash($id)) {
-            header("Location: ../pages/folders.php");
+            header("Location: ../pages/Folders.php");
             exit();
         } else {
             echo "Error moving folder to trash.";
@@ -38,11 +44,7 @@ if (isset($_POST['id'])) {
 }
 
 
-
-?>
-
-
-<aside class="sidebar" id="sidebar" style="z-index: 100000;">
+?><aside class="sidebar" id="sidebar" style="z-index: 100000;">
     <div class="logo">
         <h2>SmartNotes</h2>
     </div>
