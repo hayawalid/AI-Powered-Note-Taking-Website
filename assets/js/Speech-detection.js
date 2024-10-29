@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     document.getElementById('save-content').addEventListener('click', function () {
-        var content = document.getElementById('content').innerHTML;
+        var content = document.getElementById('content').innerText; // Use innerText to get plain text
         console.log("Content to save: ", content);  // Check this in your console
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '../includes/FileContent_class.php', true);
@@ -71,4 +71,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
         };
         xhr.send('content=' + encodeURIComponent(content) + '&file_id=1'); // Ensure this matches your backend code
     });
+    
 });
