@@ -35,7 +35,7 @@
                 <h1>My Folders</h1>
                 <div class="search-bar">
                     <input type="text" placeholder="Search">
-                    <div class="profile-icon"><i class="fa-regular fa-user"></i></div>
+                    <a class="profile-icon" style="cursor: pointer; " href="user_profile.php"><i class="fa-regular fa-user"></i></a>
                 </div>
             </div>
             <section class="recent-folders">
