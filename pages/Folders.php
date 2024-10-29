@@ -1,3 +1,6 @@
+<?php
+    include_once '../includes/session.php'; 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,8 +51,10 @@
                         </button>
                     </div>
                     <?php
-                    // Fetch folders where folder_id is 1
-                    $obj = folder::readByParent(1);
+                    
+                    $current_folder_id = $_GET['folder_id'] ?? 1; 
+                    $user_id = $_SESSION['UserID']; 
+                    $obj = folder::readByParent($user_id, $current_folder_id);
                     $colors = ['blue', 'yellow', 'red'];
                     if ($obj) {
                         for ($j = 0; $j < count($obj); $j++) {

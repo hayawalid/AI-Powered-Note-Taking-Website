@@ -14,6 +14,8 @@ include '../includes/user_sidebar.php';
     <link rel="stylesheet" href="../assets/css/user_style.css">
     <script src="../assets/js/Speech-detection.js" defer></script>
     <script src="../assets/js/sidebar.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@latest/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
 	<title>Word Editor</title>
 </head>

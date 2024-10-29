@@ -1,3 +1,6 @@
+<?php
+include_once '../includes/session.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,19 +36,26 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $obj = folder::readTrash();
+                                        include_once '../includes/folder_class.php';
+
+                                        $user_id = $_SESSION['UserID'];  // Get user ID from session
+                                        $obj = folder::readTrash($user_id);  // Pass user ID
+                                        
                                         if ($obj) {
                                             foreach ($obj as $folder) {
                                                 ?>
-                                                <tr data-id="<?php echo $folder['folder_id']; ?>" data-parent="0" data-level="1">
+                                                <tr data-id="<?php echo $folder['folder_id']; ?>" data-parent="0"
+                                                    data-level="1">
                                                     <td data-column="name"><?php echo $folder['name']; ?></td>
                                                     <td><?php echo $folder['deleted_at']; ?></td>
                                                     <td>
                                                         <div>
-                                                            <a href="#" class="badge badge-success mr-3 edit-note" data-toggle="modal" data-target="#edit-note">
+                                                            <a href="#" class="badge badge-success mr-3 edit-note"
+                                                                data-toggle="modal" data-target="#edit-note">
                                                                 <i class="fa-solid fa-rotate"></i>
                                                             </a>
-                                                            <a href="#" class="badge badge-danger" data-extra-toggle="delete" data-closest-elem="tr">
+                                                            <a href="#" class="badge badge-danger" data-extra-toggle="delete"
+                                                                data-closest-elem="tr">
                                                                 <i class="fa-solid fa-trash"></i>
                                                             </a>
                                                         </div>
@@ -55,6 +65,7 @@
                                             }
                                         }
                                         ?>
+
                                     </tbody>
                                 </table>
                             </div>
