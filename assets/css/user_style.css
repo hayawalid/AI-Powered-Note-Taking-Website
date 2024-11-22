@@ -92,15 +92,6 @@
 .folder {
     position: relative;
 }
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.page-header h1 {
-    font-size: 36px;
-}
 
 .search-bar {
     display: flex;
@@ -130,18 +121,18 @@ a:visited {
     color: inherit;
 }
 
-
+/* 
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     background-color: #f9f9f9;
     color: #333;
-}
+} */
 
 .container {
     display: flex;
     height: 100vh;
 }
-
+/* 
 .sidebar {
     position: fixed;
     width: 250px;
@@ -160,7 +151,7 @@ body {
     cursor: pointer;
     z-index: 10000;
 
-}
+} */
 
 .logo h2 {
     font-size: 22px;
@@ -196,9 +187,10 @@ body {
 }
 
 .color-options {
-    display: flex;
+    /* display: flex; */
     gap: 5px;
-    margin-left: 10px;
+    margin-left: 9px;
+    padding: 3px;
 }
 
 .color-options .dot {
@@ -510,7 +502,7 @@ body {
     border: 1px solid #f9f8f8;
     border-radius: 10px;
     padding: 20px;
-    margin-top: 20px;
+    margin-top: 40px;
     height: auto;
 }
 
@@ -778,11 +770,22 @@ body {
 
 /* POP-UP
 ========================================== */
-.body-blur {
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     backdrop-filter: blur(5px);
-    /* Adjust the blur amount as needed */
-    transition: backdrop-filter 0.3s ease;
-    /* Smooth transition */
+    background: rgba(0, 0, 0, 0.034); 
+    z-index: 1000000; 
+    display: none;
+    transition: backdrop-filter 0.3s ease, opacity 0.3s ease;
+}
+
+.overlay.open {
+    display: block; /* Show the overlay when active */
+    opacity: 1;
 }
 
 .pop-up.open {
