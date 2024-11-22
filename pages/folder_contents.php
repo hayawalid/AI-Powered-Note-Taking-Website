@@ -57,7 +57,7 @@ include_once '../includes/session.php';
                     <div class="folders">
                         <div class="folder empty"
                             style="display: flex; justify-content: center; align-items: center; height: 12.5em !important;">
-                            <button class="new-note" style="margin: auto;">
+                            <button class="new-note" style="margin: auto;" id="new-note">
                                 <i class="fa-solid fa-plus"></i> New Note
                             </button>
                         </div>
