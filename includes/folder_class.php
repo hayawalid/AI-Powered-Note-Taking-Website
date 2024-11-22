@@ -183,22 +183,4 @@ class folder
             return false;
         }
     }
-
-
-    public static function readTrash($user_id)
-    {
-        global $con;
-        $sql = "SELECT folder_id, name, DATE_FORMAT(deleted_at, '%Y-%m-%d %H:%i:%s') as deleted_at FROM trash WHERE user_id = $user_id";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $trash = [];
-            while ($row = mysqli_fetch_assoc($result)) {
-                $trash[] = $row;
-            }
-            return $trash;
-        } else {
-            echo "Error: " . mysqli_error($con);
-            return false;
-        }
-    }
 }

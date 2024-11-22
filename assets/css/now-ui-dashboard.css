@@ -2511,6 +2511,7 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
 .navbar.bg-white:not(.navbar-transparent) a:not(.dropdown-item):not(.btn).disabled {
   opacity: .5;
   color: #888;
+  
 }
 
 .navbar.bg-white:not(.navbar-transparent) .button-bar {
@@ -2557,13 +2558,7 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
   background-color: #FFFFFF !important;
 }
 
-.page-header {
-  min-height: 100vh;
-  max-height: 999px;
-  padding: 0;
-  color: #FFFFFF;
-  position: relative;
-}
+
 
 .page-header .page-header-image {
   position: absolute;
@@ -2635,9 +2630,6 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
   content: "";
 }
 
-.page-header:before {
-  background-color: rgba(0, 0, 0, 0.3);
-}
 
 .page-header[filter-color="orange"] {
   background: rgba(44, 44, 44, 0.2);
