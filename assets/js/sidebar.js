@@ -4,10 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector('.pop-up').classList.add('open');
     });
     
-    // document.querySelector('.new-note').addEventListener('click', function () {
-    //     document.querySelector('.pop-up').classList.add('open');
-    //     document.body.classList.add('body-blur');
-    // });
+    document.querySelector('.new-note').addEventListener('click', function () {
+        document.querySelector('.pop-up').classList.add('open');
+        document.querySelector('.overlay').classList.remove('open');
+    });
 
     document.querySelector('.pop-up .close').addEventListener('click', function () {
         document.querySelector('.pop-up').classList.remove('open');
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const name = document.getElementById('name').value;
         const description = document.getElementById('description').value;
         document.querySelector('.pop-up').classList.remove('open');
-        document.body.classList.remove('body-blur');
+        document.querySelector('.overlay').classList.remove('open');
     });
 });
 document.addEventListener('click', function (event) {
