@@ -64,6 +64,10 @@ body {
     color: white;
 } */
 
+.white-card {
+    background-color:  white;
+}
+
 
 .blue-card {
     background-color: #D4E7FE !important;
