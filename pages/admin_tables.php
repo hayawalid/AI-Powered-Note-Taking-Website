@@ -51,7 +51,7 @@ $users = User::getAllUsers();
 
 <body class="">
   <div class="wrapper ">
-    <?php include '../includes/admin_sidebar.php'; ?>
+    <?php include '../includes/sidebar.php'; ?>
     <div class="main-panel" id="main-panel">
       <!-- Navbar -->
       <?php include '../includes/admin_navbar.php'; ?>
