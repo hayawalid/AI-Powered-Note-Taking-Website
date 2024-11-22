@@ -41,7 +41,7 @@ $current_page = 'User dashboard';
 </head>
 <body>
 <div class="wrapper">
-    <?php include '../includes/admin_sidebar.php'; ?>
+    <?php include '../includes/sidebar.php'; ?>
     <div class="main-panel" id="main-panel">
     <nav class="navbar navbar-expand-lg navbar-transparent bg-primary navbar-absolute" style="margin-top: 20px;">
         <div class="container-fluid">
