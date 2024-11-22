@@ -48,7 +48,7 @@ $current_page = 'Dashboard';
 </head>
 
 <body class="">
-  <div class="wrapper">
+  <div class="wrapper ">
     <?php include '../includes/admin_sidebar.php'; ?>
     <div class="main-panel" id="main-panel">
       <!-- Navbar -->
@@ -359,8 +359,8 @@ $current_page = 'Dashboard';
   <!--  Notifications Plugin    -->
   <script src="../assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
-  <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+  <script src="../assets/js/now-ui-dashboard.js" type="text/javascript"></script>
+  <script src="../assets/js/now-ui-dashboard.min.js" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
   <script src="../assets/js/demo.js"></script>
   <script>
     $(document).ready(function() {
