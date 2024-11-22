@@ -1,13 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const newNote = document.getElementById('new-note');
     document.getElementById('add-new').addEventListener('click', function () {
         document.querySelector('.overlay').classList.add('open');
         document.querySelector('.pop-up').classList.add('open');
     });
     
-    document.querySelector('.new-note').addEventListener('click', function () {
-        document.querySelector('.pop-up').classList.add('open');
-        document.querySelector('.overlay').classList.remove('open');
-    });
+    if(newNote){
+        newNote.addEventListener('click', function () {
+            document.querySelector('.pop-up').classList.add('open');
+            document.querySelector('.overlay').classList.add('open');
+        });
+    }
 
     document.querySelector('.pop-up .close').addEventListener('click', function () {
         document.querySelector('.pop-up').classList.remove('open');
