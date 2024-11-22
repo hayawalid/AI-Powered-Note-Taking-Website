@@ -101,7 +101,7 @@
 
 <body class="user-profile">
   <div class="wrapper ">
-    <?php include '../includes/sidebar.php'; ?>
+    <?php include '../includes/admin_sidebar.php'; ?>
     <div class="main-panel" id="main-panel">
       <!-- Navbar -->
       <?php include '../includes/admin_navbar.php'; ?>
