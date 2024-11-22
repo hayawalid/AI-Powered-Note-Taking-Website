@@ -126,18 +126,18 @@
                                     <!-- Rename Button -->
                                     <button class="popover-btn rename"
                                             data-folder-id="<?php echo $folderId; ?>"
-                                            <?php echo $isGeneral ? 'disabled title="Cannot rename General folder"' : ''; ?>>
+                                            >
                                         Rename
                                     </button>
                                     <button class="popover-btn move"
                                             data-folder-id="<?php echo $folderId; ?>"
-                                            <?php echo $isGeneral ? 'disabled title="Cannot move General folder"' : ''; ?>>
+                                            >
                                         Move
                                     </button>
                                     <!-- Delete Button -->
                                     <button class="popover-btn delete"
                                             data-folder-id="<?php echo $folderId; ?>"
-                                            <?php echo $isGeneral ? 'disabled title="Cannot delete General folder"' : ''; ?>
+                                            
                                             onclick="<?php echo !$isGeneral ? "openTrashModal('$folderId')" : ''; ?>">
                                         Delete
                                     </button>
