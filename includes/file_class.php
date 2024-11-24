@@ -1,0 +1,121 @@
+<?php
+$con = new mysqli("localhost", "root", "", "smartnotes_db");
+if ($con->connect_error) {
+    die("Connection failed: " . $con->connect_error);
+}
+
+class FileType {
+    public $id;
+    public $name;
+
+    public function __construct($id) {
+        global $con;
+        $this->id = $id;
+        if ($id != 0) {
+            $sql = "SELECT * FROM file_types WHERE id = $id";
+            $result = mysqli_query($con, $sql);
+            if ($row = mysqli_fetch_array($result)) {
+                $this->name = $row['name'];
+            } else {
+                echo "Error: File type not found.<br>";
+            }
+        }
+    }
+}
+class file {
+    public $id;
+    public $name;
+    public $user_id;
+    public $folder_id;
+    public $content;
+    public $created_at;
+    public $file_type;
+
+    public function __construct($id) {
+        global $con;
+        $this->id = $id;
+        if ($id != 0) {
+            $sql = "SELECT * FROM files WHERE id = $id";
+            $result = mysqli_query($con, $sql);
+            if ($row = mysqli_fetch_array($result)) {
+                $this->name = $row['name'];
+                $this->user_id = $row['user_id'];
+                $this->folder_id = $row['folder_id'];
+                $this->content = $row['content'];
+                $this->created_at = $row['created_at'];
+                $this->file_type = $row['file_type'];
+            } else {
+                echo "Error: File not found.<br>";
+            }
+        }
+    }
+
+    // Create a new file
+    public static function create($name, $user_id, $folder_id, $content, $file_type) {
+        global $con;
+        $created_at = date('Y-m-d H:i:s');
+        $sql = "INSERT INTO files (name, user_id, folder_id, content, created_at, file_type) 
+                VALUES ('$name', $user_id, $folder_id, '$content', '$created_at', $file_type)";
+        if (mysqli_query($con, $sql)) {
+            $new_id = mysqli_insert_id($con);
+            return $new_id;
+        } else {
+            echo "Error: " . mysqli_error($con) . "<br>";
+            return false;
+        }
+    }
+
+    // Read all files for a user
+    public static function readAll($user_id, $folder_id = null) {
+        global $con;
+        
+        // Start building the SQL query
+        $sql = "SELECT * FROM files WHERE user_id = $user_id";
+        
+        // If a folder ID is provided, filter by folder
+        if ($folder_id) {
+            $sql .= " AND folder_id = $folder_id";
+        }
+        
+        // Execute the query
+        $result = mysqli_query($con, $sql);
+        
+        // Check for results
+        if ($result) {
+            $files = [];
+            while ($row = mysqli_fetch_assoc($result)) {
+                $files[] = $row;
+            }
+            return $files;
+        } else {
+            echo "Error: " . mysqli_error($con);
+            return false;
+        }
+    }
+    
+
+    // Update a file's content
+    public static function update($id, $newContent) {
+        global $con;
+        $sql = "UPDATE files SET content = '$newContent' WHERE id = $id";
+        if (mysqli_query($con, $sql)) {
+            return true;
+        } else {
+            echo "Error: " . mysqli_error($con);
+            return false;
+        }
+    }
+
+    // Delete a file
+    public static function delete($id) {
+        global $con;
+        $sql = "DELETE FROM files WHERE id = $id";
+        if (mysqli_query($con, $sql)) {
+            return true;
+        } else {
+            echo "Error: " . mysqli_error($con);
+            return false;
+        }
+    }
+}
+?>
