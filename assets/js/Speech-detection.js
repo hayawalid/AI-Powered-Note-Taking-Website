@@ -1,11 +1,47 @@
-// Add your Azure API Key and Region here
 const subscriptionKey = '4f464ad2de1b4cd3ad40a3675ccc82a7';
-const serviceRegion = 'eastus'; // Example: 'eastus'
+const serviceRegion = 'eastus';
 let recognizer;
+let animationInterval;
 
-document.addEventListener('DOMContentLoaded', (event) => {
+window.addEventListener("load", () => {
+    const soundWaveContainer = document.getElementById("soundWave");
 
-    // Check if Speech SDK is loaded
+    // Generate 160 bars dynamically
+    for (let i = 0; i < 160; i++) {
+        const bar = document.createElement("div");
+        bar.classList.add("bar");
+        soundWaveContainer.appendChild(bar);
+    }
+
+    // Unify bar length initially
+    const bars = document.querySelectorAll(".bar");
+    bars.forEach((item) => {
+        item.style.height = '30px'; // Initial height of 30px
+    });
+
+    function animateBars() {
+        bars.forEach((bar) => {
+            const randomHeight = Math.random() * 70 + 30; // Random height between 30px and 100px
+            bar.style.height = `${randomHeight}px`;
+        });
+    }
+
+    function startAnimation() {
+        if (!animationInterval) {
+            animationInterval = setInterval(animateBars, 100);
+        }
+    }
+
+    function stopAnimation() {
+        if (animationInterval) {
+            clearInterval(animationInterval);
+            animationInterval = null;
+        }
+        bars.forEach((bar) => {
+            bar.style.height = '30px'; // Reset to initial height
+        });
+    }
+
     if (typeof SpeechSDK === 'undefined') {
         console.error("Speech SDK not loaded.");
         return;
@@ -13,29 +49,40 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     document.getElementById('start-recognition').addEventListener('click', function () {
         const speechConfig = SpeechSDK.SpeechConfig.fromSubscription(subscriptionKey, serviceRegion);
-        speechConfig.speechRecognitionLanguage = 'ar-EG';  // Set language
+        speechConfig.speechRecognitionLanguage = 'ar-EG';
 
         const audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
         recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
 
         recognizer.startContinuousRecognitionAsync();
 
-        // Event for when speech is recognized
+        recognizer.recognizing = (s, e) => {
+            if (e.result.reason === SpeechSDK.ResultReason.RecognizingSpeech) {
+                console.log("Recognizing speech, animating bars");
+                startAnimation();
+            } else {
+                stopAnimation();
+            }
+        };
+
         recognizer.recognized = (s, e) => {
             if (e.result.reason === SpeechSDK.ResultReason.RecognizedSpeech) {
-                const recognizedText = e.result.text;
-                appendRecognizedText(recognizedText);
-                console.log(`Recognized Text: ${recognizedText}`);
+                appendRecognizedText(e.result.text);
+                startAnimation(); // Keep animating if continuous speech is recognized
+            } else {
+                stopAnimation(); // Stop animating when there's no speech
             }
         };
 
         recognizer.canceled = (s, e) => {
             console.error(`Recognition canceled: ${e.errorDetails}`);
+            stopAnimation();
         };
 
         recognizer.sessionStopped = (s, e) => {
-            console.log("Session stopped");
+            console.log("Recording stopped");
             recognizer.stopContinuousRecognitionAsync();
+            stopAnimation();
         };
 
         document.getElementById('stop-recognition').disabled = false;
@@ -47,29 +94,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
             recognizer.stopContinuousRecognitionAsync();
             document.getElementById('stop-recognition').disabled = true;
             document.getElementById('start-recognition').disabled = false;
+            stopAnimation();
         }
     });
 
-    function appendRecognizedText(recognizedText) {
+    function appendRecognizedText(text) {
         const contentDiv = document.getElementById('content');
-        let highlightedText = recognizedText;
-        highlightedText = highlightedText.replace(/\d+/g, '<span class="highlight-number">$&</span>');
-        highlightedText = highlightedText.replace(/remember/gi, '<span class="highlight-remember">important</span>');
-        contentDiv.innerHTML += ' ' + highlightedText;
-    }
+        let formattedText = text.trim();
 
-    document.getElementById('save-content').addEventListener('click', function () {
-        var content = document.getElementById('content').innerText; // Use innerText to get plain text
-        console.log("Content to save: ", content);  // Check this in your console
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '../includes/FileContent_class.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                console.log(xhr.responseText);
-            }
-        };
-        xhr.send('content=' + encodeURIComponent(content) + '&file_id=1'); // Ensure this matches your backend code
-    });
-    
+        formattedText = formattedText.replace(/\d+/g, '<span class="highlight-number">$&</span>');
+        formattedText = formattedText.replace(/remember/gi, '<span class="highlight-remember">important</span>');
+
+        formattedText = `<div class="paragraph">${formattedText}</div>`;
+        contentDiv.innerHTML += ` ${formattedText}`;
+    }
 });

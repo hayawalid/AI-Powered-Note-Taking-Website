@@ -127,3 +127,102 @@ a {
 #show-code[data-active="true"] {
 	background: #eee;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* MIC css  */
+/* General Body Styling */
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	background-color: #1c1c2b; /* Background color */
+	margin: 0;
+  }
+  
+  /* Ripple Effect Container */
+  .ripple-container {
+	position: relative;
+	width: 150px;
+	height: 150px;
+  }
+  
+  .ripple-container .circle {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	border: 2px solid #a990ff; /* Circle border color */
+	border-radius: 50%;
+	animation: ripple 2s infinite;
+	box-sizing: border-box;
+  }
+  
+  .ripple-container .circle:nth-child(2) {
+	animation-delay: 0.4s;
+  }
+  
+  .ripple-container .circle:nth-child(3) {
+	animation-delay: 0.8s;
+  }
+  
+  .ripple-container .circle:nth-child(4) {
+	animation-delay: 1.2s;
+  }
+  
+  /* Ripple Animation */
+  @keyframes ripple {
+	0% {
+	  transform: scale(1);
+	  opacity: 1;
+	}
+	100% {
+	  transform: scale(2);
+	  opacity: 0;
+	}
+  }
+  
+  /* Microphone Styling */
+  .microphone {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 60px;
+	height: 60px;
+	background-color: #fff;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+  
+  .microphone::before {
+	content: '';
+	display: block;
+	width: 20px;
+	height: 40px;
+	background-color: #1c1c2b;
+	border-radius: 10px;
+  }
+  
+  .microphone::after {
+	content: '';
+	position: absolute;
+	bottom: 10px;
+	width: 10px;
+	height: 10px;
+	background-color: #1c1c2b;
+	border-radius: 50%;
+  }
+  
