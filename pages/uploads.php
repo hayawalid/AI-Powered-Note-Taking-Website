@@ -26,6 +26,7 @@
 </head>
 
 <body>
+<?php session_start(); // Start the session to use $_SESSION variables ?>
     <div class="container">
         <?php include '../includes/sidebar.php'; ?>
 

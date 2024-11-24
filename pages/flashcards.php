@@ -148,6 +148,73 @@ a:hover, a:focus {
 .card[data-color="orange"] .category {
     color: #e95e37;
 }
+/* hena */
+
+
+
+
+.card-big-shadow {
+    position: relative;
+    perspective: 1000px; /* Enables 3D flipping */
+}
+
+.card-flip {
+    transform-style: preserve-3d; /* Maintains 3D effect for children */
+    transition: transform 0.6s ease-in-out; /* Smooth flipping animation */
+    position: relative;
+}
+
+.card-flip.is-flipped {
+    transform: rotateY(180deg); /* Flipping effect */
+}
+
+.card-front,
+.card-back {
+    backface-visibility: hidden; /* Hides the back face when not visible */
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.card-front {
+    /* Ensure the front card is shown initially */
+    display: flex; /* Enable flexbox for alignment */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.card-back {
+    /* Make sure the back card is hidden initially */
+    transform: rotateY(180deg); /* Rotate back card to hide it */
+    display: flex; /* Enable flexbox for alignment */
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    text-align: center; /* Center text alignment */
+    padding: 20px; /* Add spacing inside the back card */
+    height: 100%; /* Ensure it takes up full height of the card */
+    box-sizing: border-box; /* Include padding in height/width calculations */
+    background-color: #f4f4f4; /* Light background color for better readability */
+    color: #333; /* Dark text color for readability */
+}
+
+.card-back .title, .card-back .description {
+    color: #333; /* Ensure text is readable */
+    font-size: 16px;
+}
+
+.card-back .category {
+    color: #555; /* Subtle color for category text */
+    font-size: 14px;
+}
+
+
     </style>
 </head>
 <body>
@@ -157,6 +224,7 @@ a:hover, a:focus {
 <div class="row">
     <div class="col-md-4 col-sm-6 content-card">
         <div class="card-big-shadow">
+        <div class="card-flip">
             <div class="card card-just-text" data-background="color" data-color="blue" data-radius="none">
                 <div class="content">
                     <h6 class="category">Best cards</h6>
@@ -164,6 +232,12 @@ a:hover, a:focus {
                     <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
                 </div>
             </div> <!-- end card -->
+            <div class="card card-back">
+    <h6 class="category">Details</h6>
+    <h4 class="title">Back of the Blue Card</h4>
+    <p class="description">Here is some content for the back of the card. You can add more details about this card here.</p>
+</div>
+        </div>
         </div>
     </div>
     
@@ -176,6 +250,9 @@ a:hover, a:focus {
                     <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
                 </div>
             </div> <!-- end card -->
+            <div class="card card-back">
+            <p>This is the back of the card. Add your content here!</p>
+        </div>
         </div>
     </div>
     
@@ -188,6 +265,9 @@ a:hover, a:focus {
                     <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
                 </div>
             </div> <!-- end card -->
+            <div class="card card-back">
+            <p>This is the back of the card. Add your content here!</p>
+        </div>
         </div>
     </div>
     
@@ -200,6 +280,9 @@ a:hover, a:focus {
                     <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
                 </div>
             </div> <!-- end card -->
+            <div class="card card-back">
+            <p>This is the back of the card. Add your content here!</p>
+        </div>
         </div>
     </div>
     
@@ -212,6 +295,9 @@ a:hover, a:focus {
                     <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
                 </div>
             </div> <!-- end card -->
+            <div class="card card-back">
+            <p>This is the back of the card. Add your content here!</p>
+        </div>
         </div>
     </div>
     
@@ -224,6 +310,9 @@ a:hover, a:focus {
                     <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
                 </div>
             </div> <!-- end card -->
+            <div class="card card-back">
+            <p>This is the back of the card. Add your content here!</p>
+        </div>
         </div>
     </div>
 </div>
@@ -233,8 +322,21 @@ a:hover, a:focus {
 <script type="text/javascript">
 	
 </script>
-<script src="../assets/js/sidebar.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const cardContainers = document.querySelectorAll(".card-big-shadow");
 
+    cardContainers.forEach(container => {
+        container.addEventListener("click", function () {
+            const cardFlip = this.querySelector(".card-flip");
+            cardFlip.classList.toggle("is-flipped");
+        });
+    });
+});
+
+</script>
+<script src="../assets/js/sidebar.js"></script>
+<script src="../assets/js/flashcards.js"></script>
 </body>
 </html>
 

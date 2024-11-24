@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: teal;
+}
+
+.wrapper {
+    max-width: 600px;
+    margin: 80px auto 50px;
+    padding: 30px;
+    border-radius: 20px;
+    background: #c0e2df;
+    position: relative;
+    min-height: 400px;
+    overflow: hidden;
+}
+
+.wrapper .wrap {
+    width: 500px;
+    position: absolute;
+    left: 50px;
+    transition: 0.6s;
+}
+
+#q2, #q3 {
+    left: 650px;
+}
+
+.h4 {
+    font-size: 1.5rem; /* Increase the font size */
+    font-weight: bold; /* Make the text bold */
+    margin-bottom: 30px; /* Add space under the question */
+}
+
+label {
+    display: block;
+    margin-bottom: 20px; /* Increased margin for more space */
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.options {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 20px; /* Adds space between choices and the next element */
+}
+
+.options input {
+    opacity: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 4px;
+    left: 3px;
+    height: 20px;
+    width: 20px;
+    background-color: #c0e2df;
+    border: 2px solid #444;
+    border-radius: 50%;
+}
+
+.options input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.options .checkmark:after {
+    content: "";
+    width: 9px;
+    height: 9px;
+    display: block;
+    background: white;
+    position: absolute;
+    top: 51%;
+    left: 51%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 300ms ease-in-out 0s;
+}
+
+.options input[type="radio"]:checked ~ .checkmark {
+    background: #590995;
+    border: 2px solid #590995;
+    transition: 300ms ease-in-out 0s;
+}
+
+.options input[type="radio"]:checked ~ .checkmark:after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.d-flex {
+    display: flex;
+    justify-content: space-between; /* Space between the buttons */
+    width: 100%; /* Ensure full width for button alignment */
+}
+
+.btn {
+    background-color: inherit;
+    border: 1px solid rgb(63, 139, 139);
+    border-radius: 20px;
+    padding: 9px 24px;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.btn-primary {
+    background-color: rgb(63, 139, 139);
+    border: 1px solid rgb(63, 139, 139);
+}
+
+.btn:focus {
+    box-shadow: none;
+}
+
+.btn:hover {
+    background-color: teal;
+    color: #fff;
+}
+
+/* Ensure the buttons don't overlap */
+.d-flex button {
+    flex: 1; /* Allow buttons to take up equal space */
+    margin: 0 10px; /* Space between the buttons */
+    max-width: 150px; /* Max width to avoid oversized buttons */
+}
+
+.d-flex button:first-child {
+    margin-right: 10px; /* Add space between previous and next button */
+}
+
+.d-flex button:last-child {
+    margin-left: 10px; /* Add space between next and previous button */
+}
+
+.fa-arrow-right, .fa-arrow-left {
+    transition: 0.2s ease-in all;
+}
+
+.btn.btn-primary:hover .fa-arrow-right {
+    transform: translate(8px);
+}
+
+.btn.btn-primary:hover .fa-arrow-left {
+    transform: translate(-8px);
+}
+
+/* Mobile responsiveness */
+@media(max-width: 767px) {
+    .wrapper {
+        margin: 30px 10px;
+        height: 420px;
+    }
+
+    .wrapper .wrap {
+        width: 280px;
+        left: 15px;
+    }
+}
+
+/* Dark mode toggle styling */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 28px;
+    background-color: inherit;
+    margin-top: 20px; /* Adds space between the question container and the switch */
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #590995;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #000;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(30px);
+    background-color: #fff;
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.dark-theme {
+    background-color: #222;
+}
+
+/* Center the dark mode toggle */
+.d-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Adds space between the questions and the toggle */
+}
+
+.d-flex .h3 {
+    margin-right: 10px; /* Adds space between the text and switch */
+}
