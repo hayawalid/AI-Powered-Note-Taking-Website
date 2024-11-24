@@ -44,50 +44,54 @@ class trash {
     }
 
     public function restore() {
-        global $con;
-        echo " 1 ";
-    
-        if ($this->ID != 0) {
-            $check_parent_sql = "SELECT * FROM folders WHERE ID = $this->folder_id";
-            $check_parent_result = mysqli_query($con, $check_parent_sql);
-    
-            if (mysqli_num_rows($check_parent_result) > 0) {
-                echo " 2 ";
-                $restore_folder_id = $this->folder_id;
+    global $con;
+
+    if ($this->ID != 0) {
+        $check_parent_sql = "SELECT * FROM folders WHERE ID = $this->folder_id";
+        $check_parent_result = mysqli_query($con, $check_parent_sql);
+
+        if (mysqli_num_rows($check_parent_result) > 0) {
+            $restore_folder_id = $this->folder_id;
+        } else {
+            $restore_folder_id = 1; // Default parent folder
+        }
+
+        // Insert into folders
+        $sql = "
+            INSERT INTO folders (name, created_at, folder_id, user_id)
+            SELECT 
+                name, 
+                NOW(), 
+                $restore_folder_id AS folder_id, 
+                COALESCE((SELECT user_id FROM folders WHERE ID = $restore_folder_id), 1)
+            FROM 
+                trash 
+            WHERE 
+                ID = $this->ID;
+        ";
+        
+        if (mysqli_query($con, $sql)) {
+            // Delete from trash
+            $sqlDelete = "DELETE FROM trash WHERE ID = $this->ID";
+            if (mysqli_query($con, $sqlDelete)) {
+                echo "Folder successfully restored.<br>";
+                return true;
             } else {
-                $restore_folder_id = 1; // Parent folder does not exist, restore to default parent
-                echo " 3 ";
-            }
-    
-            // Insert the folder back to the folders table
-            $sql = "INSERT INTO folders (ID, name, folder_id, user_id) 
-                    SELECT ID, name, $restore_folder_id, user_id 
-                    FROM trash WHERE ID = $this->ID";
-            echo $sql;
-    
-            if (mysqli_query($con, $sql)) {
-                echo " 5 ";
-    
-                // Delete the entry from the trash table after restoring
-                $sqlDelete = "DELETE FROM trash WHERE ID = $this->ID";
-                if (mysqli_query($con, $sqlDelete)) {
-                    echo "Folder successfully restored.<br>";
-                    return true;
-                } else {
-                    echo "Error removing folder from trash: " . mysqli_error($con) . "<br>";
-                    error_log("Error removing folder from trash: " . mysqli_error($con));
-                    return false;
-                }
-            } else {
-                echo "Error restoring folder: " . mysqli_error($con) . "<br>";
-                error_log("Error restoring folder: " . mysqli_error($con));
+                echo "Error removing folder from trash: " . mysqli_error($con) . "<br>";
+                error_log("Error removing folder from trash: " . mysqli_error($con));
                 return false;
             }
         } else {
-            echo "Invalid ID. Cannot restore.<br>";
+            echo "Error restoring folder: " . mysqli_error($con) . "<br>";
+            error_log("Error restoring folder: " . mysqli_error($con));
             return false;
         }
+    } else {
+        echo "Invalid ID. Cannot restore.<br>";
+        return false;
     }
+}
+
     
     
     public static function readTrash($user_id) {
