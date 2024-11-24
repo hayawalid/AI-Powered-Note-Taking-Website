@@ -1,5 +1,5 @@
 <?php 
-include '../includes/user_sidebar.php';
+// include '../includes/user_sidebar.php';
 include '../includes/config.php';
 
 ?>
@@ -9,7 +9,7 @@ include '../includes/config.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/css/user_style.css">
-    <script src="../assets/js/sidebar.js"></script>
+    <!-- <script src="../assets/js/sidebar.js"></script> -->
     <script src="../assets/js/Note.js"></script>
     <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.css'><link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="../assets/css/Note.css">
@@ -28,7 +28,7 @@ include '../includes/config.php';
     
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 note-content centered">
       <div class="panel panel-info">
-        <div class="panel-heading">Artifical intelligence vs machine learning 
+        <div class="panel-heading">Name your file
         <button class="btn btn-primary Edit">Edit</button> 
         <button class="btn btn-primary summarize">Summerize ✨</button> 
         </div>

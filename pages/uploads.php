@@ -22,7 +22,14 @@
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../assets/css/now-ui-dashboard.css" rel="stylesheet" />
     <link href="../assets/css/demo.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.15.349/pdf.min.js"></script>
+<script>
+    // Specify the worker source location for PDF.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.15.349/pdf.worker.min.js";
+</script>
+
 </head>
 
 <body>
@@ -45,36 +52,15 @@
 
             </div>
         </div>
-
+        <div id="contentDisplay">
+            <!-- PDF content will be displayed here -->
+        </div>
 
     </div>
-    <script>
-        const dropArea = document.querySelector(".drop_box"),
-            button = dropArea.querySelector("button"),
-            dragText = dropArea.querySelector("header"),
-            input = dropArea.querySelector("input");
-        let file;
-        var filename;
+   
 
-        button.onclick = () => {
-            input.click();
-        };
-
-        input.addEventListener("change", function (e) {
-            var fileName = e.target.files[0].name;
-            let filedata = `
-    <form action="" method="post">
-    <div class="form">
-    <h4>${fileName}</h4>
-    <input type="text" placeholder="Rename file">
-    <button class="btn">Upload</button>
-    </div>
-    </form>`;
-            dropArea.innerHTML = filedata;
-        });
-
-    </script>
     <script src="../assets/js/sidebar.js"></script>
+    <script src="../assets/js/uploads.js"></script>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
     <script src="../assets/js/core/popper.min.js"></script>

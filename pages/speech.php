@@ -1,7 +1,7 @@
 <?php 
 include '../includes/config.php';
 include '../includes/FileContent_class.php';
-include '../includes/user_sidebar.php'; 
+// include '../includes/user_sidebar.php'; 
 
 ?>
 <!DOCTYPE html>
@@ -77,9 +77,9 @@ include '../includes/user_sidebar.php';
 					<span>Background</span>
 					<input type="color" oninput="formatDoc('hiliteColor', this.value); this.value='#000000';">
 				</div>
-                <button id="start-recognition" class="color">Start</button>
-                <button id="stop-recognition" class="color" disabled>Stop</button>
-				<button id="save-content" class="color">Save</button>
+                <!-- <button id="start-recognition" class="color">Start</button>
+                <button id="stop-recognition" class="color" disabled>Stop</button> -->
+				<button id="edit-content" class="color">Save</button>
 			</div>
 			<div class="btn-toolbar">
 				<button onclick="formatDoc('undo')"><i class='bx bx-undo' ></i></button>
@@ -100,7 +100,7 @@ include '../includes/user_sidebar.php';
 			</div>
 		</div>
 		<div id="content" contenteditable="true" spellcheck="false">
-			
+		<p> <?php include '../includes/FileContent_class.php'; echo $content; ?></p>
 		</div>
 	</div>
 	
