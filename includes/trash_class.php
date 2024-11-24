@@ -55,6 +55,7 @@ class trash {
         } else {
             $restore_folder_id = 1; // Default parent folder
         }
+        $user_id = $_SESSION['UserID'];  // Retrieve the current user's ID from the session
 
         // Insert into folders
         $sql = "
@@ -63,9 +64,9 @@ class trash {
                 name, 
                 NOW(), 
                 $restore_folder_id AS folder_id, 
-                COALESCE((SELECT user_id FROM folders WHERE ID = $restore_folder_id), 1)
+                $user_id AS user_id
             FROM 
-                trash 
+                trash
             WHERE 
                 ID = $this->ID;
         ";
