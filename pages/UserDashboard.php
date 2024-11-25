@@ -20,7 +20,6 @@ $current_page = 'User dashboard';
     <link href="../assets/css/demo.css" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/user_style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/survey.css">
     <style>
         button:disabled {
             background-color: #e0e0e0;
@@ -39,37 +38,31 @@ $current_page = 'User dashboard';
             color: black !important;
             opacity: 1;
         }
+
         /* Make sure the .note div is positioned relatively so popovers can be placed relative to it */
-        .note {
-            position: relative;
-        }
+.note {
+    position: relative;
+}
 
-        /* Style the popover */
-        .popover {
-            position: absolute;
-            top: 0;
-            /* Adjust this if you want to move it up or down */
-            width: 8em;
-            right: 100%;
-            /* Positions it to the right of the note div */
-            margin-left: 10px;
-            /* Optional: Adds space between the div and the popover */
-            display: none;
-            /* Hide the popover by default */
-            background: #fff;
-            /* Popover background */
-            border: 1px solid #ccc;
-            /* Optional: border for the popover */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            /* Optional: shadow for better visibility */
-            z-index: 300000;
-            /* Make sure the popover is on top */
-        }
+/* Style the popover */
+.popover {
+    position: absolute;
+    top: 0; /* Adjust this if you want to move it up or down */
+    width: 8em;
+    right: 100%; /* Positions it to the right of the note div */
+    margin-left: 10px; /* Optional: Adds space between the div and the popover */
+    display: none; /* Hide the popover by default */
+    background: #fff; /* Popover background */
+    border: 1px solid #ccc; /* Optional: border for the popover */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional: shadow for better visibility */
+    z-index: 300000; /* Make sure the popover is on top */
+}
 
-        /* Show the popover when it's needed (e.g., on hover or click) */
-        .note:hover .popover {
-            display: block;
-        }
+/* Show the popover when it's needed (e.g., on hover or click) */
+.note:hover .popover {
+    display: block;
+}
+
     </style>
 </head>
 
@@ -77,7 +70,7 @@ $current_page = 'User dashboard';
     <div class="wrapper">
         <?php include '../includes/sidebar.php'; ?>
         <div class="main-panel" id="main-panel">
-            <?php include '../includes/user_navbar.php' ?>
+            <?php include '../includes/user_navbar.php'?>
             <main class="content">
                 <section class="bordered-content">
                     <h3 style="margin-bottom: 15px;">Recents</h3>
@@ -136,57 +129,49 @@ $current_page = 'User dashboard';
                             <button>Sort by</button>
                         </div>
                         <div class="notes">
-                            <?php
-                            // Get the user ID from the session
-                            $user_id = $_SESSION['UserID'];
+    <?php
+    // Get the user ID from the session
+    $user_id = $_SESSION['UserID'];
 
-                            // Get the folder_id from the URL, if provided
-                            $folder_id = isset($_GET['folder_id']) ? $_GET['folder_id'] : null;
+    // Get the folder_id from the URL, if provided
+    $folder_id = isset($_GET['folder_id']) ? $_GET['folder_id'] : null;
 
-                            // Fetch the files for the current folder or general view (no folder filter)
-                            $files = file::readAll($user_id, $folder_id);
-                            ?>
+    // Fetch the files for the current folder or general view (no folder filter)
+    $files = file::readAll($user_id, $folder_id);
+    ?>
 
-                            <!-- Loop through the fetched files and display them -->
-                            <?php if ($files): ?>
-                                <?php foreach ($files as $index => $file): ?>
-                                    <div class="note <?php echo $colors[$index % 3]; ?>"
-                                        data-note-id="<?php echo $file['id']; ?>">
-                                        <span><?php echo date('d/m/Y', strtotime($file['created_at'])); ?></span>
-                                        <h3 class="note-name">
-                                            <?php echo htmlspecialchars($file['name'], ENT_QUOTES, 'UTF-8'); ?>
-                                            <i class="fa-solid fa-ellipsis ellipsis"></i>
+    <!-- Loop through the fetched files and display them -->
+    <?php if ($files): ?>
+        <?php foreach ($files as $index => $file): ?>
+            <div class="note <?php echo $colors[$index % 3]; ?>" data-note-id="<?php echo $file['id']; ?>">
+    <span><?php echo date('d/m/Y', strtotime($file['created_at'])); ?></span>
+    <h3 class="note-name"><?php echo htmlspecialchars($file['name'], ENT_QUOTES, 'UTF-8'); ?>
+        <i class="fa-solid fa-ellipsis ellipsis"></i>
 
-                                            <div class="popover" style="z-index: 300000;">
-                                                <button class="popover-btn rename"
-                                                    data-note-id="<?php echo $file['id']; ?>">Rename</button>
-                                                <button class="popover-btn move"
-                                                    data-folder-id="<?php echo $folder_id; ?>">Move</button>
-                                                <button class="popover-btn delete"
-                                                    data-folder-id="<?php echo $folder_id; ?>">Delete</button>
-                                            </div>
-                                        </h3>
-                                        <hr>
-                                        <p><?php echo strlen($file['content']) > 100 ? substr($file['content'], 0, 100) . '...' : $file['content']; ?>
-                                        </p>
-                                        <span
-                                            class="bottom"><?php echo "⏱️ " . date('h:i A, l', strtotime($file['created_at'])); ?></span>
-                                    </div>
+        <div class="popover" style="z-index: 300000;">
+            <button class="popover-btn rename" data-note-id="<?php echo $file['id']; ?>">Rename</button>
+            <button class="popover-btn move" data-folder-id="<?php echo $folder_id; ?>">Move</button>
+            <button class="popover-btn delete" data-folder-id="<?php echo $folder_id; ?>">Delete</button>
+        </div>
+    </h3>
+    <hr>
+    <p><?php echo strlen($file['content']) > 100 ? substr($file['content'], 0, 100) . '...' : $file['content']; ?></p>
+    <span class="bottom"><?php echo "⏱️ " . date('h:i A, l', strtotime($file['created_at'])); ?></span>
+</div>
 
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <!-- No notes message -->
-                            <?php endif; ?>
-                        </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <!-- No notes message -->
+    <?php endif; ?>
+</div>
 
                     </section>
                 </section>
             </main>
         </div>
     </div>
-    <!-- <?php include '../includes/survey.php'?> -->
 
-
+    
     <script src="../assets/js/sidebar.js"></script>
     <script src="../assets/js/core/jquery.min.js"></script>
     <script src="../assets/js/core/popper.min.js"></script>
@@ -195,8 +180,7 @@ $current_page = 'User dashboard';
     <script src="../assets/js/plugins/chartjs.min.js"></script>
     <script src="../assets/js/plugins/bootstrap-notify.js"></script>
     <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
-    <script src="../assets/js/survey.js"></script>
-
+    
 </body>
 
 </html>
