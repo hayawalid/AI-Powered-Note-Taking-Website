@@ -73,7 +73,7 @@ $current_page = 'Folder Content';
                         <span class="navbar-toggler-bar navbar-kebab"></span>
                         <span class="navbar-toggler-bar navbar-kebab"></span>
                     </button>
-                    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                    <div class="collapse navbar-collapse justify-content-end mr-3" id="navigation">
                         <form>
                             <div class="input-group no-border">
                                 <input type="text" value="" class="form-control black-placeholder"
@@ -85,16 +85,6 @@ $current_page = 'Folder Content';
                                 </div>
                             </div>
                         </form>
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="user_profile.php">
-                                    <i class="now-ui-icons users_single-02" style="color: black;"></i>
-                                    <p>
-                                        <span class="d-lg-none d-md-block" style="color: black;">Account</span>
-                                    </p>
-                                </a>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </nav>

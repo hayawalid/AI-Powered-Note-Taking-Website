@@ -36,7 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,15 +64,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         font-weight: 500;
         text-transform: none;
       }
+
+      .btn-primary{
+        background-color: #E66A6A !important;
+        color: white;
+      }
+
+      .btn-primary:hover{
+        background-color: #88aef4 !important;
+      }
+
+      .btn-outline-primary{
+        color: #E66A6A !important;
+        border-color: #E66A6A !important
+      }
+
+      .btn-outline-primary:hover{
+        color: #88aef4 !important;
+        border-color: #88aef4 !important
+      }
     </style>
 </head>
 <body>
 <?php include '../includes/sidebar.php'; ?>
-<div class="main-container">
-    <div class = "main--content">
-      <div class="main-body">
+<div class="main-panel">
+  <main class="content">
+      <div class="bordered-content">
+        <div style=>
             <div class="row gutters-sm">
-              <div class="col-md-4 mb-3">
+              <div class="col-md-6 mb-0">
                 <div class="card white-card">
                   <div class="card-body">
                     <div class="d-flex flex-column align-items-center text-center">
@@ -88,33 +107,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                   </div>
                 </div>
-                <!-- <div class="row gutters-sm">
-                  <button class="card mt-3"  style= "width: 186px; margin-left: 10px;">
-                    <div class="card-body">
-                      <div class="d-flex flex-column align-items-center text-center">
-                        <div class="mt-0">
-                          <div class="row">
-                            <i class="fa-solid fa-phone" style="font-size: 30px; color: #95c3fc; margin-right: 20px"></i>
-                            <p style="font-size: 20px; font-weight: 600;">Contact Us</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                  <button class="card mt-3" style= "width: 186px; margin-left: 10px;">
-                    <div class="card-body">
-                      <div class="d-flex flex-column align-items-center text-center">
-                        <div class="mt-0">
-                          <div class= "row">
-                            <i class="fa-solid fa-circle-question" style="font-size: 30px; color: #dbf79b; margin-right: 20px"></i>
-                            <p style="font-size: 20px; font-weight: 600;">FAQ</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                </div> -->
-                <div class="card mt-1">
+              </div>
+              <div class="col-md-6 mb-0">
+                <div class="card" style="height: 300px">
+                  <div class="card-body">
                   <div class="card-header" style= "background-color: white;">
                     <h5 class="d-flex align-items-center" style="margin: 0px; color: black; font-weight: 400;">Survey Answers</h5>
                     <hr>
@@ -160,10 +156,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                           </select>
                       </li>
                   </ul>
+                </div>
               </div>
               </div>
-              <div class="col-md-8">
-                <div class="card mb-3 white-card">
+              <div class="col-md-12 mb-0">
+                <div class="card white-card">
                     <div class="card-body">
                       <form action="" method="POST" id="form">
                         <input type="hidden" name="user_id" id="user_id">
@@ -171,21 +168,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="col-sm-3">
                                     <label class="mb-0">Username</label>
                                 </div>
-                                <div class="col-sm-9 text-secondary">
-                                    <input type="text" class="form-control" value="<?php echo $UserObject->username ?>" name="username">
-                                    <div class="error-message" id="username-error"></div>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <label class="mb-0">Password</label>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    <input type="password" class="form-control" name="password">
-                                    <div class="error-message" id="password-error"></div>
-                                </div>
-                            </div>
+                                
+                                  <div class="col-sm-4 text-secondary">
+                                      <input type="text" class="form-control" value="<?php echo $UserObject->username ?>" name="username">
+                                      <div class="error-message" id="username-error"></div>
+                                  </div>
+                                  <div class="col-sm-1">
+                                        <label class="mb-0">Password</label>
+                                    </div>
+                                    <div class="col-sm-4 text-secondary">
+                                        <input type="password" class="form-control" name="password">
+                                        <div class="error-message" id="password-error"></div>
+                                    </div>
+                                
+                            </div>                            
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
@@ -243,48 +239,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </form>
                     </div>
                 </div>
-                <!-- <div class="row gutters-sm">
-                  <div class="col-sm-6 mb-3">
-                    <div class="card h-100 pink-card">
-                      <div class="card-body">
-                        <h6 class="d-flex align-items-center mb-3">Support and Feedback</h6>
-                        <small>Web Design</small>
-                        <div class="progress mb-3" style="height: 5px">
-                          <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <small>Website Markup</small>
-                        <div class="progress mb-3" style="height: 5px">
-                          <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <small>One Page</small>
-                        <div class="progress mb-3" style="height: 5px">
-                          <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6 mb-3">
-                    <div class="card h-100 yellow-card">
-                        <div class="card-body text-center  yellow-card-justify">
-                            <h6 class="d-flex align-items-center justify-content-center mb-3">
-                                Notes
-                                <i class="material-icons text-info ml-2">notes icon</i>
-                            </h6>
-                            <div class="circle-container">
-                                <div class="circle">
-                                    <span class="note-count">42</span> 
-                                </div>
-                            </div>
-                            <button class="btn btn-primary btn-block mt-3" onclick="window.location.href='/notes'">View Notes</button>
-                        </div>
-                    </div>
-                  </div> -->
                 </div>
               </div>
             </div>
           </div>
-      </div>
+          </div>
     </div>
+  </main>
+  </div>
     <script src="../assets/js/user_profile.js"></script>
     <script src="../assets/js/admin_form_validation.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
@@ -301,6 +263,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="../assets/js/plugins/bootstrap-notify.js"></script>
     <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
-</body>
 </body>
 </html>

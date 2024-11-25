@@ -18,7 +18,8 @@ body {
     border-radius: 20px;
     background: #c0e2df;
     position: relative;
-    min-height: 400px;
+    height: 400px !important;
+    min-height: 400px !important;
     overflow: hidden;
 }
 
@@ -111,8 +112,8 @@ label {
 }
 
 .btn-primary {
-    background-color: rgb(63, 139, 139);
-    border: 1px solid rgb(63, 139, 139);
+    background-color: rgb(63, 139, 139) !important;
+    border: 1px solid rgb(63, 139, 139) !important;
 }
 
 .btn:focus {
@@ -144,11 +145,11 @@ label {
 }
 
 .btn.btn-primary:hover .fa-arrow-right {
-    transform: translate(8px);
+    transform: translate(8px) !important;
 }
 
 .btn.btn-primary:hover .fa-arrow-left {
-    transform: translate(-8px);
+    transform: translate(-8px) !important;
 }
 
 /* Mobile responsiveness */
