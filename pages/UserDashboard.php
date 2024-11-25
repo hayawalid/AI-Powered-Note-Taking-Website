@@ -41,6 +41,37 @@ $current_page = 'User dashboard';
             color: black !important;
             opacity: 1;
         }
+        /* Make sure the .note div is positioned relatively so popovers can be placed relative to it */
+        .note {
+            position: relative;
+        }
+
+        /* Style the popover */
+        .popover {
+            position: absolute;
+            top: 0;
+            /* Adjust this if you want to move it up or down */
+            width: 8em;
+            right: 100%;
+            /* Positions it to the right of the note div */
+            margin-left: 10px;
+            /* Optional: Adds space between the div and the popover */
+            display: none;
+            /* Hide the popover by default */
+            background: #fff;
+            /* Popover background */
+            border: 1px solid #ccc;
+            /* Optional: border for the popover */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            /* Optional: shadow for better visibility */
+            z-index: 300000;
+            /* Make sure the popover is on top */
+        }
+
+        /* Show the popover when it's needed (e.g., on hover or click) */
+        .note:hover .popover {
+            display: block;
+        }
     </style>
 </head>
 

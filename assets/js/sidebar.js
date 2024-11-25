@@ -97,6 +97,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.popover-btn.rename').forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.stopPropagation();
+            
+            // Close the popover when "Rename" is clicked
+            const popover = button.closest('.popover');
+            popover.style.display = 'none';
+
             const folderElement = button.closest('.folder');
             const folderNameElement = folderElement.querySelector('p');
             const currentName = folderNameElement.textContent;
