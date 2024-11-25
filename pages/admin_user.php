@@ -86,6 +86,7 @@
   <link href="../assets/css/now-ui-dashboard.css" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="../assets/css/demo.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/user_style.css">
   <style>
     .is-invalid-label {
       color: red;
