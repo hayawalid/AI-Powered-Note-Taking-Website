@@ -9,50 +9,85 @@
 
 body {
     background: teal;
+    color: #000;
 }
 
-.wrapper {
-    max-width: 600px;
-    margin: 80px auto 50px;
-    padding: 30px;
+.quiz-container {
+    max-width: 750px;
+    margin: 40px auto;
+    padding: 40px;
     border-radius: 20px;
     background: #c0e2df;
     position: relative;
-    min-height: 400px;
+    min-height: 500px;
     overflow: hidden;
+    left: 7%;
+    transition: background 0.4s ease;
 }
 
-.wrapper .wrap {
-    width: 500px;
+.quiz-box {
     position: absolute;
-    left: 50px;
-    transition: 0.6s;
+    top: 50%;
+    left: 650px; /* Default position (off-screen to the right) */
+    transform: translateY(-50%);
+    width: 650px;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 0;
+    transition: left 0.6s ease, opacity 0.6s ease, visibility 0s 0.6s;
 }
 
-#q2, #q3 {
-    left: 650px;
+.quiz-box.active {
+    left: 50px; /* Centered position */
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+    transition: left 0.6s ease, opacity 0.6s ease, visibility 0s;
 }
 
-.h4 {
-    font-size: 1.5rem; /* Increase the font size */
-    font-weight: bold; /* Make the text bold */
-    margin-bottom: 30px; /* Add space under the question */
+.quiz-box h4,
+.quiz-box h5 {
+    margin: 0;
+    line-height: 1.2;
+}
+
+.quiz-box h4 {
+    display: inline;
+}
+
+.quiz-box h5 {
+    display: inline;
+    margin-left: 5px;
+}
+
+.text-center.pb-4 {
+    padding-bottom: 5px;
+    margin-bottom: 0;
+}
+
+.h5.font-weight-bold {
+    margin-bottom: 5px;
+}
+
+.h4.font-weight-bold {
+    margin-top: 0;
+    margin-bottom: 15px;
 }
 
 label {
     display: block;
-    margin-bottom: 20px; /* Increased margin for more space */
+    margin-bottom: 5px;
     font-size: 1.2rem;
     cursor: pointer;
 }
 
-.options {
+.answer-options {
     position: relative;
     padding-left: 30px;
-    margin-bottom: 20px; /* Adds space between choices and the next element */
+    margin-bottom: 10px;
 }
 
-.options input {
+.answer-options input {
     opacity: 0;
 }
 
@@ -67,11 +102,11 @@ label {
     border-radius: 50%;
 }
 
-.options input:checked ~ .checkmark:after {
+.answer-options input:checked ~ .checkmark:after {
     display: block;
 }
 
-.options .checkmark:after {
+.answer-options .checkmark:after {
     content: "";
     width: 9px;
     height: 9px;
@@ -85,23 +120,27 @@ label {
     transition: 300ms ease-in-out 0s;
 }
 
-.options input[type="radio"]:checked ~ .checkmark {
+.answer-options input[type="radio"]:checked ~ .checkmark {
     background: #590995;
     border: 2px solid #590995;
     transition: 300ms ease-in-out 0s;
 }
 
-.options input[type="radio"]:checked ~ .checkmark:after {
+.answer-options input[type="radio"]:checked ~ .checkmark:after {
     transform: translate(-50%, -50%) scale(1);
 }
 
 .d-flex {
     display: flex;
-    justify-content: space-between; /* Space between the buttons */
-    width: 100%; /* Ensure full width for button alignment */
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
 }
-
-.btn {
+.d-flex.flex-column {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+}
+.btn1 {
     background-color: inherit;
     border: 1px solid rgb(63, 139, 139);
     border-radius: 20px;
@@ -110,133 +149,46 @@ label {
     display: inline-block;
 }
 
-.btn-primary {
+.btn1-primary {
     background-color: rgb(63, 139, 139);
     border: 1px solid rgb(63, 139, 139);
 }
 
-.btn:focus {
+.btn1:focus {
     box-shadow: none;
 }
 
-.btn:hover {
+.btn1:hover {
     background-color: teal;
     color: #fff;
 }
 
-/* Ensure the buttons don't overlap */
-.d-flex button {
-    flex: 1; /* Allow buttons to take up equal space */
-    margin: 0 10px; /* Space between the buttons */
-    max-width: 150px; /* Max width to avoid oversized buttons */
-}
-
-.d-flex button:first-child {
-    margin-right: 10px; /* Add space between previous and next button */
-}
-
-.d-flex button:last-child {
-    margin-left: 10px; /* Add space between next and previous button */
-}
-
-.fa-arrow-right, .fa-arrow-left {
+.fa-arrow-right,
+.fa-arrow-left {
     transition: 0.2s ease-in all;
 }
 
-.btn.btn-primary:hover .fa-arrow-right {
+.btn1.btn1-primary:hover .fa-arrow-right {
     transform: translate(8px);
 }
 
-.btn.btn-primary:hover .fa-arrow-left {
+.btn1.btn1-primary:hover .fa-arrow-left {
     transform: translate(-8px);
 }
 
 /* Mobile responsiveness */
-@media(max-width: 767px) {
-    .wrapper {
+@media (max-width: 767px) {
+    .quiz-container {
         margin: 30px 10px;
-        height: 420px;
+        min-height: 420px;
     }
 
-    .wrapper .wrap {
+    .quiz-box {
         width: 280px;
-        left: 15px;
+        left: 650px; /* Off-screen default */
     }
-}
 
-/* Dark mode toggle styling */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 28px;
-    background-color: inherit;
-    margin-top: 20px; /* Adds space between the question container and the switch */
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    left: 4px;
-    bottom: 4px;
-    background-color: #590995;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-input:checked + .slider {
-    background-color: #000;
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-    transform: translateX(30px);
-    background-color: #fff;
-}
-
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
-
-.dark-theme {
-    background-color: #222;
-}
-
-/* Center the dark mode toggle */
-.d-flex {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px; /* Adds space between the questions and the toggle */
-}
-
-.d-flex .h3 {
-    margin-right: 10px; /* Adds space between the text and switch */
+    .quiz-box.active {
+        left: 15px; /* Centered for mobile */
+    }
 }
