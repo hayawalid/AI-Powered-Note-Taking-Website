@@ -19,7 +19,7 @@ body {
     border-radius: 20px;
     background: #c0e2df;
     position: relative;
-    min-height: 500px;
+    min-height: 400px;
     overflow: hidden;
     left: 7%;
     transition: background 0.4s ease;
@@ -149,7 +149,7 @@ label {
     display: inline-block;
 }
 
-.btn1-primary {
+.btn-primary {
     background-color: rgb(63, 139, 139);
     border: 1px solid rgb(63, 139, 139);
 }
@@ -168,11 +168,11 @@ label {
     transition: 0.2s ease-in all;
 }
 
-.btn1.btn1-primary:hover .fa-arrow-right {
+.btn.btn-primary:hover .fa-arrow-right {
     transform: translate(8px);
 }
 
-.btn1.btn1-primary:hover .fa-arrow-left {
+.btn.btn-primary:hover .fa-arrow-left {
     transform: translate(-8px);
 }
 
