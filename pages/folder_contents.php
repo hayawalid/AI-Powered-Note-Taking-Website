@@ -137,7 +137,6 @@ $current_page = 'Folder Content';
                                     </div>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <p>No files found for this folder.</p>
                             <?php endif; ?>
 
                         </div>

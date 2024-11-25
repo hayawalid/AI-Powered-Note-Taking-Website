@@ -95,18 +95,45 @@ class file {
     
 
     // Update a file's content
-    public static function update($id, $newContent) {
+    public static function update($id, $newName) {
         global $con;
-        $sql = "UPDATE files SET content = '$newContent' WHERE id = $id";
-        if (mysqli_query($con, $sql)) {
-            return true;
+        
+        // Clean up newName to ensure it is correctly formatted
+        $newName = trim($newName);
+    
+        // Check if the parameters are correct
+        echo "New Name: " . htmlspecialchars($newName, ENT_QUOTES, 'UTF-8') . "<br>";
+        echo "ID: " . intval($id) . "<br>";
+        
+        // SQL query to update name
+        $sql = "UPDATE files SET name = ? WHERE id = ?";
+        echo "SQL: " . $sql . "<br>";  // Debug the SQL query
+        
+        // Prepare the statement
+        if ($stmt = mysqli_prepare($con, $sql)) {
+            echo "Prepared Statement Successful<br>";
+        
+            // Bind the parameters
+            if (!mysqli_stmt_bind_param($stmt, 'si', $newName, $id)) {
+                echo "Error binding parameters: " . mysqli_error($con) . "<br>";
+                return false;
+            }
+        
+            // Execute the query
+            if (mysqli_stmt_execute($stmt)) {
+                echo "Update Successful<br>";
+                return true;
+            } else {
+                echo "Error Executing Query: " . mysqli_stmt_error($stmt) . "<br>";
+                return false;
+            }
         } else {
-            echo "Error: " . mysqli_error($con);
+            echo "Error Preparing Query: " . mysqli_error($con) . "<br>";
             return false;
         }
     }
+    
 
-    // Delete a file
     public static function delete($id) {
         global $con;
         $sql = "DELETE FROM files WHERE id = $id";

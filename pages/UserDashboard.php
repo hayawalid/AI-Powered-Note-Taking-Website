@@ -11,12 +11,10 @@ $current_page = 'User dashboard';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Notes</title>
-    <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
         integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- CSS Files -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../assets/css/now-ui-dashboard.css" rel="stylesheet" />
     <link href="../assets/css/demo.css" rel="stylesheet" />
@@ -78,7 +76,7 @@ $current_page = 'User dashboard';
     <div class="wrapper">
         <?php include '../includes/sidebar.php'; ?>
         <div class="main-panel" id="main-panel">
-            <?php include '../includes/user_navbar.php'?>
+            <?php include '../includes/user_navbar.php' ?>
             <main class="content">
                 <section class="bordered-content">
                     <h3 style="margin-bottom: 15px;">Recents</h3>
@@ -137,9 +135,7 @@ $current_page = 'User dashboard';
                             <button>Sort by</button>
                         </div>
                         <div class="notes">
-
                             <?php
-
                             // Get the user ID from the session
                             $user_id = $_SESSION['UserID'];
 
@@ -153,23 +149,20 @@ $current_page = 'User dashboard';
                             <!-- Loop through the fetched files and display them -->
                             <?php if ($files): ?>
                                 <?php foreach ($files as $index => $file): ?>
-                                    <div class="note <?php echo $colors[$index % 3]; ?>">
+                                    <div class="note <?php echo $colors[$index % 3]; ?>"
+                                        data-note-id="<?php echo $file['id']; ?>">
                                         <span><?php echo date('d/m/Y', strtotime($file['created_at'])); ?></span>
-                                        <h3><?php echo htmlspecialchars($file['name'], ENT_QUOTES, 'UTF-8'); ?>
+                                        <h3 class="note-name">
+                                            <?php echo htmlspecialchars($file['name'], ENT_QUOTES, 'UTF-8'); ?>
                                             <i class="fa-solid fa-ellipsis ellipsis"></i>
 
                                             <div class="popover" style="z-index: 300000;">
-                                                <!-- Rename Button -->
-                                                <button class="popover-btn rename" data-folder-id="<?php echo $folderId; ?>">
-                                                    Rename
-                                                </button>
-                                                <button class="popover-btn move" data-folder-id="<?php echo $folderId; ?>">
-                                                    Move
-                                                </button>
-                                                <!-- Delete Button -->
-                                                <button class="popover-btn delete" data-folder-id="<?php echo $folderId; ?>">
-                                                    Delete
-                                                </button>
+                                                <button class="popover-btn rename"
+                                                    data-note-id="<?php echo $file['id']; ?>">Rename</button>
+                                                <button class="popover-btn move"
+                                                    data-folder-id="<?php echo $folder_id; ?>">Move</button>
+                                                <button class="popover-btn delete"
+                                                    data-folder-id="<?php echo $folder_id; ?>">Delete</button>
                                             </div>
                                         </h3>
                                         <hr>
@@ -178,12 +171,13 @@ $current_page = 'User dashboard';
                                         <span
                                             class="bottom"><?php echo "⏱️ " . date('h:i A, l', strtotime($file['created_at'])); ?></span>
                                     </div>
+
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <p>No files found for this folder.</p>
+                                <!-- No notes message -->
                             <?php endif; ?>
-
                         </div>
+
                     </section>
                 </section>
             </main>
@@ -192,16 +186,12 @@ $current_page = 'User dashboard';
 
 
     <script src="../assets/js/sidebar.js"></script>
-    <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <!-- Chart JS -->
     <script src="../assets/js/plugins/chartjs.min.js"></script>
-    <!--  Notifications Plugin    -->
     <script src="../assets/js/plugins/bootstrap-notify.js"></script>
-    <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
 
 </body>
