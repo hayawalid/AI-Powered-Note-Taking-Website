@@ -7,7 +7,7 @@ include '../includes/session.php';
 //session_start();
 
 //set current page to update sidebar status
-$current_page = 'Dashboard';
+$current_page = 'Admin dashboard';
 ?>
 
 <!--
@@ -45,6 +45,7 @@ $current_page = 'Dashboard';
   <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
   <link href="../assets/css/now-ui-dashboard.css" rel="stylesheet" />
   <link href="../assets/css/demo.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/user_style.css">
 </head>
 
 <body class="">

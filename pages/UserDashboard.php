@@ -22,6 +22,7 @@ $current_page = 'User dashboard';
     <link href="../assets/css/demo.css" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/user_style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/survey.css">
     <style>
         button:disabled {
             background-color: #e0e0e0;
@@ -158,6 +159,7 @@ $current_page = 'User dashboard';
             </main>
         </div>
     </div>
+    <!-- <?php include '../includes/survey.php'?> -->
 
 
     <script src="../assets/js/sidebar.js"></script>
@@ -172,6 +174,7 @@ $current_page = 'User dashboard';
     <script src="../assets/js/plugins/bootstrap-notify.js"></script>
     <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+    <script src="../assets/js/survey.js"></script>
 
 </body>
 
