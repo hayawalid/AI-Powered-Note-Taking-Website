@@ -3,6 +3,7 @@
 include '../includes/config.php';
 include '../includes/session.php';
 include_once '../includes/UserActivity.php';
+include_once '../includes/ChartsData.php';
 
 //start user session
 //session_start();
@@ -11,6 +12,10 @@ include_once '../includes/UserActivity.php';
 $current_page = 'Admin dashboard';
 
 $users = UserActivity::getTopActiveUsers();
+$PieChartData = ChartsData::getTopFeatures();
+$BarChartData = ChartsData::getDailyUsageHours();
+$LineChartData = ChartsData::getPeakUsageTimes();
+
 ?>
 
 <!--
@@ -107,12 +112,12 @@ $users = UserActivity::getTopActiveUsers();
                     data-toggle="dropdown">
                     <i class="now-ui-icons loader_gear"></i>
                   </button>
-                  <div class="dropdown-menu dropdown-menu-right">
+                  <!-- <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item" href="#">Action</a>
                     <a class="dropdown-item" href="#">Another action</a>
                     <a class="dropdown-item" href="#">Something else here</a>
                     <a class="dropdown-item text-danger" href="#">Remove Data</a>
-                  </div>
+                  </div> -->
                 </div>
               </div>
               <div class="card-body">
@@ -271,34 +276,6 @@ $users = UserActivity::getTopActiveUsers();
           </div>
         </div>
       </div>
-      <!-- <footer class="footer">
-        <div class=" container-fluid ">
-          <nav>
-            <ul>
-              <li>
-                <a href="https://www.creative-tim.com">
-                  Creative Tim
-                </a>
-              </li>
-              <li>
-                <a href="http://presentation.creative-tim.com">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="http://blog.creative-tim.com">
-                  Blog
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <div class="copyright" id="copyright">
-            &copy; <script>
-              document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))
-            </script>, Designed by <a href="https://www.invisionapp.com" target="_blank">Invision</a>. Coded by <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a>.
-          </div>
-        </div>
-      </footer> -->
     </div>
   </div>
   <!--   Core JS Files   -->
@@ -317,7 +294,11 @@ $users = UserActivity::getTopActiveUsers();
   <script>
     $(document).ready(function () {
       // Javascript method's body can be found in assets/js/demos.js
-      demo.initDashboardPageCharts();
+      var barChartData = <?php echo json_encode($BarChartData); ?>;
+      var pieChartData = <?php echo json_encode($PieChartData); ?>;
+      var lineChartData = <?php echo json_encode($LineChartData); ?>;
+
+      demo.initDashboardPageCharts(pieChartData, barChartData, lineChartData);
       demo.initDocChart();
     });
   </script>

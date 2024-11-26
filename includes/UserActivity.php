@@ -2,7 +2,8 @@
 $con = new mysqli("localhost", "root", "", "smartnotes_db");
 // require_once "../includes/UserActivity.php";
 
-class UserActivity {
+class UserActivity
+{
     public $id;
     public $user_id;
     public $login_time;
@@ -21,7 +22,8 @@ class UserActivity {
     //     }
     // }
 
-    static function startSession($user_id) {
+    static function startSession($user_id)
+    {
         // Check if there is an active session for the user
         $sql_check = "
             SELECT COUNT(*) AS active_sessions 
@@ -29,23 +31,24 @@ class UserActivity {
             WHERE user_id = $user_id AND logout_time IS NULL";
         $result_check = mysqli_query($GLOBALS['con'], $sql_check);
         $row = mysqli_fetch_assoc($result_check);
-    
+
         if ($row['active_sessions'] > 0) {
             // Active session exists; no need to insert a new one
             return false;
         }
-    
+
         // Start a new session
         $sql = "INSERT INTO user_session_duration (user_id) VALUES ($user_id)";
         $result = mysqli_query($GLOBALS['con'], $sql);
-    
+
         if ($result) {
             self::updateActivityScore($user_id); // Update activity score
         }
         return $result;
     }
-    
-    static function endSession($user_id) {
+
+    static function endSession($user_id)
+    {
         $sql = "
             UPDATE user_session_duration
             SET logout_time = CURRENT_TIMESTAMP,
@@ -54,16 +57,17 @@ class UserActivity {
             ORDER BY login_time DESC
             LIMIT 1"; // Ensure only the most recent session is updated
         $result = mysqli_query($GLOBALS['con'], $sql);
-    
+
         if ($result) {
             self::updateActivityScore($user_id); // Update activity score
         }
-    
+
         return $result;
     }
-    
 
-    static function getTotalLoginCount($user_id) {
+
+    static function getTotalLoginCount($user_id)
+    {
         $sql = "SELECT COUNT(*) AS login_count FROM user_session_duration WHERE user_id = $user_id";
         $result = mysqli_query($GLOBALS['con'], $sql);
         if ($row = mysqli_fetch_array($result)) {
@@ -72,7 +76,8 @@ class UserActivity {
         return 0;
     }
 
-    static function getNotesCount($user_id) {
+    static function getNotesCount($user_id)
+    {
         $sql = "SELECT COUNT(*) AS notes_count FROM files WHERE user_id = $user_id";
         $result = mysqli_query($GLOBALS['con'], $sql);
         if ($row = mysqli_fetch_array($result)) {
@@ -81,7 +86,8 @@ class UserActivity {
         return 0;
     }
 
-    static public function getMostUsedFeatureType($user_id) {
+    static public function getMostUsedFeatureType($user_id)
+    {
         $sql = "
             SELECT 
                 files.file_type, 
@@ -102,16 +108,17 @@ class UserActivity {
             LIMIT 1
         ";
         $result = mysqli_query($GLOBALS['con'], $sql);
-    
+
         if ($result && $row = mysqli_fetch_array($result)) {
             return $row["name"];
         }
-    
+
         return null; // Return null if no feature type is found
     }
-    
 
-    static function getSessionDuration($user_id) {
+
+    static function getSessionDuration($user_id)
+    {
         $sql = "
             SELECT SUM(duration_minutes) AS total_duration
             FROM user_session_duration
@@ -140,26 +147,33 @@ class UserActivity {
         return $activity_score;
     }
 
-    
+
     // Function to update the activity score in the database
     public static function updateActivityScore($user_id)
     {
-        global $con; // Assuming $con is the database connection
+        global $con; 
 
         // Calculate the activity score
         $activity_score = self::calculateActivityScore($user_id);
 
-        // Insert or update the activity score in the database
-        $sql = "
-            INSERT INTO user_activity (user_id, activity_score)
-            VALUES ($user_id, $activity_score)
-            ON DUPLICATE KEY UPDATE activity_score = $activity_score
-        ";
+        // Check if the user already exists in the table
+        $check_query = "SELECT COUNT(*) AS count FROM user_activity WHERE user_id = $user_id";
+        $result = mysqli_query($con, $check_query);
+        $row = mysqli_fetch_assoc($result);
+
+        if ($row['count'] > 0) {
+            // If the user exists, update the activity score
+            $sql = "UPDATE user_activity SET activity_score = $activity_score WHERE user_id = $user_id";
+        } else {
+            // If the user doesn't exist, insert a new row
+            $sql = "INSERT INTO user_activity (user_id, activity_score) VALUES ($user_id, $activity_score)";
+        }
 
         return mysqli_query($con, $sql);
     }
 
-    
+
+
     public static function getTopActiveUsers()
     {
         global $con;
