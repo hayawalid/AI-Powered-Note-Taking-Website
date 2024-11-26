@@ -26,6 +26,41 @@ class Survey
         return $questions;
     }
 
+    public static function getUserAnswers($user_id)
+    {
+        // SQL query to fetch user's answers for each question
+        $sql = "
+                SELECT a.question_id, 
+                    o.id, 
+                    o.answer_option, 
+                    o.option_icon 
+                FROM user_survey_answers a
+                JOIN survey_questions_options o ON a.option_id = o.id
+                WHERE a.user_id = $user_id";
+
+        // Execute the query
+        $result = mysqli_query($GLOBALS['con'], $sql);
+
+        // Initialize the array to store answers
+        $answers = [];
+
+        // Check if the query returned any results
+        if ($result && $result->num_rows > 0) {
+            while ($row = mysqli_fetch_array($result)) {
+                // Store the user's answer for each question
+                $answers[$row['question_id']] = [
+                    'selected_option' => $row['id'], // Store selected option ID
+                    'answer_option' => $row['answer_option'], // Store answer text
+                    'option_icon' => $row['option_icon'] // Store option icon
+                ];
+            }
+        }
+
+        return $answers;
+    }
+
+
+
     // Check if the user has already completed the survey
     public static function seenSurvey($user_id)
     {
