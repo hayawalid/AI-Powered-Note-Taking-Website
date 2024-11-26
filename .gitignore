@@ -1,1 +1,9 @@
+# Ignore the vendor directory, where Composer installs dependencies
 /vendor/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore Composer's global configuration file
+composer.phar

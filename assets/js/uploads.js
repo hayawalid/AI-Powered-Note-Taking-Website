@@ -14,6 +14,7 @@ input.addEventListener("change", function (e) {
     if (!selectedFile) return;
 
     const fileName = selectedFile.name;
+    const fileExtension = fileName.split('.').pop().toLowerCase();
 
     // Preserve the form structure but prepare it for submission
     const fileData = `
@@ -37,22 +38,50 @@ input.addEventListener("change", function (e) {
         formData.append("file", selectedFile);
         formData.append("rename", renameInput);
 
-        extractTextFromPDF(selectedFile).then(extractedText => {
-            formData.append("content", extractedText); // Append extracted text
-            // Perform the upload
-            uploadFile(formData);
-        }).catch(err => {
-            console.error("Error extracting text:", err);
-            statusDisplay.textContent = "Failed to extract text from PDF.";
-        });
+        // Check file type and extract text accordingly
+        if (fileExtension === 'pdf') {
+            extractTextFromPDF(selectedFile).then(extractedText => {
+                formData.append("content", extractedText); // Append extracted text
+                uploadFile(formData);
+            }).catch(err => {
+                console.error("Error extracting text from PDF:", err);
+                statusDisplay.textContent = "Failed to extract text from PDF.";
+            });
+        } else if (fileExtension === 'docx') {
+            extractTextFromDOCX(selectedFile).then(extractedText => {
+                formData.append("content", extractedText); // Append extracted text
+                uploadFile(formData);
+            }).catch(err => {
+                console.error("Error extracting text from DOCX:", err);
+                statusDisplay.textContent = "Failed to extract text from DOCX.";
+            });
+        } else if (fileExtension === 'doc') {
+            extractTextFromDOC(selectedFile).then(extractedText => {
+                formData.append("content", extractedText); // Append extracted text
+                uploadFile(formData);
+            }).catch(err => {
+                console.error("Error extracting text from DOC:", err);
+                statusDisplay.textContent = "Failed to extract text from DOC.";
+            });
+        } else if (fileExtension === 'txt') {
+            extractTextFromTXT(selectedFile).then(extractedText => {
+                formData.append("content", extractedText); // Append extracted text
+                uploadFile(formData);
+            }).catch(err => {
+                console.error("Error extracting text from TXT:", err);
+                statusDisplay.textContent = "Failed to extract text from TXT.";
+            });
+        } else {
+            statusDisplay.textContent = "Unsupported file type.";
+        }
     });
 });
 
-// Function to extract text from PDF using PDF.js
+// Function to handle PDF extraction
 async function extractTextFromPDF(file) {
     const pdf = await pdfjsLib.getDocument(URL.createObjectURL(file)).promise;
     let extractedText = '';
-    
+
     for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
         const textContent = await page.getTextContent();
@@ -60,6 +89,63 @@ async function extractTextFromPDF(file) {
     }
 
     return extractedText;
+}
+
+// Function to handle DOCX extraction using Mammoth.js
+async function extractTextFromDOCX(file) {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+        reader.onload = function () {
+            // Use Mammoth.js to convert DOCX file to text
+            mammoth.extractRawText({ arrayBuffer: reader.result })
+                .then(function (result) {
+                    resolve(result.value); // Return extracted text
+                })
+                .catch(function (err) {
+                    reject('Error extracting text from DOCX file: ' + err);
+                });
+        };
+
+        reader.onerror = function () {
+            reject('Error reading DOCX file');
+        };
+
+        reader.readAsArrayBuffer(file); // Read as ArrayBuffer for Mammoth.js
+    });
+}
+
+// Function to handle DOC extraction
+async function extractTextFromDOC(file) {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+        reader.onload = function () {
+            // Use a conversion method or another library to handle the DOC file
+            // For simplicity, we assume it's converted to DOCX on the server
+            resolve("DOC files need server-side conversion to DOCX");
+        };
+
+        reader.onerror = function () {
+            reject('Error reading DOC file');
+        };
+
+        reader.readAsArrayBuffer(file); // Read as ArrayBuffer (needed for conversion)
+    });
+}
+
+// Function to handle TXT extraction
+async function extractTextFromTXT(file) {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+        reader.onload = function () {
+            resolve(reader.result);
+        };
+
+        reader.onerror = function () {
+            reject('Error reading TXT file');
+        };
+
+        reader.readAsText(file);
+    });
 }
 
 // Function to handle file upload via AJAX
