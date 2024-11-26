@@ -45,7 +45,7 @@ class User {
                 $user = new User($row['id']); 
     
                 if ($user->userType_obj->id == 2) {
-                    SessionActivity::startSession($user->id); // Start session tracking
+                    UserActivity::startSession($user->id); // Start session tracking
                 }
     
                 return $user; 
