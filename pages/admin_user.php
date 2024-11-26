@@ -2,9 +2,7 @@
   //connect to database
   include '../includes/config.php';
   include '../includes/User.php';
-
-  //resume user session
-  session_start();
+  include_once '../includes/session.php';
 
   //set current page to update sidebar status
   $current_page = 'Admin Profile';

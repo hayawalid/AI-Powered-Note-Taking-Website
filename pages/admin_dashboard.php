@@ -2,12 +2,15 @@
 //connect to database
 include '../includes/config.php';
 include '../includes/session.php';
+include_once '../includes/UserActivity.php';
 
 //start user session
 //session_start();
 
 //set current page to update sidebar status
 $current_page = 'Admin dashboard';
+
+$users = UserActivity::getTopActiveUsers();
 ?>
 
 <!--
@@ -37,10 +40,12 @@ $current_page = 'Admin dashboard';
   <title>
     Now UI Dashboard by Creative Tim
   </title>
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+    name='viewport' />
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   <!-- CSS Files -->
   <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
   <link href="../assets/css/now-ui-dashboard.css" rel="stylesheet" />
@@ -65,8 +70,10 @@ $current_page = 'Admin dashboard';
               <div class="card-header">
                 <h5 class="card-category">Feature Usage</h5>
                 <h4 class="card-title">Top Features Engagement</h4>
-                <div class="dropdown">
-                  <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
+                <!-- <div class="dropdown">
+                  <button type="button"
+                    class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
+                    data-toggle="dropdown">
                     <i class="now-ui-icons loader_gear"></i>
                   </button>
                   <div class="dropdown-menu dropdown-menu-right">
@@ -75,7 +82,7 @@ $current_page = 'Admin dashboard';
                     <a class="dropdown-item" href="#">Something else here</a>
                     <a class="dropdown-item text-danger" href="#">Remove Data</a>
                   </div>
-                </div>
+                </div> -->
               </div>
               <div class="card-body">
                 <div class="chart-area">
@@ -95,7 +102,9 @@ $current_page = 'Admin dashboard';
                 <h5 class="card-category">Peak User Activity</h5>
                 <h4 class="card-title">Tracking Peak Usage Times</h4>
                 <div class="dropdown">
-                  <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
+                  <button type="button"
+                    class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
+                    data-toggle="dropdown">
                     <i class="now-ui-icons loader_gear"></i>
                   </button>
                   <div class="dropdown-menu dropdown-menu-right">
@@ -238,80 +247,22 @@ $current_page = 'Admin dashboard';
                         Age Group
                       </th>
                       <th>
-                        Category
+                        Usage Category
+                      </th>
+                      <th>
+                        Most Used Feature
                       </th>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          Dakota Rice
-                        </td>
-                        <td>
-                          Niger
-                        </td>
-                        <td>
-                          18-24
-                        </td>
-                        <td>
-                          University
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Minerva Hooper
-                        </td>
-                        <td>
-                          Curaçao
-                        </td>
-                        <td>
-                          12-17
-                        </td>
-                        <td>
-                          School
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Sage Rodriguez
-                        </td>
-                        <td>
-                          Netherlands
-                        </td>
-                        <td>
-                          36-48
-                        </td>
-                        <td>
-                          Personal Use
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Doris Greene
-                        </td>
-                        <td>
-                          Malawi
-                        </td>
-                        <td>
-                          24-36
-                        </td>
-                        <td>
-                          Work
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Mason Porter
-                        </td>
-                        <td>
-                          Chile
-                        </td>
-                        <td>
-                          18-24
-                        </td>
-                        <td>
-                          Personal
-                        </td>
-                      </tr>
+                      <?php foreach ($users as $user): ?>
+                        <tr>
+                          <td><?php echo $user['first_name'] . " " . $user['last_name']; ?></td>
+                          <td><?php echo $user['country']; ?></td>
+                          <td><?php echo $user['age_group_option_id']; ?></td>
+                          <td><?php echo $user['usage_option_id']; ?></td>
+                          <td><?php echo UserActivity::getMostUsedFeatureType($user['id']); ?></td>
+                        </tr>
+                      <?php endforeach; ?>
                     </tbody>
                   </table>
                 </div>
@@ -364,11 +315,12 @@ $current_page = 'Admin dashboard';
   <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
   <script src="../assets/js/demo.js"></script>
   <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
       // Javascript method's body can be found in assets/js/demos.js
       demo.initDashboardPageCharts();
       demo.initDocChart();
     });
   </script>
 </body>
+
 </html>

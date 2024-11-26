@@ -1,6 +1,7 @@
 <?php
 // include '../includes/config.php';
-include 'UserType.php';
+include_once 'UserType.php';
+include_once 'UserActivity.php';
 
 // Create connection
 $con = new mysqli("localhost", "root", "", "smartnotes_db");
@@ -33,19 +34,26 @@ class User {
             }
         }
     }
-    //ghaiart el login function el adima ashan el adim kan bi compare hashed password to plain password 
-    
 
+    //ghaiart el login function el adima ashan el adim kan bi compare hashed password to plain password 
     static function login($email, $password) {
         $sql = "SELECT * FROM users WHERE email = '$email'";
         $result = mysqli_query($GLOBALS['con'], $sql);
         if ($row = mysqli_fetch_array($result)) {
+            // Verify password
             if (password_verify($password, $row['password'])) {
-                return new User($row[0]);
+                $user = new User($row['id']); 
+    
+                if ($user->userType_obj->id == 2) {
+                    SessionActivity::startSession($user->id); // Start session tracking
+                }
+    
+                return $user; 
             }
         }
-        return NULL;
+        return null; // Return null if login fails
     }
+    
 
     static function getAllUsers() {
         $sql = "SELECT * FROM users WHERE user_type = 2";
