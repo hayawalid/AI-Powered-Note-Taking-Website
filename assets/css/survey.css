@@ -148,20 +148,15 @@ left h6 {
     transition: border-color 0.3s ease;
 }
 
-.radio-btn input[type=radio] {
-    display: none; 
-}
+/* .radio-btn input[type=radio] {
+    display: inline-block; 
+} */
 
 .choice:hover {
     border-color: #6495ED; 
 }
 
-.choice:hover .radio-btn::before {
-    border-color: #6495ED;
-    background-color: #6495ED; 
-}
-
-.choice .radio-btn::before {
+.choice .radio-btn input[type="radio"] {
     content: '';
     display: inline-block;
     width: 20px;
@@ -169,11 +164,19 @@ left h6 {
     border: 2px solid #ddd;
     border-radius: 50%;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-.radio-btn input[type=radio]:checked + label::before {
-    background-color: #6495ED; 
-    border-color: #6495ED; 
+/* 
+.choice:hover .radio-btn input[type="radio"] {
+    border-color: #6495ED;
+    accent-color: #618bd8 !important 
+} */
+
+
+.choice .radio-btn input[type="radio"]:checked {
+    accent-color: #618bd8 !important;
+    /* border-color: #6495ED; */
 }
 
 .choice span {
@@ -215,14 +218,15 @@ button.hidden {
 .progress-indicator .dot {
     width: 10px;
     height: 10px;
-    background: #ddd;
-    border-radius: 50%;
     margin: 0 5px;
-    transition: background-color 0.3s ease;
+    background-color: #ddd;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.3s;
 }
 
-.progress-indicator .dot.active {
-    background: #8eb0f0; 
+.dotactive {
+    background-color: #8eb0f0 !important; 
 }
 
 .hidden {

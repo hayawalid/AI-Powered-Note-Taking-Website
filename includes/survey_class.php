@@ -3,24 +3,50 @@ $con = new mysqli("localhost", "root", "", "smartnotes_db");
 
 class Survey
 {
-    public $questions_answers;
-    static function seenSurvey($user_id)
+    // Fetch all questions with their options
+    public static function getQuestions()
     {
-        if ($user_id != "") {
+        $sql = "SELECT q.id as question_id, q.question_text, o.id as option_id, o.answer_option, o.option_icon 
+                FROM survey_questions q
+                LEFT JOIN survey_questions_options o ON q.id = o.question_id
+                ORDER BY q.id, o.id";
+        $result = mysqli_query($GLOBALS['con'], $sql);
+
+        $questions = [];
+        if ($result && $result->num_rows > 0) {
+            while ($row = mysqli_fetch_array($result)) {
+                $questions[$row['question_id']]['text'] = $row['question_text'];
+                $questions[$row['question_id']]['options'][] = [
+                    'option_id' => $row['option_id'],
+                    'answer_option' => $row['answer_option'],
+                    'option_icon' => $row['option_icon']
+                ];
+            }
+        }
+        return $questions;
+    }
+
+    // Check if the user has already completed the survey
+    public static function seenSurvey($user_id)
+    {
+        if (!empty($user_id)) {
             $sql = "SELECT 1 FROM user_survey_answers WHERE user_id = $user_id LIMIT 1";
-            $result = $GLOBALS['con']->query($sql);
+            $result = mysqli_query($GLOBALS['con'], $sql);
             return $result && $result->num_rows > 0;
         }
         return false;
     }
 
-    static function submitSurveyAnswers($user_id, $question_id, $answer)
+    // Submit a single survey answer
+    public static function submitSurveyAnswer($user_id, $question_id, $option_id)
     {
-        if (!empty($user_id) && !empty($question_id) && !empty($answer)) {
-            $sql = "INSERT INTO user_survey_answers (user_id, question_id, answer) VALUES ($user_id, $question_id, $answer)";
+        if (!empty($user_id) && !empty($question_id) && !empty($option_id)) {
+            $sql = "INSERT INTO user_survey_answers (user_id, question_id, option_id) VALUES ('$user_id','$question_id', '$option_id')";
             $result = mysqli_query($GLOBALS['con'], $sql);
             return $result;
         }
+        return false;
     }
 }
+
 ?>
