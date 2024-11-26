@@ -20,7 +20,7 @@ $answers = Survey::getUserAnswers($_SESSION["UserID"]);
 $colors = ['#8eb0f0', '#f2e982', '#c6408a'];
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username'])) {
   $Username = htmlspecialchars($_POST["username"]);
   $Password = htmlspecialchars($_POST["password"]);
   // Encrypt password for additional security
@@ -40,6 +40,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $UserObject->user_type = $UserType->id;
   $result = $UserObject->updateUser();
   echo "alert('User updated successfully');";
+}
+
+if (isset($_POST['question_id']) && isset($_POST['selected_option']) && isset($_SESSION['UserID'])) {
+  $questionId = intval($_POST['question_id']);
+  $selectedOption = intval($_POST['selected_option']);
+  $userId = $_SESSION['UserID'];  // Get the current logged-in user's ID
+
+  // Update the user's answer in the database
+  try {
+    // Assuming you have a method to update answers in your Survey class
+    $result = Survey::updateUserAnswer($userId, $questionId, $selectedOption);
+
+    if ($result) {
+      echo "Your answer has been updated successfully.";
+    } else {
+      echo "There was an error updating your answer.";
+    }
+  } catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+  }
+} else {
+  echo "Invalid request.";
 }
 ?>
 
@@ -262,6 +284,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <script src="../assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+
+  <script>
+    $(document).ready(function () {
+      // When the user changes their selection
+      $('.survey-answer').change(function () {
+        var questionId = $(this).data('question-id');  // Get the question ID
+        var selectedOption = $(this).val();  // Get the selected option ID
+
+        // Send the data via AJAX to update the answer in the database
+        $.ajax({
+          url: 'user_profile.php',  // The backend PHP file that processes the update
+          type: 'POST',
+          data: {
+            question_id: questionId,
+            selected_option: selectedOption
+          },
+          success: function (response) {
+            // Handle response if needed, e.g., show success message
+            alert("Your answers have been updated successfully.");
+            location.reload();
+          },
+          error: function () {
+            alert('Error updating your answer.');
+          }
+        });
+      });
+    });
+
+  </script>
 </body>
 
 </html>

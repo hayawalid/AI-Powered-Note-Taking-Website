@@ -60,7 +60,6 @@ class Survey
     }
 
 
-
     // Check if the user has already completed the survey
     public static function seenSurvey($user_id)
     {
@@ -81,6 +80,14 @@ class Survey
             return $result;
         }
         return false;
+    }
+
+    public static function updateUserAnswer($userId, $questionId, $selectedOption) {
+        // Prepare and execute the update query
+        $sql = "UPDATE user_survey_answers SET option_id = $selectedOption WHERE user_id = $userId AND question_id = $questionId";
+        $result = mysqli_query($GLOBALS['con'], $sql);
+
+        return $result;
     }
 }
 
