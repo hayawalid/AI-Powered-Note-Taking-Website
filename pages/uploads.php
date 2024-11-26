@@ -38,22 +38,21 @@
 
 
         <div class="containers">
-            <div class="card">
-                <h3>Upload Files</h3>
-                <div class="drop_box">
-                    <header>
-                        <h4>Select File here</h4>
-                    </header>
-                    <p>Files Supported: PDF, TEXT, DOC , DOCX</p>
-                    <input type="file" hidden accept=".doc,.docx,.pdf" id="fileID" style="display:none;">
-                    <button class="btn">Choose File</button>
-                </div>
+    <div class="card">
+        <h3>Upload Files</h3>
+        <div class="drop_box">
+            <header>
+                <h4>Select File here</h4>
+            </header>
+            <p>Files Supported: PDF, TEXT, DOC , DOCX</p>
+            <input type="file" hidden accept=".doc,.docx,.pdf" id="fileID" style="display:none;">
+            <button class="btn">Choose File</button>
+        </div>
+    </div>
+    <!-- Add this status element -->
+    <div id="upload-status" style="margin-top: 10px; font-weight: bold;"></div>
+</div>
 
-            </div>
-        </div>
-        <div id="contentDisplay">
-            <!-- PDF content will be displayed here -->
-        </div>
 
     </div>
    

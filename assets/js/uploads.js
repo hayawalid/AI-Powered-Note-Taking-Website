@@ -1,63 +1,95 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Select DOM elements
-    const dropArea = document.querySelector(".drop_box"),
-          button = dropArea.querySelector("button"),
-          input = dropArea.querySelector("input"),
-          contentDisplay = document.getElementById('contentDisplay');
+const dropBox = document.querySelector(".drop_box"),
+      button = dropBox.querySelector("button"),
+      input = dropBox.querySelector("input"),
+      statusDisplay = document.getElementById("upload-status");
 
-    // Open file input dialog when the button is clicked
-    button.onclick = () => {
-        input.click();
+let selectedFile;
+
+// Open file selection dialog when the button is clicked
+button.onclick = () => input.click();
+
+// Handle file selection
+input.addEventListener("change", function (e) {
+    selectedFile = e.target.files[0];
+    if (!selectedFile) return;
+
+    const fileName = selectedFile.name;
+
+    // Preserve the form structure but prepare it for submission
+    const fileData = `
+        <form id="uploadForm" method="post" enctype="multipart/form-data">
+            <div class="form">
+                <h4>${fileName}</h4>
+                <input type="text" name="rename" placeholder="Rename file" />
+                <button class="btn" type="submit">Upload</button>
+            </div>
+        </form>
+    `;
+    dropBox.innerHTML = fileData;
+
+    // Attach event listener to the form for upload
+    const uploadForm = document.getElementById("uploadForm");
+    uploadForm.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const renameInput = uploadForm.querySelector("input[name='rename']").value;
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        formData.append("rename", renameInput);
+
+        extractTextFromPDF(selectedFile).then(extractedText => {
+            formData.append("content", extractedText); // Append extracted text
+            // Perform the upload
+            uploadFile(formData);
+        }).catch(err => {
+            console.error("Error extracting text:", err);
+            statusDisplay.textContent = "Failed to extract text from PDF.";
+        });
+    });
+});
+
+// Function to extract text from PDF using PDF.js
+async function extractTextFromPDF(file) {
+    const pdf = await pdfjsLib.getDocument(URL.createObjectURL(file)).promise;
+    let extractedText = '';
+    
+    for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        extractedText += textContent.items.map(item => item.str).join(' ');
+    }
+
+    return extractedText;
+}
+
+// Function to handle file upload via AJAX
+function uploadFile(formData) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "../includes/upload_handler.php", true);
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            console.log(xhr.responseText); // Log the response for debugging
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (response.status) {
+                    statusDisplay.textContent = response.message;
+                    dropBox.innerHTML = `<h4>Upload Complete!</h4>`;
+                } else {
+                    statusDisplay.textContent = `Error: ${response.message}`;
+                }
+            } catch (e) {
+                console.error("Error parsing response:", e);
+                statusDisplay.textContent = "Server returned invalid response.";
+            }
+        } else {
+            statusDisplay.textContent = "Server error. Please try again.";
+        }
     };
 
-    // Handle file selection
-    input.addEventListener("change", function (e) {
-        const file = e.target.files[0];
+    xhr.onerror = function () {
+        statusDisplay.textContent = "Network error. Please try again.";
+    };
 
-        // Check if the uploaded file is a PDF
-        if (file && file.type === 'application/pdf') {
-            const fileReader = new FileReader();
-
-            // On file read complete
-            fileReader.onload = function () {
-                const typedArray = new Uint8Array(this.result);
-
-                // Initialize PDF.js
-                pdfjsLib.getDocument(typedArray).promise.then((pdf) => {
-                    let content = ''; // This will store the extracted content
-
-                    const numPages = pdf.numPages;
-
-                    // Loop through all pages of the PDF and extract text
-                    for (let pageNumber = 1; pageNumber <= numPages; pageNumber++) {
-                        pdf.getPage(pageNumber).then((page) => {
-                            page.getTextContent().then((textContent) => {
-                                textContent.items.forEach((item) => {
-                                    content += item.str + ' '; // Append text from PDF
-                                });
-
-                                // Once the last page is processed, display the content
-                                if (pageNumber === numPages) {
-                                    displayContent(content); // Function to display the content
-                                }
-                            });
-                        });
-                    }
-                }).catch((error) => {
-                    console.error('Error extracting PDF content:', error);
-                    contentDisplay.innerHTML = '<p>Error extracting PDF content. Please try again.</p>';
-                });
-            };
-
-            // Read the PDF file as ArrayBuffer
-            fileReader.readAsArrayBuffer(file);
-        } else {
-            alert("Please upload a valid PDF file.");
-        }
-    });
-
-    // Function to display the extracted content
-    function displayContent(content) {
-        contentDisplay.innerHTML = `<pre>${content}</pre>`;
-    }
-});
+    xhr.send(formData);
+}
