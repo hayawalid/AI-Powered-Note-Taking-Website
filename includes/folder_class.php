@@ -183,7 +183,10 @@ class folder
             return false;
         }
     }
-    public function delete() {
+    
+
+    public function delete()
+    {
         global $con;
         if ($this->ID != 0) {
             $sql = "DELETE FROM trash WHERE ID = $this->ID";

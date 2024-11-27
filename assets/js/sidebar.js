@@ -56,11 +56,23 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.popover-btn.delete').forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.stopPropagation();
-            const folderId = this.getAttribute('data-folder-id');
-            document.getElementById('folder_id').value = folderId;
+            const itemId = this.getAttribute('data-item-id');
+            const itemType = this.getAttribute('data-item-type'); // Get type dynamically
+            
+            // Set item_id and item_type values
+            document.getElementById('trash_item_id').value = itemId;
+            document.getElementById('trash_item_type').value = itemType; // Dynamic value
+    
+            // Update modal message based on item type
+            const modalMessage = document.querySelector('#trashModal .modal-content p');
+            modalMessage.textContent = `Are you sure you want to move this ${itemType} to trash?`;
+    
+            // Display the modal
             document.getElementById('trashModal').style.display = 'flex';
         });
     });
+    
+    
 
     // Open the delete modal when ".fa-solid.fa-trash" is clicked
     document.querySelectorAll('.fa-solid.fa-trash').forEach(function(button) {

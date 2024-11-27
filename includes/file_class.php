@@ -4,11 +4,13 @@ if ($con->connect_error) {
     die("Connection failed: " . $con->connect_error);
 }
 
-class FileType {
+class FileType
+{
     public $id;
     public $name;
 
-    public function __construct($id) {
+    public function __construct($id)
+    {
         global $con;
         $this->id = $id;
         if ($id != 0) {
@@ -22,7 +24,8 @@ class FileType {
         }
     }
 }
-class file {
+class file
+{
     public $id;
     public $name;
     public $user_id;
@@ -31,7 +34,8 @@ class file {
     public $created_at;
     public $file_type;
 
-    public function __construct($id) {
+    public function __construct($id)
+    {
         global $con;
         $this->id = $id;
         if ($id != 0) {
@@ -51,7 +55,8 @@ class file {
     }
 
     // Create a new file
-    public static function create($name, $user_id, $folder_id, $content, $file_type) {
+    public static function create($name, $user_id, $folder_id, $content, $file_type)
+    {
         global $con;
         $created_at = date('Y-m-d H:i:s');
         $sql = "INSERT INTO files (name, user_id, folder_id, content, created_at, file_type) 
@@ -66,20 +71,21 @@ class file {
     }
 
     // Read all files for a user
-    public static function readAll($user_id, $folder_id = null) {
+    public static function readAll($user_id, $folder_id = null)
+    {
         global $con;
-        
+
         // Start building the SQL query
         $sql = "SELECT * FROM files WHERE user_id = $user_id";
-        
+
         // If a folder ID is provided, filter by folder
         if ($folder_id) {
             $sql .= " AND folder_id = $folder_id";
         }
-        
+
         // Execute the query
         $result = mysqli_query($con, $sql);
-        
+
         // Check for results
         if ($result) {
             $files = [];
@@ -92,33 +98,34 @@ class file {
             return false;
         }
     }
-    
+
 
     // Update a file's content
-    public static function update($id, $newName) {
+    public static function update($id, $newName)
+    {
         global $con;
-        
+
         // Clean up newName to ensure it is correctly formatted
         $newName = trim($newName);
-    
+
         // Check if the parameters are correct
         echo "New Name: " . htmlspecialchars($newName, ENT_QUOTES, 'UTF-8') . "<br>";
         echo "ID: " . intval($id) . "<br>";
-        
+
         // SQL query to update name
         $sql = "UPDATE files SET name = ? WHERE id = ?";
         echo "SQL: " . $sql . "<br>";  // Debug the SQL query
-        
+
         // Prepare the statement
         if ($stmt = mysqli_prepare($con, $sql)) {
             echo "Prepared Statement Successful<br>";
-        
+
             // Bind the parameters
             if (!mysqli_stmt_bind_param($stmt, 'si', $newName, $id)) {
                 echo "Error binding parameters: " . mysqli_error($con) . "<br>";
                 return false;
             }
-        
+
             // Execute the query
             if (mysqli_stmt_execute($stmt)) {
                 echo "Update Successful<br>";
@@ -132,9 +139,10 @@ class file {
             return false;
         }
     }
-    
 
-    public static function delete($id) {
+
+    public static function delete($id)
+    {
         global $con;
         $sql = "DELETE FROM files WHERE id = $id";
         if (mysqli_query($con, $sql)) {
@@ -144,5 +152,63 @@ class file {
             return false;
         }
     }
+    public static function moveToTrash($id)
+{
+    global $con;
+    $user_id = $_SESSION['UserID']; // Ensure you have the user ID from session
+
+    // Get the file details
+    $stmt = $con->prepare("SELECT * FROM files WHERE ID = ? AND user_id = ?");
+    $stmt->bind_param("ii", $id, $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($file = $result->fetch_assoc()) {
+        echo "File found: " . json_encode($file) . "<br>";
+
+        // Assign file details correctly
+        $file_name = $file['name'];
+        $parent_folder_id = $file['folder_id'];
+
+        // Begin transaction
+        mysqli_begin_transaction($con);
+
+        try {
+            // Move file to trash
+            $trash_sql = "INSERT INTO trash (file_id, folder_id, name, user_id, deleted_at) VALUES (?, ?, ?, ?, NOW())";
+            $stmt_trash = $con->prepare($trash_sql);
+            $stmt_trash->bind_param("iisi", $id, $parent_folder_id, $file_name, $user_id);
+
+            if (!$stmt_trash->execute()) {
+                throw new Exception("Error moving file to trash: " . $stmt_trash->error);
+            }
+            echo "1";
+            // Delete file from files table
+            $delete_sql = "DELETE FROM files WHERE ID = ? AND user_id = ?";
+            $stmt_delete = $con->prepare($delete_sql);
+            $stmt_delete->bind_param("ii", $id, $user_id);
+            echo "2";
+
+            if (!$stmt_delete->execute()) {
+                throw new Exception("Error deleting file: " . $stmt_delete->error);
+            }
+            echo "3";
+
+            // Commit transaction
+            mysqli_commit($con);
+            echo "File moved to trash successfully.<br>";
+            return true;
+        } catch (Exception $e) {
+            // Rollback transaction on error
+            mysqli_rollback($con);
+            echo $e->getMessage() . "<br>";
+            return false;
+        }
+    } else {
+        echo "Error: File not found.<br>";
+        return false;
+    }
+}
+
 }
 ?>

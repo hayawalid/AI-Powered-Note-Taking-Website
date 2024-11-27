@@ -28,35 +28,47 @@ if (isset($_POST["submit"])) {
       echo "ERROR!";
     }
   } else {
-    // Here we handle the case where the type is not Folder (option2), assuming it's a file.
-    // The dropdown option selected is for creating a file (option3)
-
+    
     if ($type == "option3") {
-        // Logic to create a file when "File" is selected
-        $content = ""; // Default content or get from form if needed
-        $file_type = 1; // Assuming default file type ID (replace this if needed)
+      $content = ""; // Default content or get from form if needed
+      $file_type = 1; // Assuming default file type ID (replace this if needed)
 
-        // Call the create method for the file
-        $new_file_id = file::create($name, $user_id, $parent_folder_id, $content, $file_type);
+      // Call the create method for the file
+      $new_file_id = file::create($name, $user_id, $parent_folder_id, $content, $file_type);
 
     } else {
       echo "<script>alert('Invalid selection! Please choose either a \"Folder\" or a \"File\".');</script>";
     }
-}
+  }
 }
 
-if (isset($_POST['id'])) {
-  $id = $_POST['id'];
-  echo "Received Folder ID: " . $id . "<br>";
-  if ($id) {
-    if (folder::moveToTrash($id)) {
-      header("Location: ../pages/Folders.php");
-      exit();
-    } else {
-      echo "Error moving folder to trash.";
-    }
+if (isset($_POST['item_id']) && isset($_POST['item_type'])) {
+  $item_id = intval($_POST['item_id']);
+  $item_type = $_POST['item_type'];
+
+  // Debugging outputs
+  echo "Item Type: " . htmlspecialchars($item_type) . "<br>";
+  echo "Item ID: " . htmlspecialchars($item_id) . "<br>";
+
+  error_log("Move to trash request: ID = $item_id, Type = $item_type");
+
+  // Validation check
+  if ($item_id && in_array($item_type, ['folder', 'file'])) {
+      if ($item_type === 'folder') {
+          $result = folder::moveToTrash($item_id);
+      } elseif ($item_type === 'file') {
+          $result = file::moveToTrash($item_id);
+      }
+
+      if ($result) {
+          echo "<script>alert('Item moved to trash successfully.');</script>";
+          header("Location: ../pages/UserDashboard.php");
+          exit();
+      } else {
+          echo "<script>alert('Error moving $item_type to trash.');</script>";
+      }
   } else {
-    echo "No folder ID provided.";
+      echo "<script>alert('Invalid item ID or type.');</script>";
   }
 }
 
@@ -170,8 +182,11 @@ if (!$user) {
   <div class="modal-content">
     <p>Are you sure you want to move this folder to trash?</p><br><br>
     <form id="trashForm" method="post" action="">
-      <input type="hidden" id="folder_id" name="id">
-      <button type="submit" class="btn-confirm">Yes, move to trash</button>
+      <!-- Corrected input fields -->
+      <input type="hidden" name="item_id" id="trash_item_id">
+      <input type="hidden" name="item_type" id="trash_item_type" value="folder">
+      
+      <button type="submit" class="btn-confirm delete-file">Yes, move to trash</button>
       <button type="button" class="btn-cancel" onclick="closeModal('trashModal')">Cancel</button>
     </form>
   </div>

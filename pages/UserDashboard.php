@@ -1,8 +1,9 @@
 <?php
 include_once '../includes/session.php';
 
-//set current page to update sidebar status
 $current_page = 'User dashboard';
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,34 +41,22 @@ $current_page = 'User dashboard';
             opacity: 1;
         }
 
-        /* Make sure the .note div is positioned relatively so popovers can be placed relative to it */
         .note {
             position: relative;
         }
 
-        /* Style the popover */
         .popover {
             position: absolute;
             top: 0;
-            /* Adjust this if you want to move it up or down */
             width: 8em;
             right: 100%;
-            /* Positions it to the right of the note div */
             margin-left: 10px;
-            /* Optional: Adds space between the div and the popover */
             display: none;
-            /* Hide the popover by default */
             background: #fff;
-            /* Popover background */
             border: 1px solid #ccc;
-            /* Optional: border for the popover */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            /* Optional: shadow for better visibility */
             z-index: 300000;
-            /* Make sure the popover is on top */
         }
-
-        /* Show the popover when it's needed (e.g., on hover or click) */
         .note:hover .popover {
             display: block;
         }
@@ -117,7 +106,7 @@ $current_page = 'User dashboard';
                                                 Move
                                             </button>
                                             <!-- Delete Button -->
-                                            <button class="popover-btn delete" data-folder-id="<?php echo $folderId; ?>">
+                                            <button class="popover-btn delete" data-item-id="<?php echo $folderId; ?>" data-item-type="folder">
                                                 Delete
                                             </button>
                                         </div>
@@ -138,17 +127,11 @@ $current_page = 'User dashboard';
                         </div>
                         <div class="notes">
                             <?php
-                            // Get the user ID from the session
                             $user_id = $_SESSION['UserID'];
-
-                            // Get the folder_id from the URL, if provided
                             $folder_id = isset($_GET['folder_id']) ? $_GET['folder_id'] : null;
-
-                            // Fetch the files for the current folder or general view (no folder filter)
                             $files = file::readAll($user_id, $folder_id);
                             ?>
 
-                            <!-- Loop through the fetched files and display them -->
                             <?php if ($files): ?>
                                 <?php foreach ($files as $index => $file): ?>
                                     <div class="note <?php echo $colors[$index % 3]; ?>"
@@ -164,7 +147,7 @@ $current_page = 'User dashboard';
                                                 <button class="popover-btn move"
                                                     data-folder-id="<?php echo $folder_id; ?>">Move</button>
                                                 <button class="popover-btn delete"
-                                                    data-folder-id="<?php echo $folder_id; ?>">Delete</button>
+                                                data-item-id="<?php echo $file['id']; ?>" data-item-type="file">Delete</button>
                                             </div>
                                         </h3>
                                         <hr>
@@ -176,7 +159,6 @@ $current_page = 'User dashboard';
 
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <!-- No notes message -->
                             <?php endif; ?>
                         </div>
 
