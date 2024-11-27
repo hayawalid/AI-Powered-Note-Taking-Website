@@ -33,11 +33,13 @@ $current_page = 'Speech To Text';
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <title>Speech Detection</title>
 </head>
-
+ 
 <body>
   <div class="wrapper">
     <?php include '../includes/sidebar.php'; ?>
     <div class="main-panel" id="main-panel">
+    <main class="content">
+    <section class="bordered-content">
       <div class="sound-recorder-wrapper">
         <h1>🎤 Sound Recorder</h1>
         <div class="instructions">
@@ -58,7 +60,8 @@ $current_page = 'Speech To Text';
       </div>
 
       <!-- <div class="speech-content" id="content"> -->
-
+    </section>
+    </main>
     </div>
   </div>
   </div>
