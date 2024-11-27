@@ -119,6 +119,39 @@ class ChartsData
             'activeUsers' => $activeUsers
         ];
     }
+
+    static public function getMonthlyActiveAccounts() {
+        // SQL query to count active accounts by month
+        $query = "
+            SELECT 
+                MONTH(login_time) AS month, 
+                COUNT(DISTINCT user_id) AS active_accounts
+            FROM 
+                user_session_duration
+            WHERE 
+                YEAR(login_time) = YEAR(CURDATE())
+            GROUP BY 
+                MONTH(login_time)
+            ORDER BY 
+                MONTH(login_time);
+        ";
+    
+        // Execute the query
+        $result = mysqli_query($GLOBALS['con'], $query);
+    
+        // Initialize arrays
+        $monthlyData = array_fill(0, 12, 0); // Default 0 for all 12 months
+    
+        // Populate the monthly data
+        while ($row = mysqli_fetch_assoc($result)) {
+            $monthIndex = (int)$row['month'] - 1; // Convert month to zero-based index
+            $monthlyData[$monthIndex] = (int)$row['active_accounts'];
+        }
+    
+        // Return JSON-encoded data for JavaScript
+        return $monthlyData;
+    }
+    
     
 
 

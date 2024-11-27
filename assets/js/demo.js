@@ -75,7 +75,8 @@ demo = {
     };
   },
 
-  initDashboardPageCharts: function (pieChartData, barChartData, lineChartData) {
+  initDashboardPageCharts: function (pieChartData, barChartData, lineChartData, bigDashboardChart) {
+    console.log("in function");
 
     //PIE CHART
     var featureNames = pieChartData.map(function (item) {
@@ -89,6 +90,10 @@ demo = {
     //LINE CHART
     var hours = lineChartData.hours;
     var activeUsers = lineChartData.activeUsers;
+
+    //DASHBOARD CHART
+    var monthlyActiveAccounts = bigDashboardChart;
+    console.log(monthlyActiveAccounts);
 
     chartColor = "#E6D1F2";
 
@@ -221,7 +226,7 @@ demo = {
           fill: true,
           backgroundColor: gradientFill,
           borderWidth: 2,
-          data: [50, 150, 100, 190, 130, 90, 150, 160, 120, 140, 190, 95]
+          data: monthlyActiveAccounts
         }]
       },
       options: {
