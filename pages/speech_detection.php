@@ -32,36 +32,84 @@ $current_page = 'Speech To Text';
   <link rel="stylesheet" href="../assets/css/user_style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <title>Speech Detection</title>
+  <style>
+    .header-text {
+      margin-bottom: 34px;
+    }
+
+    .header-text h3 {
+      font-weight: bold !important;
+      font-size: 28px !important;
+      margin-bottom: 5px;
+    }
+
+    .header-text p {
+      font-weight: bold !important;
+      font-size: 13px !important;
+      text-transform: uppercase;
+    }
+
+    .instructions {
+      display: flex;
+      justify-content: center;
+    }
+
+    .instructions div {
+      margin: 50px;
+    }
+
+    .instructions p {
+      font-size: 13px;
+      width: 175px;
+    }
+
+    img {
+      height: 100px;
+      width: 100px;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
- 
+
 <body>
   <div class="wrapper">
     <?php include '../includes/sidebar.php'; ?>
     <div class="main-panel" id="main-panel">
-    <main class="content">
-    <section class="bordered-content">
-      <div class="sound-recorder-wrapper">
-        <h1>🎤 Sound Recorder</h1>
-        <div class="instructions">
-          <!-- <h3>📋 How to Use:</h3> -->
-          <p><span class="emoji">🎧</span> Ensure your microphone is turned on and ready to go.</p>
-          <p><span class="emoji">🔴</span> Press <strong>Start</strong> to begin recording your audio.</p>
-          <p><span class="emoji">⏸️</span> Press <strong>Pause</strong> to stop recording.</p>
-          <p><span class="emoji">💾</span> Press <strong>Save & Transcribe</strong> to save and convert your audio into
-            text.</p>
-        </div>
+      <main class="content">
+        <section class="bordered-content">
+          <div class="sound-recorder-wrapper">
+            <div class="header-text">
+              <h3><span class="mr-2"><i class="bi bi-mic"></i></span> Sound Recorder</h3>
+              <p>Make sure your microphone is turned on and <br> ready to go.</p>
+            </div>
+            <div class="instructions">
+              <!-- <h3>📋 How to Use:</h3> -->
+              <div>
+                <img src="../assets/images/record.png" alt="record icon">
+                <p>Press <strong>Start</strong> to begin recording your audio.</p>
+              </div>
+              <div>
+                <img src="../assets/images/pause.png" alt="pause icon">
+                <p>Press <strong>Pause</strong> to stop recording.</p>
+              </div>
+              <div>
+                <img src="../assets/images/save.png" alt="save icon">
+                <p>Press <strong>Save & Transcribe</strong> to save and convert your audio into
+                  text.</p>
+              </div>
+            </div>
 
-        <!-- <div class="sound-wave" id="soundWave"></div> -->
-        <canvas id="sineCanvas" width="800" height="400"></canvas>
-        <button id="start-recognition">Start</button>
-        <button id="stop-recognition" disabled>Pause</button>
-        <button id="start-over">Start Over</button>
-        <button id="save-content">Save & Transcribe</button>
-      </div>
+            <!-- <div class="sound-wave" id="soundWave"></div> -->
+            <canvas id="sineCanvas" width="800" height="200"></canvas>
+            <button id="start-recognition">Start</button>
+            <button id="stop-recognition" disabled>Pause</button>
+            <button id="start-over">Start Over</button>
+            <button id="save-content">Save & Transcribe</button>
+          </div>
 
-      <!-- <div class="speech-content" id="content"> -->
-    </section>
-    </main>
+          <!-- <div class="speech-content" id="content"> -->
+        </section>
+      </main>
     </div>
   </div>
   </div>
