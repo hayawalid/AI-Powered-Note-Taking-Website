@@ -152,63 +152,72 @@ class file
             return false;
         }
     }
-    public static function moveToTrash($id)
-{
-    global $con;
-    $user_id = $_SESSION['UserID']; // Ensure you have the user ID from session
+    public static function moveToTrash($id) {
+        global $con;
+        $user_id = $_SESSION['UserID']; // Ensure you have the user ID from session
+    
+        // Get the file details
+        $stmt = $con->prepare("SELECT * FROM files WHERE ID = ? AND user_id = ?");
+        $stmt->bind_param("ii", $id, $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if ($file = $result->fetch_assoc()) {
+            echo "File found: " . json_encode($file) . "<br>";
+    
+            // Assign file details correctly
+            $file_name = $file['name'];
+            $parent_folder_id = $file['folder_id'];
+            $file_content = $file['content'] ?? ''; 
+    
+            mysqli_begin_transaction($con);
+    
+            try {
+                // Move file to trash, including file content
+                $trash_sql = "INSERT INTO trash (file_id, folder_id, name, user_id, file_content, deleted_at) VALUES (?, ?, ?, ?, ?, NOW())";
+                $stmt_trash = $con->prepare($trash_sql);
+                $stmt_trash->bind_param("iissi", $id, $parent_folder_id, $file_name, $user_id, $file_content);
+    
+                if (!$stmt_trash->execute()) {
+                    throw new Exception("Error moving file to trash: " . $stmt_trash->error);
+                }
+                echo "Insert into trash successful.<br>";
+    
+                // Verify insertion into trash
+                $last_insert_id = $con->insert_id;
+                if ($last_insert_id <= 0) {
+                    throw new Exception("Failed to insert into trash.");
+                }
+    
+                // Delete file from files table
+                $delete_sql = "DELETE FROM files WHERE ID = ? AND user_id = ?";
+                $stmt_delete = $con->prepare($delete_sql);
+                $stmt_delete->bind_param("ii", $id, $user_id);
+    
+                if (!$stmt_delete->execute()) {
+                    // Log the error in more detail
+                    error_log("Error deleting file: " . $stmt_delete->error . " | ID: $id | User ID: $user_id");
+                    // Detailed exception message
+                    throw new Exception("Error deleting file: " . $stmt_delete->error . " | ID: $id | User ID: $user_id");
+                }
+                error_log("DELETE SQL: $delete_sql | ID: $id | User ID: $user_id");
+error_log("INSERT SQL: $trash_sql | ID: $id | Name: $file_name");
 
-    // Get the file details
-    $stmt = $con->prepare("SELECT * FROM files WHERE ID = ? AND user_id = ?");
-    $stmt->bind_param("ii", $id, $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($file = $result->fetch_assoc()) {
-        echo "File found: " . json_encode($file) . "<br>";
-
-        // Assign file details correctly
-        $file_name = $file['name'];
-        $parent_folder_id = $file['folder_id'];
-
-        // Begin transaction
-        mysqli_begin_transaction($con);
-
-        try {
-            // Move file to trash
-            $trash_sql = "INSERT INTO trash (file_id, folder_id, name, user_id, deleted_at) VALUES (?, ?, ?, ?, NOW())";
-            $stmt_trash = $con->prepare($trash_sql);
-            $stmt_trash->bind_param("iisi", $id, $parent_folder_id, $file_name, $user_id);
-
-            if (!$stmt_trash->execute()) {
-                throw new Exception("Error moving file to trash: " . $stmt_trash->error);
+                echo "Delete from files successful.<br>";
+                // Commit transaction
+                mysqli_commit($con);
+                echo "File moved to trash successfully.<br>";
+                return true;
+            } catch (Exception $e) {
+                mysqli_rollback($con);
+                echo "Error during transaction: " . $e->getMessage() . "<br>";
+                error_log("Error during transaction: " . $e->getMessage());
+                return false;
             }
-            echo "1";
-            // Delete file from files table
-            $delete_sql = "DELETE FROM files WHERE ID = ? AND user_id = ?";
-            $stmt_delete = $con->prepare($delete_sql);
-            $stmt_delete->bind_param("ii", $id, $user_id);
-            echo "2";
-
-            if (!$stmt_delete->execute()) {
-                throw new Exception("Error deleting file: " . $stmt_delete->error);
-            }
-            echo "3";
-
-            // Commit transaction
-            mysqli_commit($con);
-            echo "File moved to trash successfully.<br>";
-            return true;
-        } catch (Exception $e) {
-            // Rollback transaction on error
-            mysqli_rollback($con);
-            echo $e->getMessage() . "<br>";
+        } else {
+            echo "Error: File not found.<br>";
             return false;
         }
-    } else {
-        echo "Error: File not found.<br>";
-        return false;
     }
+    
 }
-
-}
-?>
