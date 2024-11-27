@@ -35,6 +35,7 @@ $current_page = 'Speech To Text';
   <style>
     .header-text {
       margin-bottom: 34px;
+      margin-top: -10px;
     }
 
     .header-text h3 {
