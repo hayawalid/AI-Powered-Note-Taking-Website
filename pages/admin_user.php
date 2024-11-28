@@ -2,9 +2,7 @@
   //connect to database
   include '../includes/config.php';
   include '../includes/User.php';
-
-  //resume user session
-  session_start();
+  include_once '../includes/session.php';
 
   //set current page to update sidebar status
   $current_page = 'Admin Profile';
@@ -86,6 +84,7 @@
   <link href="../assets/css/now-ui-dashboard.css" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="../assets/css/demo.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/user_style.css">
   <style>
     .is-invalid-label {
       color: red;

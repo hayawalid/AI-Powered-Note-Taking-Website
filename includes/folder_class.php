@@ -183,4 +183,23 @@ class folder
             return false;
         }
     }
+    
+
+    public function delete()
+    {
+        global $con;
+        if ($this->ID != 0) {
+            $sql = "DELETE FROM trash WHERE ID = $this->ID";
+            if (mysqli_query($con, $sql)) {
+                echo "Folder permanently deleted from trash.<br>";
+                return true;
+            } else {
+                echo "Error deleting folder: " . mysqli_error($con) . "<br>";
+                return false;
+            }
+        } else {
+            echo "Invalid ID. Cannot delete.<br>";
+            return false;
+        }
+    }
 }

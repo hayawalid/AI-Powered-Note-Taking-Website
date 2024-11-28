@@ -53,3 +53,6 @@ composer.lock
 
 # Secrets
 secrets/
+
+# Ignore Composer's global configuration file
+composer.phar

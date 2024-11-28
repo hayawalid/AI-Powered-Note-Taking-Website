@@ -1,122 +1,63 @@
 /* Base styling for the body */
 body {
-    background: #fcfcfc; /* Change the color for the base background */
-    height: 100vh;
-    margin: 0;
-    display: inline;
-    justify-content: center; /* Center horizontally */
-    align-items: center;     /* Center vertically */
-    font-family: 'Fira Sans', sans-serif; /* Add your desired font */
-  }
-  
-  /* Wrapper for the sound recorder content */
-  .sound-recorder-wrapper {
-    text-align: center; /* Center all text within the wrapper */
-    align-items: center;
-    margin-top: 15vh;
-    margin-left:15vh;
-  }
-  
-  /* Styling for the heading */
-  h1, h3 {
-    margin: 10px 0;
-  }
-  
-  /* Sound wave container styling */
-  .sound-wave {
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px; /* Space below the sound wave container */
-  }
-  
-  /* Styling for each individual bar */
-  .bar {
-    background: black; /* Change the color for the bars */ 
-    margin: 0 1.5px; 
-    height: 15px; /* Initial height */ 
-    width: 2px; /* Change the number for the bar width */ 
-    transition: height 0.1s ease-in-out; /* Smooth transition for height changes */ 
-    animation-iteration-count: infinite; 
-    animation-timing-function: ease-in-out; 
-    animation-direction: alternate;
-  }
- 
+  background: #fcfcfc;
+  /* Change the color for the base background */
+  height: 100vh;
+  margin: 0;
+  display: inline;
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
+  font-family: 'Fira Sans', sans-serif;
+  /* Add your desired font */
+  overflow: hidden;
+}
 
-  
-  /* Smaller bars animation */
-  .bar:nth-child(-n + 3),
-  .bar:nth-last-child(-n + 3) {
-    animation-name: wave-sm;
-  }
-  
-  /* Medium bars animation */
-  .bar:nth-child(-n + 7),
-  .bar:nth-last-child(-n + 7) {
-    animation-name: wave-md;
-  }
-  
-  /* Keyframe for small wave animation */
-  @keyframes wave-sm {
-    0% {
-      opacity: 0.35;
-      height: 10px;
-    }
-    100% {
-      opacity: 1;
-      height: 25px;
-    }
-  }
-  
-  /* Keyframe for medium wave animation */
-  @keyframes wave-md {
-    0% {
-      opacity: 0.35;
-      height: 15px;
-    }
-    100% {
-      opacity: 1;
-      height: 50px;
-    }
-  }
-  
-  /* Keyframe for large wave animation */
-  @keyframes wave-lg {
-    0% {
-      opacity: 0.35;
-      height: 15px;
-    }
-    100% {
-      opacity: 1;
-      height: 70px;
-    }
-  }
-  
-  /* Styling for the buttons */
-  button {
-    background-color: #8eadc2; /* Green button background */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 10px 5px;
-    margin-top:40px;
-    cursor: pointer;
-    border-radius: 4px;
+/* Wrapper for the sound recorder content */
+.sound-recorder-wrapper {
+  text-align: center;
+  /* Center all text within the wrapper */
+  align-items: center;
+  margin-top: 6vh;
+  margin-left: 4vh;
+}
 
-    
-  }
-  
-  button:disabled {
-    background-color: #fafafa; /* Disabled button styling */
-    cursor: not-allowed;
-  }
-  
-  button:hover {
-    background-color: #dfe3e7; /* Button hover effect */
-  }
-  
+/* Styling for the heading */
+h1,
+h3 {
+  margin: 2px 0;
+}
+
+
+/* Styling for the buttons */
+button {
+  margin: 2em auto;
+  padding: 1em 2.5em;
+  background: #222;
+  border: 1px solid #222;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+
+
+}
+
+button:disabled {
+  background-color: #000000;
+  cursor: not-allowed;
+}
+
+button:hover {
+  background: transparent;
+  color: #222;
+}
+
+
+canvas {
+  margin-left:20vh;
+  border: transparent;
+  display:flex;
+}

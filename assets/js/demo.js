@@ -2,8 +2,8 @@
 console.log('in file');
 
 demo = {
-  initPickColor: function() {
-    $('.pick-class-label').click(function() {
+  initPickColor: function () {
+    $('.pick-class-label').click(function () {
       var new_class = $(this).attr('new-class');
       var old_class = $('#display-buttons').attr('data-class');
       var display_div = $('#display-buttons');
@@ -17,8 +17,7 @@ demo = {
   },
 
 
-  initDocChart: function() {
-    console.log('anything please');
+  initDocChart: function () {
     chartColor = "white";
 
     // General configuration for the charts with Line gradientStroke
@@ -74,42 +73,27 @@ demo = {
         }
       }
     };
-
-    ctx = document.getElementById('lineChartExample').getContext("2d");
-
-    gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
-    gradientStroke.addColorStop(0, '#80b6f4');
-    gradientStroke.addColorStop(1, chartColor);
-
-    gradientFill = ctx.createLinearGradient(0, 170, 0, 50);
-    gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
-    gradientFill.addColorStop(1, "rgba(249, 99, 59, 0.40)");
-
-    myChart = new Chart(ctx, {
-      type: 'line',
-      responsive: true,
-      data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        datasets: [{
-          label: "Active Accounts",
-          borderColor: "#f96332",
-          pointBorderColor: "#FFF",
-          pointBackgroundColor: "#f96332",
-          pointBorderWidth: 2,
-          pointHoverRadius: 4,
-          pointHoverBorderWidth: 1,
-          pointRadius: 4,
-          fill: true,
-          backgroundColor: gradientFill,
-          borderWidth: 2,
-          data: [542, 480, 430, 550, 530, 453, 380, 434, 568, 610, 700, 630]
-        }]
-      },
-      options: gradientChartOptionsConfiguration
-    });
   },
 
-  initDashboardPageCharts: function() {
+  initDashboardPageCharts: function (pieChartData, barChartData, lineChartData, bigDashboardChart) {
+    console.log("in function");
+
+    //PIE CHART
+    var featureNames = pieChartData.map(function (item) {
+      return item.name;
+    });
+
+    var featureCounts = pieChartData.map(function (item) {
+      return item.count;
+    });
+
+    //LINE CHART
+    var hours = lineChartData.hours;
+    var activeUsers = lineChartData.activeUsers;
+
+    //DASHBOARD CHART
+    var monthlyActiveAccounts = bigDashboardChart;
+    console.log(monthlyActiveAccounts);
 
     chartColor = "#E6D1F2";
 
@@ -242,7 +226,7 @@ demo = {
           fill: true,
           backgroundColor: gradientFill,
           borderWidth: 2,
-          data: [50, 150, 100, 190, 130, 90, 150, 160, 120, 140, 190, 95]
+          data: monthlyActiveAccounts
         }]
       },
       options: {
@@ -305,62 +289,62 @@ demo = {
     });
 
     var cardStatsMiniLineColor = "#fff",
-    cardStatsMiniDotColor = "#fff";
+      cardStatsMiniDotColor = "#fff";
 
     // JavaScript Code for the Pie Chart
     var ctx = document.getElementById('pieChartExample').getContext("2d");
 
     var pieChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Speech-to-Text', 'AI Smart Summarization', 'AI Q&A Generation'],
-            datasets: [{
-                data: [40, 25, 15], // Usage data for the features
-                backgroundColor: [
-                    '#F8CFC3', // Pink
-                    '#EA8C08', // Yellow
-                    '#D2D2D2'  // Green
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    '#EA7200',
-                    'rgba(75, 192, 192, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          legend: {
-            position: 'bottom', // 'top', 'bottom', 'left' are other options
-            labels: {
-              usePointStyle: true,
-              fontColor: '#333',
-              fontSize: 8
-            }
-          },
-          plugins: {
-              datalabels: {
-                  color: '#fff',
-                  formatter: (value, ctx) => {
-                      let datasets = ctx.chart.data.datasets;
-                      if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
-                          let sum = datasets[0].data.reduce((a, b) => a + b, 0);
-                          let percentage = ((value / sum) * 100).toFixed(2) + "%";
-                          return percentage;
-                      } else {
-                          return value;
-                      }
-                  },
-                  font: {
-                      weight: 'bold',
-                      size: 14
-                  }
-              }
+      type: 'pie',
+      data: {
+        labels: featureNames,
+        datasets: [{
+          data: featureCounts, // Usage data for the features
+          backgroundColor: [
+            '#F8CFC3', // Pink
+            '#EA8C08', // Yellow
+            '#D2D2D2'  // Green
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            '#EA7200',
+            'rgba(75, 192, 192, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+          position: 'bottom', // 'top', 'bottom', 'left' are other options
+          labels: {
+            usePointStyle: true,
+            fontColor: '#333',
+            fontSize: 8
           }
+        },
+        plugins: {
+          datalabels: {
+            color: '#fff',
+            formatter: (value, ctx) => {
+              let datasets = ctx.chart.data.datasets;
+              if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                let sum = datasets[0].data.reduce((a, b) => a + b, 0);
+                let percentage = ((value / sum) * 100).toFixed(2) + "%";
+                return percentage;
+              } else {
+                return value;
+              }
+            },
+            font: {
+              weight: 'bold',
+              size: 14
+            }
+          }
+        }
       }
-      
+
     });
 
     ctx = document.getElementById('lineChartExampleWithNumbersAndGrid').getContext("2d");
@@ -377,7 +361,9 @@ demo = {
       type: 'line',
       responsive: true,
       data: {
-        labels: ["12pm,", "3pm", "6pm", "9pm", "12am", "3am", "6am", "9am"],
+        labels: hours.map(function (hour) {
+          return hour + ":00";  // Display each hour as "hour:00"
+        }),
         datasets: [{
           label: "Users",
           borderColor: "#18ce0f",
@@ -390,7 +376,7 @@ demo = {
           fill: true,
           backgroundColor: gradientFill,
           borderWidth: 2,
-          data: [40, 500, 650, 700, 1200, 1250, 1300, 1900]
+          data: activeUsers
         }]
       },
       options: gradientChartOptionsConfigurationWithNumbersAndGrid
@@ -418,7 +404,8 @@ demo = {
           pointRadius: 4,
           fill: true,
           borderWidth: 1,
-          data: [20, 40, 17, 35, 25, 16, 29] // Example data, replace with actual values
+          data: barChartData
+          // data: [20, 40, 17, 35, 25, 16, 29]
         }]
       },
       options: {

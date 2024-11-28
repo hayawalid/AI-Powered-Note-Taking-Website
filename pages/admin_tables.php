@@ -2,9 +2,7 @@
 //connect to database
 include '../includes/config.php';
 include '../includes/User.php';
-
-//resume user session
-session_start();
+include_once '../includes/session.php';
 
 //set current page to update sidebar status
 $current_page = 'Users Table List';
@@ -47,6 +45,7 @@ $users = User::getAllUsers();
   <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
   <link href="../assets/css/now-ui-dashboard.css" rel="stylesheet" />
   <link href="../assets/css/demo.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/user_style.css">
 </head>
 
 <body class="">

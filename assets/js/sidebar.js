@@ -36,7 +36,6 @@ document.addEventListener('click', function (event) {
         if (event.target === ellipsis || popover.contains(event.target)) {
             isEllipsis = true;
             isPopover = true;
-            // Toggle the current popover
             if (popover.style.display === 'block') {
                 popover.style.display = 'none';
             } else {
@@ -57,11 +56,23 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.popover-btn.delete').forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.stopPropagation();
-            const folderId = this.getAttribute('data-folder-id');
-            document.getElementById('folder_id').value = folderId;
+            const itemId = this.getAttribute('data-item-id');
+            const itemType = this.getAttribute('data-item-type'); // Get type dynamically
+            
+            // Set item_id and item_type values
+            document.getElementById('trash_item_id').value = itemId;
+            document.getElementById('trash_item_type').value = itemType; // Dynamic value
+    
+            // Update modal message based on item type
+            const modalMessage = document.querySelector('#trashModal .modal-content p');
+            modalMessage.textContent = `Are you sure you want to move this ${itemType} to trash?`;
+    
+            // Display the modal
             document.getElementById('trashModal').style.display = 'flex';
         });
     });
+    
+    
 
     // Open the delete modal when ".fa-solid.fa-trash" is clicked
     document.querySelectorAll('.fa-solid.fa-trash').forEach(function(button) {
@@ -93,46 +104,108 @@ document.getElementById('deleteForm').addEventListener('submit', function() {
     const folderId = document.getElementById('folder_id').value;
     console.log("Folder ID being submitted: ", folderId);
 });
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.popover-btn.rename').forEach(function(button) {
-        button.addEventListener('click', function(event) {
-            event.stopPropagation();
-            const folderElement = button.closest('.folder');
-            const folderNameElement = folderElement.querySelector('p');
-            const currentName = folderNameElement.textContent;
 
-            // Replace folder name with an input field
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.popover-btn.rename').forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.stopPropagation();
+
+            // Close the popover when "Rename" is clicked
+            const popover = button.closest('.popover');
+            popover.style.display = 'none';
+
+            // Determine if it's a folder or note
+            const folderElement = button.closest('.folder');
+            const noteElement = button.closest('.note');
+            let currentName, id, isFolder, nameElement;
+
+            if (folderElement) {
+                nameElement = folderElement.querySelector('p');
+                currentName = nameElement.textContent.trim();
+                id = button.getAttribute('data-folder-id');
+                isFolder = true;
+            } else if (noteElement) {
+                nameElement = noteElement.querySelector('.note-name');
+                currentName = nameElement.childNodes[0].textContent.trim();
+                id = button.getAttribute('data-note-id');
+                isFolder = false;
+            }
+
             const inputField = document.createElement('input');
             inputField.type = 'text';
             inputField.value = currentName;
             inputField.classList.add('rename-input');
-            folderNameElement.replaceWith(inputField);
-
-            // Focus on the input field
+            nameElement.replaceWith(inputField);
             inputField.focus();
 
-            // Handle blur event to save changes
-            inputField.addEventListener('blur', function() {
-                const newName = inputField.value;
+            const saveHandler = function (event) {
+                if (event.type === 'blur' || (event.type === 'keydown' && event.key === 'Enter')) {
+                    inputField.removeEventListener('blur', saveHandler); // Prevent infinite loop
+                    inputField.removeEventListener('keydown', saveHandler); // Prevent infinite loop
+                    const newName = inputField.value.trim();
+                    saveNewName(newName, id, isFolder, inputField, nameElement);
+                }
+            };
 
-                // Send AJAX request to update the folder name
-                const folderId = button.getAttribute('data-folder-id');
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', '../includes/update_folder.php', true); // Correct path here
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200 && xhr.responseText.trim() === 'success') {
-                            const newFolderNameElement = document.createElement('p');
-                            newFolderNameElement.textContent = newName;
-                            inputField.replaceWith(newFolderNameElement);
-                        } else {
-                            alert(`Error: ${xhr.responseText}`);
-                        }
-                    }
-                };
-                xhr.send(`id=${folderId}&name=${newName}`);
-            });
+            inputField.addEventListener('keydown', saveHandler);
+            inputField.addEventListener('blur', saveHandler);
         });
     });
+
+    function saveNewName(newName, id, isFolder, inputField, originalElement) {
+        if (!newName) {
+            replaceWithOriginalElement(inputField, originalElement);
+            return;
+        }
+    
+        const xhr = new XMLHttpRequest();
+        let url, data;
+    
+        if (isFolder) {
+            url = '../includes/update_folder.php';
+            data = `id=${id}&name=${encodeURIComponent(newName)}`;
+        } else {
+            url = '../includes/update_note.php';
+            data = `id=${id}&name=${encodeURIComponent(newName)}`;
+        }
+    
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                console.log('Server response:', xhr.responseText.trim()); // Log the response
+    
+                if (xhr.status === 200 && xhr.responseText.trim() === 'success') {
+                    // Update the DOM element with the new name
+                    const updatedNameElement = originalElement.cloneNode(true);
+                    updatedNameElement.textContent = newName;
+    
+                    if (!isFolder) {
+                        const ellipsisIcon = document.createElement('i');
+                        ellipsisIcon.className = 'fa-solid fa-ellipsis ellipsis';
+                        updatedNameElement.appendChild(ellipsisIcon);
+                    }
+    
+                    inputField.replaceWith(updatedNameElement);
+                } else {
+                    // Handle failure
+                    location.reload(); // This reloads the page
+
+                    replaceWithOriginalElement(inputField, originalElement);
+                }
+            }
+        };
+        xhr.send(data);
+    }
+    
+    if (xhr.status === 200 && xhr.responseText.trim() === 'success') {
+        location.reload(); // Reloads the entire page
+    }
+    
+
+    function replaceWithOriginalElement(inputField, originalElement) {
+        // Restore the original name element if the save fails
+        inputField.replaceWith(originalElement);
+    }
 });
