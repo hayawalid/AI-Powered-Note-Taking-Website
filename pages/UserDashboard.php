@@ -228,6 +228,9 @@ $current_page = 'User dashboard';
                                         <span
                                             class="bottom"><?php echo "⏱️ " . date('h:i A, l', strtotime($file['created_at'])); ?></span>
                                     </div>
+                                    <div id="no-results" style="display: none; text-align: center; color: gray;">
+                                        No results found.
+                                    </div>
 
 
                                 <?php endforeach; ?>
@@ -253,7 +256,7 @@ $current_page = 'User dashboard';
     <script src="../assets/js/plugins/chartjs.min.js"></script>
     <script src="../assets/js/plugins/bootstrap-notify.js"></script>
     <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const filterButtons = document.querySelectorAll('.filter-buttons .filter-btn');
@@ -334,6 +337,76 @@ $current_page = 'User dashboard';
                 });
             });
         });
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.querySelector('.input-group .form-control');
+    const clearSearchButton = document.getElementById('clear-search');
+    const clearFiltersButton = document.getElementById('clear-filters');
+    const folders = document.querySelectorAll('.folder');
+    const notes = document.querySelectorAll('.note');
+    const filterButtons = document.querySelectorAll('.filter-buttons .filter-btn');
+
+    // Search functionality
+    searchInput.addEventListener('input', function () {
+        const query = searchInput.value.toLowerCase();
+        let hasResults = false;
+
+        // Toggle clear search button visibility
+        clearSearchButton.style.display = query ? 'inline' : 'none';
+
+        // Filter folders
+        folders.forEach(folder => {
+            const folderName = folder.querySelector('p').textContent.toLowerCase();
+            if (folderName.includes(query)) {
+                folder.style.display = '';
+                hasResults = true;
+            } else {
+                folder.style.display = 'none';
+            }
+        });
+
+        // Filter notes
+        notes.forEach(note => {
+            const noteName = note.querySelector('.note-name').textContent.toLowerCase();
+            const noteContent = note.querySelector('p').textContent.toLowerCase();
+            if (noteName.includes(query) || noteContent.includes(query)) {
+                note.style.display = '';
+                hasResults = true;
+            } else {
+                note.style.display = 'none';
+            }
+        });
+
+        // Handle "No Results" message
+        document.getElementById('no-results').style.display = hasResults ? 'none' : '';
+    });
+
+    // Clear search functionality
+    clearSearchButton.addEventListener('click', function () {
+        searchInput.value = ''; // Clear the input
+        searchInput.dispatchEvent(new Event('input')); // Trigger the input event to reset results
+    });
+
+    // Clear filters functionality
+    clearFiltersButton.addEventListener('click', function () {
+        // Reset filter buttons
+        filterButtons.forEach(button => button.classList.remove('active'));
+
+        // Show all folders and notes
+        folders.forEach(folder => (folder.style.display = ''));
+        notes.forEach(note => (note.style.display = ''));
+
+        // Reset search input
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input')); // Trigger the input event
+
+        // Hide "No Results" message
+        document.getElementById('no-results').style.display = 'none';
+    });
+});
+
     </script>
 
 
