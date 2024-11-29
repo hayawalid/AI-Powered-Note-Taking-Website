@@ -31,7 +31,7 @@ if (isset($_POST["submit"])) {
     
     if ($type == "option3") {
       $content = ""; // Default content or get from form if needed
-      $file_type = 1; // Assuming default file type ID (replace this if needed)
+      $file_type = 4; // Assuming default file type ID (replace this if needed)
 
       // Call the create method for the file
       $new_file_id = file::create($name, $user_id, $parent_folder_id, $content, $file_type);
