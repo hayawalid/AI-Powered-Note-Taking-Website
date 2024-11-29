@@ -288,86 +288,88 @@ $current_page = 'Folder Content';
         <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
 
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const filterButtons = document.querySelectorAll('.filter-buttons .filter-btn');
-                const sortLinks = document.querySelectorAll('.dropdown-content a');
-                const folders = document.querySelectorAll('.folder');
-                const notes = document.querySelectorAll('.note');
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterButtons = document.querySelectorAll('.filter-buttons .filter-btn');
+            const sortLinks = document.querySelectorAll('.dropdown-content a');
+            const folders = document.querySelectorAll('.folder');
+            const notes = document.querySelectorAll('.note');
 
-                function sortElements(elements, sortBy) {
-                    let sortedElements = Array.from(elements);
-                    sortedElements.sort((a, b) => {
-                        if (sortBy === 'name') {
-                            return a.querySelector('p').textContent.localeCompare(b.querySelector('p').textContent);
-                        } else if (sortBy === 'created') {
-                            return new Date(a.getAttribute('data-created-at')) - new Date(b.getAttribute('data-created-at'));
-                        } else if (sortBy === 'modified') {
-                            // Assuming data-modified-at attribute is present
-                            return new Date(a.getAttribute('data-modified-at')) - new Date(b.getAttribute('data-modified-at'));
-                        }
-                    });
-                    return sortedElements;
-                }
-
-                function applyFilterAndSort(filter = null, sortBy = null) {
-                    const today = new Date();
-                    let startDate;
-
-                    if (filter === 'today') {
-                        startDate = new Date(today.setHours(0, 0, 0, 0));
-                    } else if (filter === 'this week') {
-                        const firstDayOfWeek = today.getDate() - today.getDay();
-                        startDate = new Date(today.setDate(firstDayOfWeek));
-                        startDate.setHours(0, 0, 0, 0);
-                    } else if (filter === 'this month') {
-                        startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-                        startDate.setHours(0, 0, 0, 0);
+            function sortElements(elements, sortBy) {
+                let sortedElements = Array.from(elements);
+                sortedElements.sort((a, b) => {
+                    if (sortBy === 'name') {
+                        return a.querySelector('p').textContent.localeCompare(b.querySelector('p').textContent);
+                    } else if (sortBy === 'created') {
+                        return new Date(a.getAttribute('data-created-at')) - new Date(b.getAttribute('data-created-at'));
+                    } else if (sortBy === 'modified') {
+                        // Assuming data-modified-at attribute is present
+                        return new Date(a.getAttribute('data-modified-at')) - new Date(b.getAttribute('data-modified-at'));
                     }
-
-                    let filteredFolders = Array.from(folders);
-                    let filteredNotes = Array.from(notes);
-
-                    if (filter) {
-                        filteredFolders = filteredFolders.filter(folder => new Date(folder.getAttribute('data-created-at')) >= startDate);
-                        filteredNotes = filteredNotes.filter(note => new Date(note.getAttribute('data-created-at')) >= startDate);
-                    }
-
-                    if (sortBy) {
-                        filteredFolders = sortElements(filteredFolders, sortBy);
-                        filteredNotes = sortElements(filteredNotes, sortBy);
-                    }
-
-                    document.querySelector('.folders').innerHTML = '';
-                    document.querySelector('.notes').innerHTML = '';
-
-                    filteredFolders.forEach(folder => document.querySelector('.folders').appendChild(folder));
-                    filteredNotes.forEach(note => document.querySelector('.notes').appendChild(note));
-                }
-
-                filterButtons.forEach(button => {
-                    button.addEventListener('click', function () {
-                        const isActive = this.classList.contains('active');
-
-                        // Remove active class from all buttons
-                        filterButtons.forEach(btn => btn.classList.remove('active'));
-
-                        if (isActive) {
-                            applyFilterAndSort();
-                        } else {
-                            this.classList.add('active');
-                            applyFilterAndSort(this.getAttribute('data-filter'));
-                        }
-                    });
                 });
+                return sortedElements;
+            }
 
-                sortLinks.forEach(link => {
-                    link.addEventListener('click', function (event) {
-                        event.preventDefault();
-                        applyFilterAndSort(null, this.getAttribute('data-sort'));
-                    });
+            function applyFilterAndSort(filter = null, sortBy = null) {
+                const today = new Date();
+                let startDate;
+
+                if (filter === 'today') {
+                    startDate = new Date(today.setHours(0, 0, 0, 0));
+                } else if (filter === 'this week') {
+                    const firstDayOfWeek = today.getDate() - today.getDay();
+                    startDate = new Date(today.setDate(firstDayOfWeek));
+                    startDate.setHours(0, 0, 0, 0);
+                } else if (filter === 'this month') {
+                    startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                    startDate.setHours(0, 0, 0, 0);
+                }
+
+                let filteredFolders = Array.from(folders);
+                let filteredNotes = Array.from(notes);
+
+                if (filter) {
+                    filteredFolders = filteredFolders.filter(folder => new Date(folder.getAttribute('data-created-at')) >= startDate);
+                    filteredNotes = filteredNotes.filter(note => new Date(note.getAttribute('data-created-at')) >= startDate);
+                }
+
+                if (sortBy) {
+                    filteredFolders = sortElements(filteredFolders, sortBy);
+                    filteredNotes = sortElements(filteredNotes, sortBy);
+                }
+
+                document.querySelector('.folders').innerHTML = '';
+                document.querySelector('.notes').innerHTML = '';
+
+                filteredFolders.forEach(folder => document.querySelector('.folders').appendChild(folder));
+                filteredNotes.forEach(note => document.querySelector('.notes').appendChild(note));
+            }
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const isActive = this.classList.contains('active');
+
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                    if (isActive) {
+                        applyFilterAndSort();
+                    } else {
+                        this.classList.add('active');
+                        applyFilterAndSort(this.getAttribute('data-filter'));
+                    }
                 });
             });
-        </script>
+
+            sortLinks.forEach(link => {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    applyFilterAndSort(null, this.getAttribute('data-sort'));
+                });
+            });
+        });
+    </script>
+
+
 
 
 </body>
