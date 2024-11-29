@@ -202,4 +202,43 @@ class folder
             return false;
         }
     }
+    public static function readFiltered($user_id, $parent_folder_id, $startDate, $endDate) {
+        global $con; // Assuming $con is the global mysqli connection
+    
+        // Prepare the query
+        $query = "SELECT * FROM folders 
+                  WHERE user_id = ? 
+                  AND folder_id = ? 
+                  AND created_at BETWEEN ? AND ?
+                  ORDER BY created_at DESC";
+    
+        // Use a prepared statement to avoid SQL injection
+        $stmt = $con->prepare($query);
+        if ($stmt === false) {
+            die("Error preparing statement: " . $con->error);
+        }
+    
+        // Bind parameters
+        $stmt->bind_param("iiss", $user_id, $parent_folder_id, $startDate, $endDate);
+    
+        // Execute the statement
+        if (!$stmt->execute()) {
+            die("Error executing statement: " . $stmt->error);
+        }
+    
+        // Get the result
+        $result = $stmt->get_result();
+        $folders = [];
+    
+        // Fetch all rows as an associative array
+        while ($row = $result->fetch_assoc()) {
+            $folders[] = $row;
+        }
+    
+        // Close the statement
+        $stmt->close();
+    
+        return $folders;
+    }
+    
 }

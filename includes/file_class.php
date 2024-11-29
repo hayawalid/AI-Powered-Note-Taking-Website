@@ -219,5 +219,44 @@ error_log("INSERT SQL: $trash_sql | ID: $id | Name: $file_name");
             return false;
         }
     }
+    public static function readFiltered($user_id, $folder_id, $startDate, $endDate) {
+        global $con; // Assuming $con is the global mysqli connection
+    
+        // Prepare the query
+        $query = "SELECT * FROM files 
+                  WHERE user_id = ? 
+                  AND folder_id = ? 
+                  AND created_at BETWEEN ? AND ?
+                  ORDER BY created_at DESC";
+    
+        // Use a prepared statement to avoid SQL injection
+        $stmt = $con->prepare($query);
+        if ($stmt === false) {
+            die("Error preparing statement: " . $con->error);
+        }
+    
+        // Bind parameters
+        $stmt->bind_param("iiss", $user_id, $folder_id, $startDate, $endDate);
+    
+        // Execute the statement
+        if (!$stmt->execute()) {
+            die("Error executing statement: " . $stmt->error);
+        }
+    
+        // Get the result
+        $result = $stmt->get_result();
+        $files = [];
+    
+        // Fetch all rows as an associative array
+        while ($row = $result->fetch_assoc()) {
+            $files[] = $row;
+        }
+    
+        // Close the statement
+        $stmt->close();
+    
+        return $files;
+    }
+    
     
 }

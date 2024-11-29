@@ -57,7 +57,70 @@ $current_page = 'User dashboard';
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             z-index: 300000;
         }
+
         .note:hover .popover {
+            display: block;
+        }
+
+        .filter-buttons button.active {
+            background-color: #f1f1f1;
+            color: #555;
+            border-radius: 5px;
+            border-bottom: 1px solid black;
+
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+
+        /* Dropdown container */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Dropdown button */
+        .dropbtn {
+            padding: 8px 12px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .dropbtn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Dropdown content */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* Links inside dropdown */
+        .dropdown-content a {
+            color: black;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Show the dropdown on hover */
+        .dropdown:hover .dropdown-content {
             display: block;
         }
     </style>
@@ -74,10 +137,19 @@ $current_page = 'User dashboard';
 
                     <section class="recent-folders">
                         <div class="filter-buttons">
-                            <button>Today</button>
-                            <button>This Week</button>
-                            <button>This Month</button>
+                            <button class="filter-btn" data-filter="today">Today</button>
+                            <button class="filter-btn" data-filter="this week">This Week</button>
+                            <button class="filter-btn" data-filter="this month">This Month</button>
+                            <div class="dropdown">
+                                <button class="dropbtn">Sort by</button>
+                                <div class="dropdown-content">
+                                    <a href="#" data-sort="name">Name</a>
+                                    <a href="#" data-sort="created">Date Created</a>
+                                    <a href="#" data-sort="modified">Last Modified</a>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="folders">
                             <?php
                             include_once '../includes/folder_class.php';
@@ -92,10 +164,13 @@ $current_page = 'User dashboard';
                                     $folderName = strtolower($obj[$j]['name']);
                                     $isGeneral = ($folderId == 1 && $folderName == 'general');
                                     ?>
-                                    <div class="folder <?php echo $color; ?>">
-                                        <i class="fa-solid fa-folder fold"></i>
-                                        <p><?php echo $obj[$j]['name']; ?></p>
-                                        <span><?php echo $obj[$j]['created_at']; ?></span>
+                                    <div class="folder <?php echo $color; ?>"
+                                        data-created-at="<?php echo htmlspecialchars($obj[$j]['created_at']); ?>">
+                                        <a href="folder_contents.php?folder_id=<?php echo $folderId; ?>" class="folder-link">
+                                            <i class="fa-solid fa-folder fold"></i>
+                                            <p><?php echo htmlspecialchars($obj[$j]['name']); ?></p>
+                                        </a>
+                                        <span><?php echo htmlspecialchars($obj[$j]['created_at']); ?></span>
                                         <i class="fa-solid fa-ellipsis ellipsis"></i>
                                         <div class="popover" style="z-index: 300000;">
                                             <!-- Rename Button -->
@@ -106,24 +181,34 @@ $current_page = 'User dashboard';
                                                 Move
                                             </button>
                                             <!-- Delete Button -->
-                                            <button class="popover-btn delete" data-item-id="<?php echo $folderId; ?>" data-item-type="folder">
+                                            <button class="popover-btn delete" data-item-id="<?php echo $folderId; ?>"
+                                                data-item-type="folder">
                                                 Delete
                                             </button>
                                         </div>
                                     </div>
+
                                     <?php
                                 }
                             }
                             ?>
                         </div>
+
                     </section>
                     <section class="my-notes">
                         <h3 style="margin-bottom: 15px;">My Notes</h3>
                         <div class="filter-buttons">
-                            <button>Today</button>
-                            <button>This Week</button>
-                            <button>This Month</button>
-                            <button>Sort by</button>
+                            <button class="filter-btn" data-filter="today">Today</button>
+                            <button class="filter-btn" data-filter="this week">This Week</button>
+                            <button class="filter-btn" data-filter="this month">This Month</button>
+                            <div class="dropdown">
+                                <button class="dropbtn">Sort by</button>
+                                <div class="dropdown-content">
+                                    <a href="#" data-sort="name">Name</a>
+                                    <a href="#" data-sort="created">Date Created</a>
+                                    <a href="#" data-sort="modified">Last Modified</a>
+                                </div>
+                            </div>
                         </div>
                         <div class="notes">
                             <?php
@@ -135,19 +220,18 @@ $current_page = 'User dashboard';
                             <?php if ($files): ?>
                                 <?php foreach ($files as $index => $file): ?>
                                     <div class="note <?php echo $colors[$index % 3]; ?>"
-                                        data-note-id="<?php echo $file['id']; ?>">
+                                        data-created-at="<?php echo $file['created_at']; ?>">
                                         <span><?php echo date('d/m/Y', strtotime($file['created_at'])); ?></span>
                                         <h3 class="note-name">
                                             <?php echo htmlspecialchars($file['name'], ENT_QUOTES, 'UTF-8'); ?>
                                             <i class="fa-solid fa-ellipsis ellipsis"></i>
-
                                             <div class="popover" style="z-index: 300000;">
                                                 <button class="popover-btn rename"
                                                     data-note-id="<?php echo $file['id']; ?>">Rename</button>
                                                 <button class="popover-btn move"
                                                     data-folder-id="<?php echo $folder_id; ?>">Move</button>
-                                                <button class="popover-btn delete"
-                                                data-item-id="<?php echo $file['id']; ?>" data-item-type="file">Delete</button>
+                                                <button class="popover-btn delete" data-item-id="<?php echo $file['id']; ?>"
+                                                    data-item-type="file">Delete</button>
                                             </div>
                                         </h3>
                                         <hr>
@@ -156,6 +240,7 @@ $current_page = 'User dashboard';
                                         <span
                                             class="bottom"><?php echo "⏱️ " . date('h:i A, l', strtotime($file['created_at'])); ?></span>
                                     </div>
+
 
                                 <?php endforeach; ?>
                             <?php else: ?>
@@ -180,6 +265,90 @@ $current_page = 'User dashboard';
     <script src="../assets/js/plugins/chartjs.min.js"></script>
     <script src="../assets/js/plugins/bootstrap-notify.js"></script>
     <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-buttons .filter-btn');
+    const sortLinks = document.querySelectorAll('.dropdown-content a');
+    const folders = document.querySelectorAll('.folder');
+    const notes = document.querySelectorAll('.note');
+
+    function sortElements(elements, sortBy) {
+        let sortedElements = Array.from(elements);
+        sortedElements.sort((a, b) => {
+            if (sortBy === 'name') {
+                return a.querySelector('p').textContent.localeCompare(b.querySelector('p').textContent);
+            } else if (sortBy === 'created') {
+                return new Date(a.getAttribute('data-created-at')) - new Date(b.getAttribute('data-created-at'));
+            } else if (sortBy === 'modified') {
+                // Assuming data-modified-at attribute is present
+                return new Date(a.getAttribute('data-modified-at')) - new Date(b.getAttribute('data-modified-at'));
+            }
+        });
+        return sortedElements;
+    }
+
+    function applyFilterAndSort(filter = null, sortBy = null) {
+        const today = new Date();
+        let startDate;
+
+        if (filter === 'today') {
+            startDate = new Date(today.setHours(0, 0, 0, 0));
+        } else if (filter === 'this week') {
+            const firstDayOfWeek = today.getDate() - today.getDay();
+            startDate = new Date(today.setDate(firstDayOfWeek));
+            startDate.setHours(0, 0, 0, 0);
+        } else if (filter === 'this month') {
+            startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            startDate.setHours(0, 0, 0, 0);
+        }
+
+        let filteredFolders = Array.from(folders);
+        let filteredNotes = Array.from(notes);
+
+        if (filter) {
+            filteredFolders = filteredFolders.filter(folder => new Date(folder.getAttribute('data-created-at')) >= startDate);
+            filteredNotes = filteredNotes.filter(note => new Date(note.getAttribute('data-created-at')) >= startDate);
+        }
+
+        if (sortBy) {
+            filteredFolders = sortElements(filteredFolders, sortBy);
+            filteredNotes = sortElements(filteredNotes, sortBy);
+        }
+
+        document.querySelector('.folders').innerHTML = '';
+        document.querySelector('.notes').innerHTML = '';
+
+        filteredFolders.forEach(folder => document.querySelector('.folders').appendChild(folder));
+        filteredNotes.forEach(note => document.querySelector('.notes').appendChild(note));
+    }
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const isActive = this.classList.contains('active');
+            
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+
+            if (isActive) {
+                applyFilterAndSort();
+            } else {
+                this.classList.add('active');
+                applyFilterAndSort(this.getAttribute('data-filter'));
+            }
+        });
+    });
+
+    sortLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            applyFilterAndSort(null, this.getAttribute('data-sort'));
+        });
+    });
+});
+</script>
+
+
+
 
 </body>
 

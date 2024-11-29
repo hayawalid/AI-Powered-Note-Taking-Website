@@ -50,20 +50,18 @@ class trash {
 
     public function restore() {
         global $con;
-
+    
         if ($this->ID != 0) {
+            // Check if the parent folder exists; if not, use a default folder
             $check_parent_sql = "SELECT * FROM folders WHERE ID = $this->folder_id";
             $check_parent_result = mysqli_query($con, $check_parent_sql);
-
-            if (mysqli_num_rows($check_parent_result) > 0) {
-                $restore_folder_id = $this->folder_id;
-            } else {
-                $restore_folder_id = 1; // Default parent folder
-            }
+            $restore_folder_id = (mysqli_num_rows($check_parent_result) > 0) ? $this->folder_id : 1;
+    
             $user_id = $_SESSION['UserID']; // Retrieve the current user's ID from the session
-
-            // Insert into folders or files based on whether it's a file or folder
-            if (!empty($this->file_content)) {
+    
+            // Check if the item is a file or folder
+            if ($this->file_content!=NULL) {
+                // Restore as a file
                 $sql = "
                     INSERT INTO files (name, folder_id, user_id, content, created_at, file_type)
                     SELECT 
@@ -72,13 +70,14 @@ class trash {
                         $user_id AS user_id, 
                         file_content AS content,
                         NOW(),
-                        1 AS file_type -- Assume file_type is 1, adjust accordingly
+                        1 AS file_type -- Adjust file_type based on your application logic
                     FROM 
                         trash
                     WHERE 
                         ID = $this->ID;
                 ";
             } else {
+                // Restore as a folder
                 $sql = "
                     INSERT INTO folders (name, created_at, folder_id, user_id)
                     SELECT 
@@ -92,9 +91,10 @@ class trash {
                         ID = $this->ID;
                 ";
             }
-
+    
+            // Execute the restore SQL
             if (mysqli_query($con, $sql)) {
-                // Delete from trash
+                // Delete the item from trash after restoring
                 $sqlDelete = "DELETE FROM trash WHERE ID = $this->ID";
                 if (mysqli_query($con, $sqlDelete)) {
                     echo "Item successfully restored.<br>";
@@ -114,6 +114,7 @@ class trash {
             return false;
         }
     }
+    
 
     public static function readTrash($user_id) {
         global $con;
