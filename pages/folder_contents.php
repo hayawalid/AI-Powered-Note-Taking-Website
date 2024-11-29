@@ -1,4 +1,6 @@
 <?php
+ob_start();
+
 include_once '../includes/session.php';
 
 //set current page to update sidebar status
@@ -180,43 +182,49 @@ $current_page = 'Folder Content';
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="folders">
-                            <div class="folder empty"
-                                style="display: flex; justify-content: center; align-items: center; height: 12.5em !important;">
-                                <button class="new-note" style="margin: auto;" id="new-note">
-                                    <i class="fa-solid fa-plus"></i> New Note
-                                </button>
-                            </div>
                             <?php
                             include_once '../includes/folder_class.php';
-                            $current_folder_id = $_GET['folder_id'] ?? 1;
+                            include_once '../includes/session.php';
                             $user_id = $_SESSION['UserID'];
-                            if (!isset($_SESSION['UserID'])) {
-                                die('User ID is not set in session. Please log in.');
-                            }
+                            $current_folder_id = $_GET['folder_id'] ?? 1;
 
-                            if (!isset($user_id)) {
-                                die('User ID is not set in session');
-                            }
-
-                            $folders = folder::readByParent($user_id, $current_folder_id);  // Pass both user ID and parent folder ID
+                            $obj = folder::readByParent($user_id,$current_folder_id);
                             $colors = ['blue', 'yellow', 'red'];
-                            foreach ($folders as $index => $folder) {
-                                $isGeneral = ($folder['ID'] == 1 && strtolower($folder['name']) == 'general');  // Check if it's the "General" folder
-                                $color = $colors[$index % count($colors)];
-                                echo "<div class='folder $color' data-created-at='" . $folder['created_at'] . "'>"; // Add data attribute for created_at
-                                echo "<a href='folder_contents.php?folder_id=" . $folder['ID'] . "'>";
-                                echo "<i class='fa-solid fa-folder fold'></i>";
-                                echo "<p>" . htmlspecialchars($folder['name']) . "</p>";
-                                echo "<span class='date'>" . htmlspecialchars($folder['created_at']) . "</span>";
-                                echo "</a>";
-                                echo "<i class='fa-solid fa-ellipsis ellipsis'></i>";
-                                echo "<div class='popover' style='z-index: 300000; display: none;'>";
-                                echo "<button class='popover-btn rename' data-folder-id='" . $folder['ID'] . "' " . ($isGeneral ? 'disabled title=\"Cannot rename General folder\"' : '') . ">Rename</button>";
-                                echo "<button class='popover-btn move' data-folder-id='" . $folder['ID'] . "' " . ($isGeneral ? 'disabled title=\"Cannot move General folder\"' : '') . ">Move</button>";
-                                echo "<button class='popover-btn delete' data-folder-id='" . $folder['ID'] . "' " . ($isGeneral ? 'disabled title=\"Cannot delete General folder\"' : '') . " onclick='" . (!$isGeneral ? "openTrashModal('{$folder['ID']}')" : '') . "'>Delete</button>";
-                                echo "</div>";
-                                echo "</div>";
+                            if ($obj) {
+                                for ($j = 0; $j < count($obj); $j++) {
+                                    $color = $colors[$j % count($colors)];
+                                    $folderId = $obj[$j]['ID'];
+                                    $folderName = strtolower($obj[$j]['name']);
+                                    $isGeneral = ($folderId == 1 && $folderName == 'general');
+                                    ?>
+                                    <div class="folder <?php echo $color; ?>"
+                                        data-created-at="<?php echo htmlspecialchars($obj[$j]['created_at']); ?>">
+                                        <a href="folder_contents.php?folder_id=<?php echo $folderId; ?>" class="folder-link">
+                                            <i class="fa-solid fa-folder fold"></i>
+                                            <p><?php echo htmlspecialchars($obj[$j]['name']); ?></p>
+                                        </a>
+                                        <span><?php echo htmlspecialchars($obj[$j]['created_at']); ?></span>
+                                        <i class="fa-solid fa-ellipsis ellipsis"></i>
+                                        <div class="popover" style="z-index: 300000;">
+                                            <!-- Rename Button -->
+                                            <button class="popover-btn rename" data-folder-id="<?php echo $folderId; ?>">
+                                                Rename
+                                            </button>
+                                            <button class="popover-btn move" data-folder-id="<?php echo $folderId; ?>">
+                                                Move
+                                            </button>
+                                            <!-- Delete Button -->
+                                            <button class="popover-btn delete" data-item-id="<?php echo $folderId; ?>"
+                                                data-item-type="folder">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <?php
+                                }
                             }
                             ?>
                         </div>
@@ -365,3 +373,6 @@ $current_page = 'Folder Content';
 </body>
 
 </html>
+<?php
+ob_end_flush();
+?>

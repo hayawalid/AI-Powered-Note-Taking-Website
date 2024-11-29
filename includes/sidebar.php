@@ -42,41 +42,46 @@ if (isset($_POST["submit"])) {
   }
 }
 
+ob_start();
+
 if (isset($_POST['item_id']) && isset($_POST['item_type'])) {
-  $item_id = intval($_POST['item_id']);
-  $item_type = $_POST['item_type'];
+    $item_id = intval($_POST['item_id']);
+    $item_type = $_POST['item_type'];
 
-  // Debugging outputs
-  echo "Item Type: " . htmlspecialchars($item_type) . "<br>";
-  echo "Item ID: " . htmlspecialchars($item_id) . "<br>";
+    // Debugging outputs (remove or comment out these lines before deploying to production)
+    error_log("Move to trash request: ID = $item_id, Type = $item_type");
 
-  error_log("Move to trash request: ID = $item_id, Type = $item_type");
+    // Validation check
+    if ($item_id && in_array($item_type, ['folder', 'file'])) {
+        if ($item_type === 'folder') {
+            $result = folder::moveToTrash($item_id);
+        } elseif ($item_type === 'file') {
+            $result = file::moveToTrash($item_id);
+        }
 
-  // Validation check
-  if ($item_id && in_array($item_type, ['folder', 'file'])) {
-      if ($item_type === 'folder') {
-          $result = folder::moveToTrash($item_id);
-      } elseif ($item_type === 'file') {
-          $result = file::moveToTrash($item_id);
-      }
+        if ($result) {
+            // Clear buffer and redirect
+            ob_end_clean();
+            header("Location: ../pages/trash.php");
+            exit();
+        } else {
+            echo "<script>alert('Error moving $item_type to trash.');</script>";
+        }
+    } else {
+        echo "<script>alert('Invalid item ID or type.');</script>";
+    }
 
-      if ($result) {
-          echo "<script>alert('Item moved to trash successfully.');</script>";
-          header("Location: ../pages/trash.php");
-          exit;
-      } else {
-          echo "<script>alert('Error moving $item_type to trash.');</script>";
-      }
-  } else {
-      echo "<script>alert('Invalid item ID or type.');</script>";
-  }
+    // Flush the buffer in case of errors
+    ob_end_flush();
 }
 
 $user = new User($_SESSION['UserID']);
 if (!$user) {
-  header("Location: " . htmlspecialchars('./index.php'));
+    header("Location: " . htmlspecialchars('./index.php'));
 }
 ?>
+
+
 <div class="sidebar" data-color="white">
   <div class="logo">
     <a href="" class="simple-text logo-normal">
