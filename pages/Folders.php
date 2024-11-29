@@ -44,6 +44,9 @@ $current_page = 'Folders';
             background-color: #e0e0e0;
             color: #888;
         }
+        .popover {
+    display: none; /* Hide initially */
+}
 
         .black-placeholder::placeholder {
             color: black !important;
@@ -55,7 +58,6 @@ $current_page = 'Folders';
             color: #555;
             border-radius: 5px;
             border-bottom: 1px solid black;
-
 
         }
 
@@ -124,31 +126,26 @@ $current_page = 'Folders';
                 <section class="bordered-content">
                     <h3 style="margin-bottom: 15px;">My Folders</h3>
                     <section class="recent-folders">
-                    <div class="filter-buttons">
-    <button class="filter-btn" data-filter="today">Today</button>
-    <button class="filter-btn" data-filter="this week">This Week</button>
-    <button class="filter-btn" data-filter="this month">This Month</button>
-    <div class="dropdown">
-        <button class="dropbtn">Sort by</button>
-        <div class="dropdown-content">
-            <a href="#" data-sort="name">Name</a>
-            <a href="#" data-sort="created">Date Created</a>
-            <a href="#" data-sort="modified">Last Modified</a>
-        </div>
-    </div>
-</div>
+                        <div class="filter-buttons">
+                            <button class="filter-btn" data-filter="today">Today</button>
+                            <button class="filter-btn" data-filter="this week">This Week</button>
+                            <button class="filter-btn" data-filter="this month">This Month</button>
+                            <div class="dropdown">
+                                <button class="dropbtn">Sort by</button>
+                                <div class="dropdown-content">
+                                    <a href="#" data-sort="name">Name</a>
+                                    <a href="#" data-sort="created">Date Created</a>
+                                    <a href="#" data-sort="modified">Last Modified</a>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="folders">
-                            <div class="folder empty"
-                                style="display: flex; justify-content: center; align-items: center;">
-                                <button class="new-note" style="margin: auto;" id="new-note">
-                                    <i class="fa-solid fa-plus"></i> New Note
-                                </button>
-                            </div>
                             <?php
-                            $current_folder_id = $_GET['folder_id'] ?? 1;
+                            include_once '../includes/folder_class.php';
+                            include_once '../includes/session.php';
                             $user_id = $_SESSION['UserID'];
-                            $obj = folder::readByParent($user_id, $current_folder_id);
+                            $obj = folder::read($user_id);
                             $colors = ['blue', 'yellow', 'red'];
                             if ($obj) {
                                 for ($j = 0; $j < count($obj); $j++) {
@@ -159,30 +156,34 @@ $current_page = 'Folders';
                                     ?>
                                     <div class="folder <?php echo $color; ?>"
                                         data-created-at="<?php echo htmlspecialchars($obj[$j]['created_at']); ?>">
-                                        <i class="fa-solid fa-folder fold"></i>
-                                        <a href="folder_contents.php?folder_id=<?php echo $folderId; ?>"
-                                            style="text-decoration: none; color: inherit;">
+                                        <a href="folder_contents.php?folder_id=<?php echo $folderId; ?>" class="folder-link">
+                                            <i class="fa-solid fa-folder fold"></i>
                                             <p><?php echo htmlspecialchars($obj[$j]['name']); ?></p>
                                         </a>
                                         <span><?php echo htmlspecialchars($obj[$j]['created_at']); ?></span>
                                         <i class="fa-solid fa-ellipsis ellipsis"></i>
-                                        <div class="popover" id="popover" style="z-index: 300000; display: none;">
+                                        <div class="popover" style="z-index: 300000;">
                                             <!-- Rename Button -->
-                                            <button class="popover-btn rename"
-                                                data-folder-id="<?php echo $folderId; ?>">Rename</button>
-                                            <button class="popover-btn move"
-                                                data-folder-id="<?php echo $folderId; ?>">Move</button>
+                                            <button class="popover-btn rename" data-folder-id="<?php echo $folderId; ?>">
+                                                Rename
+                                            </button>
+                                            <button class="popover-btn move" data-folder-id="<?php echo $folderId; ?>">
+                                                Move
+                                            </button>
                                             <!-- Delete Button -->
-                                            <button class="popover-btn delete" data-folder-id="<?php echo $folderId; ?>"
-                                                onclick="<?php echo !$isGeneral ? "openTrashModal('$folderId')" : ''; ?>">Delete</button>
+                                            <button class="popover-btn delete" data-item-id="<?php echo $folderId; ?>"
+                                                data-item-type="folder">
+                                                Delete
+                                            </button>
                                         </div>
                                     </div>
+
                                     <?php
                                 }
                             }
                             ?>
-
                         </div>
+
                     </section>
                 </section>
             </main>
@@ -201,25 +202,36 @@ $current_page = 'Folders';
 document.addEventListener('DOMContentLoaded', function() {
     const filterButtons = document.querySelectorAll('.filter-buttons .filter-btn');
     const sortLinks = document.querySelectorAll('.dropdown-content a');
-    const folders = document.querySelectorAll('.folder');
+    const foldersContainer = document.querySelector('.folders');
+    const folders = foldersContainer ? foldersContainer.querySelectorAll('.folder') : [];
+    const notesContainer = document.querySelector('.notes');
+    const notes = notesContainer ? notesContainer.querySelectorAll('.note') : [];
 
-    // Function to sort folders based on selected sort criteria
+    console.log('Filter Buttons:', filterButtons);
+    console.log('Sort Links:', sortLinks);
+    console.log('Folders:', folders);
+    console.log('Notes:', notes);
+
     function sortElements(elements, sortBy) {
+        console.log('Sorting elements by:', sortBy);
         let sortedElements = Array.from(elements);
         sortedElements.sort((a, b) => {
+            console.log('Comparing:', a, b);
             if (sortBy === 'name') {
                 return a.querySelector('p').textContent.localeCompare(b.querySelector('p').textContent);
             } else if (sortBy === 'created') {
                 return new Date(a.getAttribute('data-created-at')) - new Date(b.getAttribute('data-created-at'));
             } else if (sortBy === 'modified') {
+                // Assuming data-modified-at attribute is present
                 return new Date(a.getAttribute('data-modified-at')) - new Date(b.getAttribute('data-modified-at'));
             }
         });
+        console.log('Sorted elements:', sortedElements);
         return sortedElements;
     }
 
-    // Function to apply filter and sort
     function applyFilterAndSort(filter = null, sortBy = null) {
+        console.log('Applying Filter:', filter, 'Sort By:', sortBy);
         const today = new Date();
         let startDate;
 
@@ -235,32 +247,40 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         let filteredFolders = Array.from(folders);
+        let filteredNotes = Array.from(notes);
 
-        // Apply the filter if a filter is specified
         if (filter) {
             filteredFolders = filteredFolders.filter(folder => new Date(folder.getAttribute('data-created-at')) >= startDate);
+            filteredNotes = filteredNotes.filter(note => new Date(note.getAttribute('data-created-at')) >= startDate);
         }
 
-        // Apply sorting if a sort criterion is specified
         if (sortBy) {
             filteredFolders = sortElements(filteredFolders, sortBy);
+            filteredNotes = sortElements(filteredNotes, sortBy);
         }
 
-        // Update the folder container with sorted/filtered folders
-        const folderContainer = document.querySelector('.folders');
-        folderContainer.innerHTML = ''; // Clear current folder list
-        filteredFolders.forEach(folder => folderContainer.appendChild(folder));
+        console.log('Filtered and Sorted Folders:', filteredFolders);
+        console.log('Filtered and Sorted Notes:', filteredNotes);
+
+        // Update folders container
+        foldersContainer.innerHTML = '';
+        filteredFolders.forEach(folder => foldersContainer.appendChild(folder));
+
+        // Update notes container if it exists
+        if (notesContainer) {
+            notesContainer.innerHTML = '';
+            filteredNotes.forEach(note => notesContainer.appendChild(note));
+        }
     }
 
-    // Event listeners for filter buttons
     filterButtons.forEach(button => {
         button.addEventListener('click', function() {
+            console.log('Button Clicked:', this.textContent);
             const isActive = this.classList.contains('active');
-            
+
             // Remove active class from all buttons
             filterButtons.forEach(btn => btn.classList.remove('active'));
 
-            // Toggle active class for the clicked button and apply filter
             if (isActive) {
                 applyFilterAndSort();
             } else {
@@ -270,23 +290,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Event listeners for sort dropdown links
     sortLinks.forEach(link => {
         link.addEventListener('click', function(event) {
             event.preventDefault();
-
-            // Remove active class from all sort options
-            sortLinks.forEach(link => link.classList.remove('active'));
-            this.classList.add('active');
-
-            // Apply filter and sorting based on the selected option
+            console.log('Sort Link Clicked:', this.textContent);
             applyFilterAndSort(null, this.getAttribute('data-sort'));
         });
     });
 });
+document.querySelectorAll('.popover').forEach(popover => {
+    popover.style.display = 'none'; // Hide initially
+});
 
 </script>
-
 
 </body>
 

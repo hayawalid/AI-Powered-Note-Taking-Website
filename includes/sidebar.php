@@ -62,8 +62,8 @@ if (isset($_POST['item_id']) && isset($_POST['item_type'])) {
 
       if ($result) {
           echo "<script>alert('Item moved to trash successfully.');</script>";
-          header("Location: ../pages/UserDashboard.php");
-          exit();
+          header("Location: ../pages/trash.php");
+          exit;
       } else {
           echo "<script>alert('Error moving $item_type to trash.');</script>";
       }

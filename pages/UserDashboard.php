@@ -197,19 +197,7 @@ $current_page = 'User dashboard';
                     </section>
                     <section class="my-notes">
                         <h3 style="margin-bottom: 15px;">My Notes</h3>
-                        <div class="filter-buttons">
-                            <button class="filter-btn" data-filter="today">Today</button>
-                            <button class="filter-btn" data-filter="this week">This Week</button>
-                            <button class="filter-btn" data-filter="this month">This Month</button>
-                            <div class="dropdown">
-                                <button class="dropbtn">Sort by</button>
-                                <div class="dropdown-content">
-                                    <a href="#" data-sort="name">Name</a>
-                                    <a href="#" data-sort="created">Date Created</a>
-                                    <a href="#" data-sort="modified">Last Modified</a>
-                                </div>
-                            </div>
-                        </div>
+                        
                         <div class="notes">
                             <?php
                             $user_id = $_SESSION['UserID'];
