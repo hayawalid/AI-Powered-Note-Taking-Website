@@ -106,81 +106,101 @@ Privacy is another critical issue. AI systems often require large amounts of dat
 
 In conclusion, artificial intelligence has the potential to transform various aspects of society, from healthcare and education to business and entertainment. While the opportunities are immense, it is essential to address the ethical, societal, and privacy challenges associated with AI. By fostering responsible development and implementation, we can harness the power of AI to create a better future for all. ";
 
-$prompt = "Generate many multiple-choice question based on the following text: " . $staticText;
+$Q_A = "";
+$MCQ="";
 
-//Handle summarization request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['summarize'])) {
-  try {
-    // Make the API request to the Node.js service
-    $response = $client->request('POST', 'http://localhost:3000/summarize', [
-      'json' => [
-        'prompt' => $prompt
-      ]
-    ]);
-    $data = json_decode($response->getBody(), true);
-    $summary = $data['summary'] ?? "No summary generated";
+// Handle the form submission for generating the summary
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gen'])) {
+    // Construct the prompt for summarization
+    $prompt = "Generate many multiple-choice question based on the following text: " . $staticText;
 
-    // Log the response
-    $logger->info('API Response', $data);
-  } catch (Exception $e) {
-    // Handle errors and log them
-    $summary = "Error: " . htmlentities($e->getMessage());
-    $logger->error('Error in summarization', ['message' => $e->getMessage()]);
-  }
-} else {
-  $summary = "Summarized text will appear here...";
+    try {
+        // Make the API request to the Node.js service
+        $response = $client->request('POST', 'http://localhost:3000/summarize', [
+            'json' => [
+                'prompt' => $prompt
+            ]
+        ]);
+        $data = json_decode($response->getBody(), true);
+        //echo json_encode($data); 
+        // Output the summary
+        $MCQ = $data['summary'] ?? 'No summary available';
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        $logger->error('Error in summarization', ['message' => $e->getMessage()]);
+    }
 }
 //----------------------------------------------------------------------------------------------
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
+  // Construct the prompt for summarization
+ $prompt_1 = "Generate questions and answers from the following text: " . $staticText . "\nPlease format the output as follows: \nQuestion 1: <question text>\nAnswer 1: <answer text>\nQuestion 2: <question text>\nAnswer 2: <answer text>";
 
-// Define the prompt for generating multiple-choice questions
-$prompt_1 = "Generate questions and answers from the following text: " . $staticText . "\nPlease format the output as follows: \nQuestion 1: <question text>\nAnswer 1: <answer text>\nQuestion 2: <question text>\nAnswer 2: <answer text>";
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['summarize'])) {
   try {
-    // Make the API request to the Node.js service
-    $response_1 = $client->request('POST', 'http://localhost:3000/summarize', [
-      'json' => [
-        'prompt' => $prompt_1
-      ]
-    ]);
-    $data_1 = json_decode($response_1->getBody(), true);
-    
-    // Print the API response for debugging
-    //echo "<pre>" . htmlentities(print_r($data_1, true)) . "</pre>";
-
-    $MCQ = $data_1['summary'] ?? "No summary generated";
-
-    // Separate the questions and answers using a regular expression
-    $questions = [];
-    $answers = [];
-
-    // Updated regular expression to match questions and answers
-    preg_match_all('/Question (\d+): (.*?)\nAnswer \1: (.*?)(?=\n|$)/s', $MCQ, $matches);
-
-    if (isset($matches[1])) {
-      $questions = $matches[2];  // Extracted questions
-      $answers = $matches[3];    // Extracted answers
-    } else {
-      $questions = ["No questions found"];
-      $answers = ["No answers found"];
-    }
-
-    
-
-    // Log the response for debugging (optional)
-    $logger->info('API Response', $data_1);
+      // Make the API request to the Node.js service
+      $response = $client->request('POST', 'http://localhost:3000/summarize', [
+          'json' => [
+              'prompt' => $prompt_1
+          ]
+      ]);
+      $dataa = json_decode($response->getBody(), true);
+      //echo json_encode($data); 
+      // Output the summary
+      $Q_A = $dataa['summary'] ?? 'No summary available';
   } catch (Exception $e) {
-    // Handle errors and log them
-    $MCQ = "Error: " . htmlentities($e->getMessage());
-    $questions = ["Error occurred"];
-    $answers = ["Error occurred"];
-    $logger->error('Error in summarization', ['message' => $e->getMessage()]);
+      echo "Error: " . $e->getMessage();
+      $logger->error('Error in summarization', ['message' => $e->getMessage()]);
   }
-} else {
-  $MCQ = "Summarized text will appear here...";
-  $questions = ["No questions generated"];
-  $answers = ["No answers generated"];
 }
+//------------------------------------------------------------------------------------------------
+// Define the prompt for generating multiple-choice questions
+// $prompt_1 = "Generate questions and answers from the following text: " . $staticText . "\nPlease format the output as follows: \nQuestion 1: <question text>\nAnswer 1: <answer text>\nQuestion 2: <question text>\nAnswer 2: <answer text>";
+
+// if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['summarize'])) {
+//   try {
+//     // Make the API request to the Node.js service
+//     $response_1 = $client->request('POST', 'http://localhost:3000/summarize', [
+//       'json' => [
+//         'prompt' => $prompt_1
+//       ]
+//     ]);
+//     $data_1 = json_decode($response_1->getBody(), true);
+    
+//     // Print the API response for debugging
+//     //echo "<pre>" . htmlentities(print_r($data_1, true)) . "</pre>";
+
+//     $MCQ = $data_1['summary'] ?? "No summary generated";
+
+//     // Separate the questions and answers using a regular expression
+//     $questions = [];
+//     $answers = [];
+
+//     // Updated regular expression to match questions and answers
+//     preg_match_all('/Question (\d+): (.*?)\nAnswer \1: (.*?)(?=\n|$)/s', $MCQ, $matches);
+
+//     if (isset($matches[1])) {
+//       $questions = $matches[2];  // Extracted questions
+//       $answers = $matches[3];    // Extracted answers
+//     } else {
+//       $questions = ["No questions found"];
+//       $answers = ["No answers found"];
+//     }
+
+    
+
+//     // Log the response for debugging (optional)
+//     $logger->info('API Response', $data_1);
+//   } catch (Exception $e) {
+//     // Handle errors and log them
+//     $MCQ = "Error: " . htmlentities($e->getMessage());
+//     $questions = ["Error occurred"];
+//     $answers = ["Error occurred"];
+//     $logger->error('Error in summarization', ['message' => $e->getMessage()]);
+//   }
+// } else {
+//   $MCQ = "Summarized text will appear here...";
+//   $questions = ["No questions generated"];
+//   $answers = ["No answers generated"];
+// }
 
 function saveQandAtoDatabase($q_and_a) {
     global $pdo; // Use the global PDO instance for the database connection
@@ -225,116 +245,192 @@ function saveQandAtoDatabase($q_and_a) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summarization and Q&A Generation</title>
-    <style>
+    <title>Text Summarization</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            margin: 20px;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
             color: #333;
-            margin: 0;
-            padding: 20px;
+            text-align: center;
         }
-        .container {
-            width: 80%;
-            margin: 0 auto;
-        }
+
         .section {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .section h2 {
-            font-size: 1.5em;
-            color: #007BFF;
-        }
-        .json-section pre, .text-section p {
-            background-color: #f1f1f1;
-            padding: 10px;
-            border-radius: 8px;
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        .qa-section h3 {
-            color: #28a745;
-            font-size: 1.3em;
-        }
-        .qa-section p {
-            padding: 10px;
-            background-color: #e9f7e9;
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
             border-radius: 5px;
-            font-style: italic;
+            background-color: #fff;
         }
-        .form-container {
-            margin-top: 20px;
+
+        .section h2 {
+            color: #444;
+            margin-bottom: 10px;
         }
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 16px;
+
+        p {
+            margin: 10px 0;
+            line-height: 1.6;
         }
+
         button {
-            padding: 10px 15px;
+            padding: 10px 20px;
             font-size: 16px;
-            border: none;
-            border-radius: 8px;
+            color: #fff;
             background-color: #007BFF;
-            color: white;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
+        .question, .mcq {
+            margin: 10px 0;
+        }
+
+        .mcq-options {
+            margin-left: 20px;
+        }
+
+        .answer-key {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border: 1px dashed #ddd;
+        }
     </style>
-</head>
 <body>
-    <div class="container">
-    <div class="section text-section">
-        <h2>API Request Content Sent</h2>
-            <p><?php echo $staticText; ?></p>
-        </div>
 
-        <div class="section text-section">
-        <h2>API MCQ Response (JSON)</h2>
-            <p><?php echo nl2br(htmlentities(print_r($data, true))); ?></p>
-        </div>
-        
-        <!-- JSON Response Section -->
-        <div class="section text-section">
-        <h2>API Q&A Response (JSON)</h2>
-            <p><?php echo nl2br(htmlentities(print_r($data_1, true))); ?></p>
-        </div>
+    <h1>Text Summarization Result</h1>
 
-        
+    <div class="section">
+        <h2>Original Text</h2>
+        <p><strong>Static Text:</strong> <?= htmlspecialchars($staticText) ?></p>
+    </div>
 
+    <div class="section">
+        <!-- Form with Generate button -->
+   
+       
+    </div>
 
-        <!-- Questions and Answers Section -->
-        <div class="section qa-section">
-            <h2>Generated Q&A</h2>
-            <?php 
-            $counter = 1;
-            foreach ($questions as $index => $question) { 
-                echo "<h3>Question " . $counter . ":</h3>";
-                echo "<p>" . htmlentities($question) . "</p>";
-                echo "<h4>Answer " . $counter . ":</h4>";
-                echo "<p>" . htmlentities($answers[$index]) . "</p>";
-                $counter++;
-            }
-            ?>
-        </div>
+    
 
-        <!-- Form for Generating and Saving Q&A -->
-        <div class="form-container">
-            <form action="" method="POST">
-                <textarea name="staticText" placeholder="Enter text here..." required></textarea><br>
-                <button type="submit" name="summarize">Generate Q&A</button>
+    <?php if (!empty($Q_A)): ?>
+        <div class="section">
+            <h2>Q&A</h2>
+            <p><?= htmlspecialchars($Q_A) ?></p>
+
+            <!-- Save button with an AJAX submit -->
+            <form method="POST" id="saveForm">
+                <button type="submit" name="save" id="save" data-summary="<?= htmlspecialchars($Q_A) ?>">Save Q_A</button>
             </form>
         </div>
+    <?php endif; ?>
+    <form method="POST" id="generateForm">
+            <button type="submit" name="generate">Generate Q_A</button>
+        </form>
+    
+    <div class="section" id="mcq-section">
+        <h2></h2>
+        <div id="mcq-content"></div>
     </div>
+
+    <?php if (!empty($MCQ)): ?>
+        <div class="section">
+            <h2>MCQ</h2>
+            <p><?= htmlspecialchars($MCQ) ?></p>
+
+            <!-- Save button with an AJAX submit -->
+            <form method="POST" id="saveFormMCQ">
+                <button type="submit" name="save" id="save" data-summary="<?= htmlspecialchars($MCQ) ?>">Save MCQ</button>
+            </form>
+        </div>
+    <?php endif; ?>
+    <form method="POST" id="generateFormMCQ">
+            <button type="submit" name="gen">Generate MCQ</button>
+        </form>
+
+    <div id="message"></div>
+
+
+    
+
+    <script>
+        // Handle the save button click event
+        $('#saveForm').on('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            // Get the summary from the button data
+            var q_a = $('#save').data('summary');
+            var jsonSummary = JSON.stringify({ Q_A: q_a });
+
+            // Prepare the data for AJAX
+            var postData = {
+                name: 'ew3aaa Summary ',
+                user_id: 5,  // Example: replace with actual user ID
+                folder_id: 1,  // Example: replace with actual folder ID
+                content: jsonSummary,
+                created_at: new Date().toISOString(),
+                file_type: 2  // Assuming 2 corresponds to "Summary"
+            };
+
+            // Send an AJAX request to save_file.php
+            $.ajax({
+                url: 'sava_db_Q&A.php',
+                method: 'POST',
+                data: postData,  // Send form data
+                success: function(response) {
+                    // Display the message from PHP
+                    $('#message').html(response);
+                    //console.log('API Response:', response);
+                },
+                error: function(xhr, status, error) {
+                    $('#message').html('Error: ' + error);
+                }
+            });
+        });
+        $('#saveFormMCQ').on('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            // Get the summary from the button data
+            var mcq = $('#save').data('summary');
+            var jsonSummary = JSON.stringify({ MCQ: mcq });
+
+            // Prepare the data for AJAX
+            var postData = {
+                name: 'ew3aaa MCQ ',
+                user_id: 5,  // Example: replace with actual user ID
+                folder_id: 1,  // Example: replace with actual folder ID
+                content: jsonSummary,
+                created_at: new Date().toISOString(),
+                file_type: 2  // Assuming 2 corresponds to "Summary"
+            };
+
+            // Send an AJAX request to save_file.php
+            $.ajax({
+                url: 'sava_db_Q&A.php',
+                method: 'POST',
+                data: postData,  // Send form data
+                success: function(response) {
+                    // Display the message from PHP
+                    $('#message').html(response);
+                    //console.log('API Response:', response);
+                },
+                error: function(xhr, status, error) {
+                    $('#message').html('Error: ' + error);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
