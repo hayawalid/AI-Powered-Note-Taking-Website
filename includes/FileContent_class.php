@@ -3,35 +3,25 @@ error_reporting(E_ALL); // Enable error reporting
 ini_set('display_errors', 1); // Display errors
 
 include '../includes/config.php';
+include_once 'file_class.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $content = mysqli_real_escape_string($conn, $_POST['content']);
-    $file_id = intval($_POST['file_id']);
-    echo "Content: $content, File ID: $file_id\n";  // Debug output
+$user_id = isset($_SESSION['UserID']) ? $_SESSION['UserID'] : null;
 
-    // Check if the file ID exists
-    $check_sql = "SELECT * FROM files WHERE id=$file_id";
-    $check_result = $conn->query($check_sql);
-    if ($check_result->num_rows == 0) {
-        echo "File ID does not exist.\n";
-        exit;
-    }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Collect POST data
+    $content = mysqli_real_escape_string($conn, $_POST['content']); // Sanitizing the input
+    $user_id = intval($_POST['user_id']); // User ID passed from JS (make sure it's valid)
+    $folder_id = intval($_POST['folder_id']); // Folder ID passed from JS (make sure it's valid)
+    $file_type = $_POST['file_type']; // File type passed from JS
 
-    // Update content in the database
-    $sql = "UPDATE files SET content='$content' WHERE id=$file_id";
+    // Generate a file name or receive it from the front-end (you can customize this logic as needed)
+    $name = "speechToText" .$folder_id;
 
-    if ($conn->query($sql) === TRUE) {
-        if ($conn->affected_rows > 0) {
-            echo "Record updated successfully\n";
-        } else {
-            echo "Update executed, but no rows were affected.\n";
-        }
-    } else {
-        echo "Error updating record: " . $conn->error . "\n";
-    }
+    // Now call the create function from file_class.php
+    $result = file::create($name, $user_id, $folder_id, $content, $file_type);
 
-    // Commit changes if using transaction mode
-    $conn->commit();
+    // Return response to the front-end
+    echo $result;
 }
 
 // Fetch the content for the file with id 1

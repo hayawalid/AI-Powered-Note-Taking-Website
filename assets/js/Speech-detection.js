@@ -126,7 +126,7 @@ window.addEventListener("load", () => {
             recognizer.recognizing = (s, e) => {
                 if (e.result.reason === SpeechSDK.ResultReason.RecognizingSpeech) {
                     // Use Azure's audio level data to control sine wave visualization
-                    const audioLevel = e.result.audioLevel || 50; 
+                    const audioLevel = e.result.audioLevel || 50;
                     visualizeSpeech(audioLevel); // Update sine wave visualization
                 }
             };
@@ -196,6 +196,9 @@ window.addEventListener("load", () => {
     }
 
     function saveTranscribedContent(content) {
+        const user_id = document.getElementById('user-id').value;
+        const folder_id = 1; // general folder
+        const file_type = 1;
         console.log('Preparing to send transcribed content to server...');
         console.log('Content to save:', content);
 
@@ -204,18 +207,18 @@ window.addEventListener("load", () => {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: `content=${encodeURIComponent(content)}&file_id=1`  // Adjust file_id as needed
+            body: `content=${encodeURIComponent(content)}&user_id=${user_id}&folder_id=${folder_id}&file_type=${file_type}`  
         })
-        .then(response => response.text())
-        .then(data => {
-            console.log('Server response:', data);
-            if (data.includes("Record updated successfully")) {
-                console.log('Content saved successfully');
-            } else {
-                console.log('Failed to save content. Response:', data);
-            }
-        })
-        .catch(error => console.error('Error saving content:', error));
-        window.location.href = '../pages/Note.php';
+            .then(response => response.text())
+            .then(data => {
+                console.log('Server response:', data);
+                if (data.includes("Record updated successfully") || data.includes("Record created successfully")) {
+                    console.log('Content saved successfully');
+                } else {
+                    console.log('Failed to save content. Response:', data);
+                }
+            })
+            .catch(error => console.error('Error saving content:', error));
+        // window.location.href = '../pages/Note.php';
     }
 });

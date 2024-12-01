@@ -2,6 +2,8 @@
 include '../includes/config.php';
 include '../includes/FileContent_class.php';
 include_once '../includes/session.php';
+include_once '../includes/User.php';
+$user_id = isset($_SESSION['UserID']) ? $_SESSION['UserID'] : null;
 
 //set current page to update sidebar status
 $current_page = 'Speech To Text';
@@ -100,6 +102,9 @@ $current_page = 'Speech To Text';
               </div>
             </div>
 
+
+            <input type="hidden" id="user-id" value="<?php echo $user_id; ?>">
+            
             <!-- <div class="sound-wave" id="soundWave"></div> -->
             <canvas id="sineCanvas" width="800" height="200"></canvas>
             <button id="start-recognition">Start</button>

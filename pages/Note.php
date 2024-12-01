@@ -1,7 +1,10 @@
 <?php 
 // include '../includes/user_sidebar.php';
 include '../includes/config.php';
+include_once '../includes/session.php';
 
+//set current page to update sidebar status
+$current_page = 'My Note';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +14,8 @@ include '../includes/config.php';
     <link rel="stylesheet" href="../assets/css/user_style.css">
     <!-- <script src="../assets/js/sidebar.js"></script> -->
     <script src="../assets/js/Note.js"></script>
-    <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.css'><link rel="stylesheet" href="./style.css">
+    <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.css'>
+    <!-- <link rel="stylesheet" href="./style.css"> -->
     <link rel="stylesheet" href="../assets/css/Note.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
