@@ -7,6 +7,7 @@ class Page {
     public $friendly_name;
     public $link_address;
     public $link_icon;
+    public $visible;
 
     // function __construct($id) {
     //     if($id != "") {
@@ -28,6 +29,7 @@ class Page {
 				$this->link_address=$row2["link_address"];
 				$this->id=$row2["id"];
                 $this->link_icon=$row2["link_icon"];
+                $this->visible = $row2['visible'];
 			}
 		}
 	}

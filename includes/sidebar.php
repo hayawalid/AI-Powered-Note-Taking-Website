@@ -28,7 +28,7 @@ if (isset($_POST["submit"])) {
       echo "ERROR!";
     }
   } else {
-    
+
     if ($type == "option3") {
       $content = ""; // Default content or get from form if needed
       $file_type = 4; // Assuming default file type ID (replace this if needed)
@@ -45,39 +45,39 @@ if (isset($_POST["submit"])) {
 ob_start();
 
 if (isset($_POST['item_id']) && isset($_POST['item_type'])) {
-    $item_id = intval($_POST['item_id']);
-    $item_type = $_POST['item_type'];
+  $item_id = intval($_POST['item_id']);
+  $item_type = $_POST['item_type'];
 
-    // Debugging outputs (remove or comment out these lines before deploying to production)
-    error_log("Move to trash request: ID = $item_id, Type = $item_type");
+  // Debugging outputs (remove or comment out these lines before deploying to production)
+  error_log("Move to trash request: ID = $item_id, Type = $item_type");
 
-    // Validation check
-    if ($item_id && in_array($item_type, ['folder', 'file'])) {
-        if ($item_type === 'folder') {
-            $result = folder::moveToTrash($item_id);
-        } elseif ($item_type === 'file') {
-            $result = file::moveToTrash($item_id);
-        }
-
-        if ($result) {
-            // Clear buffer and redirect
-            ob_end_clean();
-            header("Location: ../pages/trash.php");
-            exit();
-        } else {
-            echo "<script>alert('Error moving $item_type to trash.');</script>";
-        }
-    } else {
-        echo "<script>alert('Invalid item ID or type.');</script>";
+  // Validation check
+  if ($item_id && in_array($item_type, ['folder', 'file'])) {
+    if ($item_type === 'folder') {
+      $result = folder::moveToTrash($item_id);
+    } elseif ($item_type === 'file') {
+      $result = file::moveToTrash($item_id);
     }
 
-    // Flush the buffer in case of errors
-    ob_end_flush();
+    if ($result) {
+      // Clear buffer and redirect
+      ob_end_clean();
+      header("Location: ../pages/trash.php");
+      exit();
+    } else {
+      echo "<script>alert('Error moving $item_type to trash.');</script>";
+    }
+  } else {
+    echo "<script>alert('Invalid item ID or type.');</script>";
+  }
+
+  // Flush the buffer in case of errors
+  ob_end_flush();
 }
 
 $user = new User($_SESSION['UserID']);
 if (!$user) {
-    header("Location: " . htmlspecialchars('./index.php'));
+  header("Location: " . htmlspecialchars('./index.php'));
 }
 ?>
 
@@ -108,18 +108,20 @@ if (!$user) {
           ";
       }
       foreach ($user->userType_obj->pages_array as $page) {
-        $friendly_name = htmlspecialchars($page->friendly_name, ENT_QUOTES, 'UTF-8');
-        $url = htmlspecialchars($page->link_address, ENT_QUOTES, 'UTF-8');
-        $is_active = ($current_page == $friendly_name) ? 'active' : '';
-        $icon = htmlspecialchars($page->link_icon, ENT_QUOTES, 'UTF-8');
+        if ($page->visible == 1) {
+          $friendly_name = htmlspecialchars($page->friendly_name, ENT_QUOTES, 'UTF-8');
+          $url = htmlspecialchars($page->link_address, ENT_QUOTES, 'UTF-8');
+          $is_active = ($current_page == $friendly_name) ? 'active' : '';
+          $icon = htmlspecialchars($page->link_icon, ENT_QUOTES, 'UTF-8');
 
-        echo "
+          echo "
           <li class='$is_active'>
             <a href='$url'>
               <i class='now-ui-icons $icon'></i>
               <p>$friendly_name</p>
             </a>
           </li>";
+        }
       }
       ?>
       <li class="active-pro">
@@ -190,7 +192,7 @@ if (!$user) {
       <!-- Corrected input fields -->
       <input type="hidden" name="item_id" id="trash_item_id">
       <input type="hidden" name="item_type" id="trash_item_type" value="folder">
-      
+
       <button type="submit" class="btn-confirm delete-file">Yes, move to trash</button>
       <button type="button" class="btn-cancel" onclick="closeModal('trashModal')">Cancel</button>
     </form>
