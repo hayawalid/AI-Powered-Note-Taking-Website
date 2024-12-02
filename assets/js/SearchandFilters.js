@@ -129,20 +129,22 @@ document.addEventListener('DOMContentLoaded', function () {
         searchInput.dispatchEvent(new Event('input')); // Trigger the input event to reset results
     });
 
-    // Clear filters functionality
-    clearFiltersButton.addEventListener('click', function () {
-        // Reset filter buttons
-        filterButtons.forEach(button => button.classList.remove('active'));
+    if(clearFiltersButton) {
+        // Clear filters functionality
+        clearFiltersButton.addEventListener('click', function () {
+            // Reset filter buttons
+            filterButtons.forEach(button => button.classList.remove('active'));
 
-        // Show all folders and notes
-        folders.forEach(folder => (folder.style.display = ''));
-        notes.forEach(note => (note.style.display = ''));
+            // Show all folders and notes
+            folders.forEach(folder => (folder.style.display = ''));
+            notes.forEach(note => (note.style.display = ''));
 
-        // Reset search input
-        searchInput.value = '';
-        searchInput.dispatchEvent(new Event('input')); // Trigger the input event
+            // Reset search input
+            searchInput.value = '';
+            searchInput.dispatchEvent(new Event('input')); // Trigger the input event
 
-        // Hide "No Results" message
-        document.getElementById('no-results').style.display = 'none';
-    });
+            // Hide "No Results" message
+            document.getElementById('no-results').style.display = 'none';
+        });
+    }
 });

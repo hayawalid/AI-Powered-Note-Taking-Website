@@ -176,7 +176,7 @@ class file
                 // Move file to trash, including file content
                 $trash_sql = "INSERT INTO trash (file_id, folder_id, name, user_id, file_content, deleted_at) VALUES (?, ?, ?, ?, ?, NOW())";
                 $stmt_trash = $con->prepare($trash_sql);
-                $stmt_trash->bind_param("iissi", $id, $parent_folder_id, $file_name, $user_id, $file_content);
+                $stmt_trash->bind_param("iisis", $id, $parent_folder_id, $file_name, $user_id, $file_content);
     
                 if (!$stmt_trash->execute()) {
                     throw new Exception("Error moving file to trash: " . $stmt_trash->error);
