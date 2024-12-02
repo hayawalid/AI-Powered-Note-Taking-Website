@@ -20,12 +20,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Now call the create function from file_class.php
     $result = file::create($name, $user_id, $folder_id, $content, $file_type);
 
-    // Return response to the front-end
-    echo $result;
+    if($result){
+        header("Location: ../pages/note.php?id=". $result);
+        exit();
+    }else{
+        echo "Failed to create file";
+    }
+    
 }
 
 // Fetch the content for the file with id 1
-$file_id = 1;
+$file_id = isset($_GET['id']) ? intval($_GET['id']) : 1;
 $sql = "SELECT content FROM files WHERE id=$file_id";
 $result = $conn->query($sql);
 
