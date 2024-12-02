@@ -4,7 +4,13 @@ body {
     
   h1 > a {
       text-decoration:none;
-      color:#fff !important;
+      color:#171a59 !important;
+      font-weight: bold;
+  }
+
+  h5 {
+    color: #c6408a !important;
+    margin-top: 20px;
   }
   .error-message {
     color: red;
@@ -27,8 +33,8 @@ body {
       justify-content: center;
     }
   .intro-section {
-    /* background-image: url(https://i.pinimg.com/enabled_hi/564x/4d/94/3e/4d943ed1d63d78a03742dabeedc0c2d5.jpg); */
-    background-color: #87aaeb;
+    background-image: url(../images/login_bg8.png);
+    background-color: #fcfcfc;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -56,31 +62,39 @@ body {
   
   @media (max-width: 767px) {
     .brand-wrapper {
-      margin-bottom: 35px; } }
+      margin-bottom: 35px; } 
+  }
   
   .intro-content-wrapper {
     width: 410px;
     max-width: 100%;
     margin-top: auto;
-    margin-bottom: auto; }
-    .intro-content-wrapper .intro-title {
-      font-size: 30px;
-      font-weight: bold;
-      margin-bottom: 17px; }
-    .intro-content-wrapper .intro-text {
-      font-size: 19px;
-      line-height: 1.37; }
+    margin-bottom: auto; 
+  }
+
+  .intro-content-wrapper .intro-title {
+    font-size: 27px;
+    font-weight: bold;
+    margin-bottom: 17px; 
+    color: #171a59;
+  }
+
+  .intro-content-wrapper .intro-text {
+    font-size: 19px;
+    line-height: 1.37; 
+    color: #171a59;
+  }
     .intro-content-wrapper .btn-read-more {
-      background-color: #fff;
+      background-color: #171a59;
       padding: 13px 30px;
       border-radius: 0;
       font-size: 16px;
       font-weight: bold;
-      color: #000; }
+      color: #f5f5f5; }
       .intro-content-wrapper .btn-read-more:hover {
         background-color: transparent;
-        border: 1px solid #fff;
-        color: #fff; }
+        border: 1px solid #171a59;
+        color: #171a59; }
   
   @media (max-width: 767px) {
     .intro-section-footer {
@@ -136,19 +150,24 @@ body {
   .login-title {
     font-size: 30px;
     font-weight: bold;
-    margin-bottom: 30px; }
+    margin-bottom: 30px; 
+    color: #171a59; 
+  }
   
   .login-btn {
     padding: 13px 30px;
-    background-color: #87aaeb;
+    background-color: #171a59;
     border-radius: 0;
     font-size: 20px;
     font-weight: bold;
-    color: #fff; }
-    .login-btn:hover {
-      border: 1px solid #000;
-      background-color: transparent;
-      color: #000; }
+    color: #f5f5f5; 
+  }
+
+  .login-btn:hover {
+    border: 1px solid #171a59;
+    background-color: transparent;
+    color: #171a59; 
+  }
   
   .forgot-password-link {
     font-size: 14px;
@@ -221,6 +240,7 @@ body {
       display: block; /* Ensure error messages take up the full line */
       height: auto; /* Allow the height to be dynamic based on content */
   }
+  
   
   
   

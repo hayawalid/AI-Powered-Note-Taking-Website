@@ -39,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username'])) {
   $UserObject->country = $Country;
   $UserObject->user_type = $UserType->id;
   $result = $UserObject->updateUser();
-  echo "alert('User updated successfully');";
 }
 
 if (isset($_POST['question_id']) && isset($_POST['selected_option']) && isset($_SESSION['UserID'])) {
@@ -60,8 +59,6 @@ if (isset($_POST['question_id']) && isset($_POST['selected_option']) && isset($_
   } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
   }
-} else {
-  echo "Invalid request.";
 }
 ?>
 

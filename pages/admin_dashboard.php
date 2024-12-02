@@ -135,7 +135,7 @@ $BigDashboardChart = ChartsData::getMonthlyActiveAccounts();
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table">
+                  <table class="table" id="dataTable">
                     <thead class=" text-primary">
                       <th>
                         Name
@@ -198,6 +198,7 @@ $BigDashboardChart = ChartsData::getMonthlyActiveAccounts();
       demo.initDocChart();
     });
   </script>
+  <script src="../assets/js/searchAdmin.js"></script>
 </body>
 
 </html>

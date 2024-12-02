@@ -22,19 +22,19 @@
   --background-color: #ffffff; /* Background color for the entire website, including individual sections */
   --default-color: #444444; /* Default color used for the majority of the text content across the entire website */
   --heading-color: #6495ED; /* Color for headings, subheadings and title throughout the website */
-  --accent-color: #E893C5; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
+  --accent-color: #c6408a; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
   --surface-color: #ffffff; /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
   --contrast-color: #ffffff; /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
 }
 
 /* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
 :root {
-  --nav-color: #ffffff;  /* The default color of the main navmenu links */
-  --nav-hover-color: #1acc8d; /* Applied to main navmenu links when they are hovered over or active */
+  --nav-color: #171a59;  /* The default color of the main navmenu links */
+  --nav-hover-color: #c6408a; /* Applied to main navmenu links when they are hovered over or active */
   --nav-mobile-background-color: #ffffff; /* Used as the background color for mobile navigation menu */
   --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
   --nav-dropdown-color: #444444; /* Used for navigation links of the dropdown items in the navigation menu. */
-  --nav-dropdown-hover-color: #1acc8d; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
+  --nav-dropdown-hover-color: #c6408a; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
 }
 
 /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
@@ -45,9 +45,11 @@
 }
 
 .dark-background {
-  --background-color: #6495ED;
-  --default-color: #ffffff;
-  --heading-color: #ffffff;
+  /* --background-color: #6495ED; */
+  --background-color: #fcfcfc;
+  --default-color: #171a59;
+  /* --heading-color: #ffffff; */
+  --heading-color: #171a59;
   --surface-color: #FFDBDC;
   --contrast-color: #ffffff;
 }
@@ -145,7 +147,7 @@ h6 {
 .header {
   --background-color: rgba(255, 255, 255, 0);
   --default-color: #ffffff;
-  --heading-color: #ffffff;
+  --heading-color: #171a59;
   color: var(--default-color);
   background-color: var(--background-color);
   padding: 20px 0;
@@ -176,7 +178,7 @@ h6 {
 /* Global Header on Scroll
 ------------------------------*/
 .scrolled .header {
-  --background-color: #10058c;
+  --background-color: #fcfcfc;
 }
 
 /*--------------------------------------------------------------
@@ -1049,8 +1051,26 @@ section,
   font-size: 32px;
   line-height: 0;
   transition: all 0.4s ease-out 0s;
+}
+
+.pink i {
   background-color: color-mix(in srgb, var(--accent-color), transparent 95%);
   color: var(--accent-color);
+}
+
+.blue i {
+  background-color: color-mix(in srgb, #a8dde2, transparent 75%);
+  color: #6098e2;
+}
+
+.yellow i {
+  background-color: color-mix(in srgb, #f2e982, transparent 55%);
+  color: #dccd62;
+}
+
+.green i {
+  background-color: color-mix(in srgb, #f2cf82, transparent 55%);
+  color: #e7862a;
 }
 
 .about .icon-box h3 {
@@ -1063,8 +1083,23 @@ section,
   margin-bottom: 0;
 }
 
-.about .icon-box:hover i {
+.pink:hover i {
   background-color: var(--accent-color);
+  color: var(--contrast-color);
+}
+
+.blue:hover i {
+  background-color: #6098e2;
+  color: var(--contrast-color);
+}
+
+.yellow:hover i {
+  background-color: #dccd62;
+  color: var(--contrast-color);
+}
+
+.green:hover i {
+  background-color: #e7862a;
   color: var(--contrast-color);
 }
 

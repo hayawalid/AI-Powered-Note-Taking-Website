@@ -205,7 +205,7 @@
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table">
+                  <table class="table" id="dataTable">
                     <thead class=" text-primary">
                       <th>
                         Full Name
@@ -258,5 +258,6 @@
   <script src="../assets/js/demo.js"></script>
   <script src="../assets/js/admin_form_validation.js"></script>
   <script src="../assets/js/delete_user.js"></script>
+  <script src="../assets/js/searchAdmin.js"></script>
 </body>
 </html>

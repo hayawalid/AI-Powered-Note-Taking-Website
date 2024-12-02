@@ -66,7 +66,7 @@ $users = User::getAllUsers();
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table">
+                  <table class="table" id="dataTable">
                     <thead class=" text-primary">
                       <th>
                         Name
@@ -83,8 +83,8 @@ $users = User::getAllUsers();
                         foreach ($users as $user) {
                           echo "<tr id='admin-row-{$user->id}'>";
                           echo "<td>" . $user->first_name . " " . $user->last_name . "</td>";
-                          echo "<td>" . $user->username . "</td>";
                           echo "<td>" . $user->email . "</td>";
+                          echo "<td>" . $user->country . "</td>";
                           echo '<td class="td-actions text-right">
                                   <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove" data-user-id="' . $user->id . '" onclick="deleteUser(' . $user->id . ', this)">
                                     <i class="now-ui-icons ui-1_simple-remove"></i>
@@ -116,6 +116,7 @@ $users = User::getAllUsers();
   <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
   <script src="../assets/js/demo.js"></script>
   <script src="../assets/js/delete_user.js"></script>
+  <script src="../assets/js/searchAdmin.js"></script>
 </body>
 
 </html>
