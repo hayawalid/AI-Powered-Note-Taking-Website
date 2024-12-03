@@ -1,9 +1,9 @@
 <!-- 
 <?php
- // include '../includes/user_sidebar.php';
+// include '../includes/user_sidebar.php';
 // include '../includes/config.php';
- 
- ?>
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,6 +73,7 @@
 
 <?php
 // include '../includes/user_sidebar.php';
+include_once '../includes/session.php';
 include '../includes/config.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -86,7 +87,9 @@ $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/app.log', Logger::DEB
 
 // Initialize the HTTP client
 $client = new Client();
-
+// include '../includes/FileContent_class.php';
+// $text=$content;
+// echo $text;
 // Static content for summarization
 $staticText = "Artificial Intelligence (AI) is a branch of computer science that focuses on creating intelligent machines capable of performing tasks that typically require human intelligence. These tasks include learning, reasoning, problem-solving, perception, language understanding, and more. The development and implementation of AI have profound implications for various sectors, including healthcare, education, business, and entertainment.
 
@@ -107,7 +110,7 @@ Privacy is another critical issue. AI systems often require large amounts of dat
 In conclusion, artificial intelligence has the potential to transform various aspects of society, from healthcare and education to business and entertainment. While the opportunities are immense, it is essential to address the ethical, societal, and privacy challenges associated with AI. By fostering responsible development and implementation, we can harness the power of AI to create a better future for all. ";
 
 $Q_A = "";
-$MCQ="";
+$MCQ = "";
 
 // Handle the form submission for generating the summary
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gen'])) {
@@ -132,24 +135,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gen'])) {
 }
 //----------------------------------------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
-  // Construct the prompt for summarization
- $prompt_1 = "Generate questions and answers from the following text: " . $staticText . "\nPlease format the output as follows: \nQuestion 1: <question text>\nAnswer 1: <answer text>\nQuestion 2: <question text>\nAnswer 2: <answer text>";
+    // Construct the prompt for summarization
+    $prompt_1 = "Generate questions and answers from the following text: " . $staticText . "\nPlease format the output as follows: \nQuestion 1: <question text>\nAnswer 1: <answer text>\nQuestion 2: <question text>\nAnswer 2: <answer text>";
 
-  try {
-      // Make the API request to the Node.js service
-      $response = $client->request('POST', 'http://localhost:3000/summarize', [
-          'json' => [
-              'prompt' => $prompt_1
-          ]
-      ]);
-      $dataa = json_decode($response->getBody(), true);
-      //echo json_encode($data); 
-      // Output the summary
-      $Q_A = $dataa['summary'] ?? 'No summary available';
-  } catch (Exception $e) {
-      echo "Error: " . $e->getMessage();
-      $logger->error('Error in summarization', ['message' => $e->getMessage()]);
-  }
+    try {
+        // Make the API request to the Node.js service
+        $response = $client->request('POST', 'http://localhost:3000/summarize', [
+            'json' => [
+                'prompt' => $prompt_1
+            ]
+        ]);
+        $dataa = json_decode($response->getBody(), true);
+        //echo json_encode($data); 
+        // Output the summary
+        $Q_A = $dataa['summary'] ?? 'No summary available';
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        $logger->error('Error in summarization', ['message' => $e->getMessage()]);
+    }
 }
 //------------------------------------------------------------------------------------------------
 // Define the prompt for generating multiple-choice questions
@@ -164,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
 //       ]
 //     ]);
 //     $data_1 = json_decode($response_1->getBody(), true);
-    
+
 //     // Print the API response for debugging
 //     //echo "<pre>" . htmlentities(print_r($data_1, true)) . "</pre>";
 
@@ -185,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
 //       $answers = ["No answers found"];
 //     }
 
-    
+
 
 //     // Log the response for debugging (optional)
 //     $logger->info('API Response', $data_1);
@@ -202,7 +205,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
 //   $answers = ["No answers generated"];
 // }
 
-function saveQandAtoDatabase($q_and_a) {
+function saveQandAtoDatabase($q_and_a)
+{
     global $pdo; // Use the global PDO instance for the database connection
 
     // Prepare the database query to insert the Q&A pairs
@@ -236,12 +240,15 @@ function saveQandAtoDatabase($q_and_a) {
 //     $counter++; // Increment counter for next question-answer pair
 
 // }
+
+echo $_SESSION['UserID'];
 ?>
 
 
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -249,65 +256,67 @@ function saveQandAtoDatabase($q_and_a) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 0;
+        background-color: #f9f9f9;
+    }
 
-        h1 {
-            color: #333;
-            text-align: center;
-        }
+    h1 {
+        color: #333;
+        text-align: center;
+    }
 
-        .section {
-            margin: 20px 0;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fff;
-        }
+    .section {
+        margin: 20px 0;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #fff;
+    }
 
-        .section h2 {
-            color: #444;
-            margin-bottom: 10px;
-        }
+    .section h2 {
+        color: #444;
+        margin-bottom: 10px;
+    }
 
-        p {
-            margin: 10px 0;
-            line-height: 1.6;
-        }
+    p {
+        margin: 10px 0;
+        line-height: 1.6;
+    }
 
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #007BFF;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007BFF;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-        button:hover {
-            background-color: #0056b3;
-        }
+    button:hover {
+        background-color: #0056b3;
+    }
 
-        .question, .mcq {
-            margin: 10px 0;
-        }
+    .question,
+    .mcq {
+        margin: 10px 0;
+    }
 
-        .mcq-options {
-            margin-left: 20px;
-        }
+    .mcq-options {
+        margin-left: 20px;
+    }
 
-        .answer-key {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f1f1f1;
-            border: 1px dashed #ddd;
-        }
-    </style>
+    .answer-key {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f1f1f1;
+        border: 1px dashed #ddd;
+    }
+</style>
+
 <body>
 
     <h1>Text Summarization Result</h1>
@@ -319,11 +328,11 @@ function saveQandAtoDatabase($q_and_a) {
 
     <div class="section">
         <!-- Form with Generate button -->
-   
-       
+
+
     </div>
 
-    
+
 
     <?php if (!empty($Q_A)): ?>
         <div class="section">
@@ -337,9 +346,9 @@ function saveQandAtoDatabase($q_and_a) {
         </div>
     <?php endif; ?>
     <form method="POST" id="generateForm">
-            <button type="submit" name="generate">Generate Q_A</button>
-        </form>
-    
+        <button type="submit" name="generate">Generate Q_A</button>
+    </form>
+
     <div class="section" id="mcq-section">
         <h2></h2>
         <div id="mcq-content"></div>
@@ -357,28 +366,32 @@ function saveQandAtoDatabase($q_and_a) {
         </div>
     <?php endif; ?>
     <form method="POST" id="generateFormMCQ">
-            <button type="submit" name="gen">Generate MCQ</button>
-        </form>
+        <button type="submit" name="gen">Generate MCQ</button>
+    </form>
 
     <div id="message"></div>
 
 
-    
+
 
     <script>
         // Handle the save button click event
-        $('#saveForm').on('submit', function(event) {
+        var sessionUserID = <?php echo json_encode($_SESSION['UserID']); ?>;
+        var ID = sessionUserID;
+
+        $('#saveForm').on('submit', function (event) {
             event.preventDefault(); // Prevent the form from submitting normally
 
             // Get the summary from the button data
             var q_a = $('#save').data('summary');
             var jsonSummary = JSON.stringify({ Q_A: q_a });
-
+            //var ID = $_SESSION['UserID'];
+            
             // Prepare the data for AJAX
             var postData = {
-                name: 'ew3aaa Summary ',
-                user_id: 5,  // Example: replace with actual user ID
-                folder_id: 1,  // Example: replace with actual folder ID
+                name: 'ew3aaa Q_A ',
+                user_id: ID,  // Example: replace with actual user ID
+                folder_id: 75,  // Example: replace with actual folder ID
                 content: jsonSummary,
                 created_at: new Date().toISOString(),
                 file_type: 2  // Assuming 2 corresponds to "Summary"
@@ -389,17 +402,17 @@ function saveQandAtoDatabase($q_and_a) {
                 url: 'sava_db_Q&A.php',
                 method: 'POST',
                 data: postData,  // Send form data
-                success: function(response) {
+                success: function (response) {
                     // Display the message from PHP
                     $('#message').html(response);
                     //console.log('API Response:', response);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     $('#message').html('Error: ' + error);
                 }
             });
         });
-        $('#saveFormMCQ').on('submit', function(event) {
+        $('#saveFormMCQ').on('submit', function (event) {
             event.preventDefault(); // Prevent the form from submitting normally
 
             // Get the summary from the button data
@@ -409,8 +422,8 @@ function saveQandAtoDatabase($q_and_a) {
             // Prepare the data for AJAX
             var postData = {
                 name: 'ew3aaa MCQ ',
-                user_id: 5,  // Example: replace with actual user ID
-                folder_id: 1,  // Example: replace with actual folder ID
+                user_id: ID,  // Example: replace with actual user ID
+                folder_id: 75,  // Example: replace with actual folder ID
                 content: jsonSummary,
                 created_at: new Date().toISOString(),
                 file_type: 2  // Assuming 2 corresponds to "Summary"
@@ -421,16 +434,19 @@ function saveQandAtoDatabase($q_and_a) {
                 url: 'sava_db_Q&A.php',
                 method: 'POST',
                 data: postData,  // Send form data
-                success: function(response) {
+                success: function (response) {
                     // Display the message from PHP
+
                     $('#message').html(response);
+
                     //console.log('API Response:', response);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     $('#message').html('Error: ' + error);
                 }
             });
         });
     </script>
 </body>
+
 </html>
