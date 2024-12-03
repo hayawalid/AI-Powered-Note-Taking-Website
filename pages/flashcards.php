@@ -2,6 +2,55 @@
 include_once '../includes/session.php';
 
 $current_page = 'Flash Cards';
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+//db connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "smartnotes_db"; // Replace with your actual database name
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+// Fetch all flashcards where file_type = 3 (assuming that file_type 3 is for flashcards)
+$sql = "SELECT id, name, content FROM files WHERE file_type = 3";
+$result = $conn->query($sql);
+
+$flashcards = []; // Initialize an empty array to store flashcards
+
+if ($result->num_rows > 0) {
+    // Loop through each flashcard
+    while ($card = $result->fetch_assoc()) {
+        // Decode the content JSON to access question and answer
+        $content = json_decode($card['content'], true);
+
+        if (isset($content['question']) && isset($content['answer'])) {
+            // Add the card data to the flashcards array with the question and answer
+            $flashcards[] = [
+                'id' => $card['id'],
+                'name' => $card['name'],
+                'question' => $content['question'],
+                'answer' => $content['answer']
+            ];
+        } else {
+            // Fallback if question or answer is missing
+            $flashcards[] = [
+                'id' => $card['id'],
+                'name' => $card['name'],
+                'question' => 'No question available',
+                'answer' => 'No answer available'
+            ];
+        }
+    }
+} else {
+    echo "No flashcards found.";
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -238,102 +287,35 @@ a:hover, a:focus {
 <body>
 <?php include '../includes/sidebar.php'; ?>
 
+<!-- Display Flashcards -->
 <div class="container bootstrap snippets bootdeys">
-<div class="row">
-    <div class="col-md-4 col-sm-6 content-card">
-        <div class="card-big-shadow">
-        <div class="card-flip">
-            <div class="card card-just-text" data-background="color" data-color="blue" data-radius="none">
-                <div class="content">
-                    <h6 class="category">Best cards</h6>
-                    <h4 class="title"><a href="#">Blue Card</a></h4>
-                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
+    <div class="row">
+        <?php foreach ($flashcards as $card): ?>
+            <div class="col-md-4 col-sm-6 content-card">
+                <div class="card-big-shadow">
+                    <div class="card-flip">
+                        <!-- Front of the Card (Question) -->
+                        <div class="card card-just-text" data-background="color" data-color="blue" data-radius="none">
+                            <div class="content">
+                                <h6 class="category"><?php echo htmlspecialchars($card['name']); ?></h6>
+                                <h4 class="title"><a href="#">Flashcard #<?php echo $card['id']; ?></a></h4>
+                                <p class="description">
+                                    <?php echo htmlspecialchars($card['question']); // Display question on the front ?>
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Back of the Card (Answer) -->
+                        <div class="card card-back">
+                            <h6 class="category">Answer</h6>
+                            <p>
+                                <?php echo htmlspecialchars($card['answer']); // Display answer on the back ?>
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div> <!-- end card -->
-            <div class="card card-back">
-    <h6 class="category">Details</h6>
-    <h4 class="title">Back of the Blue Card</h4>
-    <p class="description">Here is some content for the back of the card. You can add more details about this card here.</p>
-</div>
-        </div>
-        </div>
+            </div>
+        <?php endforeach; ?>
     </div>
-    
-    <div class="col-md-4 col-sm-6 content-card">
-        <div class="card-big-shadow">
-            <div class="card card-just-text" data-background="color" data-color="green" data-radius="none">
-                <div class="content">
-                    <h6 class="category">Best cards</h6>
-                    <h4 class="title"><a href="#">Green Card</a></h4>
-                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
-                </div>
-            </div> <!-- end card -->
-            <div class="card card-back">
-            <p>This is the back of the card. Add your content here!</p>
-        </div>
-        </div>
-    </div>
-    
-    <div class="col-md-4 col-sm-6 content-card">
-        <div class="card-big-shadow">
-            <div class="card card-just-text" data-background="color" data-color="yellow" data-radius="none">
-                <div class="content">
-                    <h6 class="category">Best cards</h6>
-                    <h4 class="title"><a href="#">Yellow Card</a></h4>
-                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
-                </div>
-            </div> <!-- end card -->
-            <div class="card card-back">
-            <p>This is the back of the card. Add your content here!</p>
-        </div>
-        </div>
-    </div>
-    
-    <div class="col-md-4 col-sm-6 content-card">
-        <div class="card-big-shadow">
-            <div class="card card-just-text" data-background="color" data-color="brown" data-radius="none">
-                <div class="content">
-                    <h6 class="category">Best cards</h6>
-                    <h4 class="title"><a href="#">Brown Card</a></h4>
-                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
-                </div>
-            </div> <!-- end card -->
-            <div class="card card-back">
-            <p>This is the back of the card. Add your content here!</p>
-        </div>
-        </div>
-    </div>
-    
-    <div class="col-md-4 col-sm-6 content-card">
-        <div class="card-big-shadow">
-            <div class="card card-just-text" data-background="color" data-color="purple" data-radius="none">
-                <div class="content">
-                    <h6 class="category">Best cards</h6>
-                    <h4 class="title"><a href="#">Purple Card</a></h4>
-                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
-                </div>
-            </div> <!-- end card -->
-            <div class="card card-back">
-            <p>This is the back of the card. Add your content here!</p>
-        </div>
-        </div>
-    </div>
-    
-    <div class="col-md-4 col-sm-6 content-card">
-        <div class="card-big-shadow">
-            <div class="card card-just-text" data-background="color" data-color="orange" data-radius="none">
-                <div class="content">
-                    <h6 class="category">Best cards</h6>
-                    <h4 class="title"><a href="#">Orange Card</a></h4>
-                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
-                </div>
-            </div> <!-- end card -->
-            <div class="card card-back">
-            <p>This is the back of the card. Add your content here!</p>
-        </div>
-        </div>
-    </div>
-</div>
 </div>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>

@@ -53,10 +53,12 @@ if (isset($_POST['name']) && isset($_POST['user_id']) && isset($_POST['folder_id
     $folder_id = $_GET['folder_id'] ?? 1;
     // $user_id = $_SESSION['UserID'];
     $user_id = $_POST['user_id'];
+
+   
     $content = $conn->real_escape_string($_POST['content']);
     $created_at = $_POST['created_at']; // Use the timestamp sent from AJAX
-    $file_type = $_POST['file_type']; // Assuming file type is passed as an integer
-
+    // $file_type = $_POST['file_type']; // Assuming file type is passed as an integer
+    $file_type = 3;
     // SQL query to insert the data
     $sql = "INSERT INTO files (name, user_id, folder_id, content, created_at, file_type) 
             VALUES ('$name', $user_id, $folder_id, '$content', '$created_at', $file_type)";
