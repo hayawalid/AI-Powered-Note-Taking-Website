@@ -18,13 +18,13 @@
         <div class="collapse navbar-collapse justify-content-end mr-3" id="navigation">
             <form>
                 <div class="input-group no-border">
-                <button type="button" id="clear-search"
-                        style="display: none; border: none; background: transparent; color: black; margin-left: 5px;">✖</button>
                     <input type="text" value="" class="form-control black-placeholder" placeholder="Search..."
                         style="color: black;">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <i class="now-ui-icons ui-1_zoom-bold" style="color: black;"></i>
+                            <button type="button" id="clear-search"
+                        style="display: none; border: none; background: transparent; color: black; margin-left: 5px;">✖</button>
                         </div>
                     </div>
                     
