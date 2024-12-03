@@ -307,32 +307,40 @@ a:hover, a:focus {
  <!-- Display Flashcards -->
  <div class="container bootstrap snippets bootdeys">
     <div class="row">
-        <?php foreach ($flashcards as $card): ?>
-            <div class="col-md-4 col-sm-6 content-card">
+        <?php 
+        // Loop through each flashcard
+        foreach ($flashcards as $card):
+            // Check how many questions are in the current flashcard
+            $num_flashcards = count($card['questions']);
+        ?>
+            <div class="col-md-4 col-sm-6 content-col">
                 <div class="card-big-shadow">
                     <div class="card-flip">
-                        <!-- Front of the Card (Question) -->
+                        <!-- Front of the Card (Card Name) -->
                         <div class="card card-just-text" data-background="color" data-color="blue" data-radius="none">
                             <div class="content">
                                 <h6 class="category"><?php echo htmlspecialchars($card['name']); ?></h6>
-                                
-                                <p class="description">
-                                    <?php 
-                                    // Display first question on the front of the card
-                                    echo isset($card['questions'][0]) ? htmlspecialchars($card['questions'][0]) : 'No question available'; 
-                                    ?>
-                                </p>
+                                <?php 
+                                // Display all questions in the current flashcard
+                                foreach ($card['questions'] as $index => $question): 
+                                ?>
+                                    <p class="description">
+                                        <strong>Question </strong><?php echo htmlspecialchars($question); ?>
+                                    </p>
+                                <?php endforeach; ?>
                             </div>
                         </div>
-                        <!-- Back of the Card (Answer) -->
+                        <!-- Back of the Card (Answers) -->
                         <div class="card card-back">
-                            <h6 class="category">Answer</h6>
-                            <p>
-                                <?php 
-                                // Display corresponding answer on the back of the card
-                                echo isset($card['answers'][0]) ? htmlspecialchars($card['answers'][0]) : 'No answer available'; 
-                                ?>
-                            </p>
+                            <h6 class="category">Answers</h6>
+                            <?php 
+                            // Display all answers corresponding to the questions
+                            foreach ($card['answers'] as $index => $answer): 
+                            ?>
+                                <p>
+                                    <strong>Answer </strong><?php echo htmlspecialchars($answer); ?>
+                                </p>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
