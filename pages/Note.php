@@ -1,28 +1,28 @@
-<?php 
+ <?php 
 // include '../includes/user_sidebar.php';
 include '../includes/config.php';
 // include_once '../includes/session.php';
 
 // Set current page to update sidebar status
 // $current_page = 'My Note';
-$file_id = isset($_GET['id']) ? intval($_GET['id']) : null; // Change file_id to id
+// $file_id = isset($_GET['id']) ? intval($_GET['id']) : null; // Change file_id to id
 
-$sql = "SELECT content FROM files WHERE id=$file_id";
-$result = $conn->query($sql);
+// $sql = "SELECT content FROM files WHERE id=$file_id";
+// $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    // Output data of each row
-    while ($row = $result->fetch_assoc()) {
-        $content = $row["content"];
-    }
-} else {
-    $content = "No content found.";
-}
+// if ($result->num_rows > 0) {
+//     // Output data of each row
+//     while ($row = $result->fetch_assoc()) {
+//         $content = $row["content"];
+//     }
+// } else {
+//     $content = "No content found.";
+// }
 
-// Disable strict mode temporarily
-$conn->query("SET sql_mode = ''");
+// // Disable strict mode temporarily
+// $conn->query("SET sql_mode = ''");
 
-$conn->close();
+// $conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +50,7 @@ $conn->close();
         </div>
        
         <div class="panel-body">
-          <p><?php echo $content; ?></p>
+          <p><?php //echo $content; ?></p>
         </div>
       </div>   
     </div>
@@ -70,4 +70,113 @@ $conn->close();
   </div>
 </div>
 </body>
-</html>
+</html> 
+
+
+
+<!-- the upcoming commented implement the logic of the generate summary and save summary in the db  -->
+
+<?php
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
+// include '../includes/config.php';
+// require_once __DIR__ . '/../vendor/autoload.php'; 
+
+// use GuzzleHttp\Client;
+// use Monolog\Logger;
+// use Monolog\Handler\StreamHandler;
+
+// // Initialize Logger
+// $logger = new Logger('summarizer_logger');
+// $logger->pushHandler(new StreamHandler(__DIR__ . '/logs/app.log', Logger::DEBUG));
+
+// // Initialize the HTTP client
+// $client = new Client();
+
+// // Initialize variables
+// $summary = "";
+// $message = "";
+
+// // Handle form submission for generating the summary
+// if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
+//     // Get original text from POST data
+//     $originalText = $_POST['originalText'] ?? '';
+
+//     // Construct the prompt for summarization
+//     $prompt = "summarize the following text: " . $originalText;
+
+//     try {
+//         // Make the API request to the Node.js summarization service
+//         $response = $client->request('POST', 'http://localhost:3000/summarize', [
+//             'json' => [
+//                 'prompt' => $prompt
+//             ]
+//         ]);
+
+//         // Decode the JSON response
+//         $data = json_decode($response->getBody(), true);
+//         $summary = $data['summary'] ?? 'No summary available';
+//     } catch (Exception $e) {
+//         // Handle errors
+//         $message = "Error: " . $e->getMessage();
+//         $logger->error('Error in summarization', ['message' => $e->getMessage()]);
+//     }
+//}
+?>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarization</title>
+    <link rel="stylesheet" href="path/to/your/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="message"><?= htmlspecialchars($message) ?></div>
+    
+    <div id="summarization-section">
+        <form method="POST" id="summarizeForm">
+            <textarea id="originalText" name="originalText" rows="10" cols="50" placeholder="Enter text to summarize"><?= htmlspecialchars($_POST['originalText'] ?? '') ?></textarea>
+            <button type="submit" name="generate">Summarize</button>
+        </form>
+        <?php if (!empty($summary)): ?>
+        <div id="summaryResult">
+            <h3>Summary</h3>
+            <p id="summaryText"><?= htmlspecialchars($summary) ?></p>
+        </div>
+        <button id="saveBtn" >Save Summary</button>
+        <?php endif; ?>
+    </div>
+
+    <script>
+        // AJAX handler for "Save Summary" if needed
+        $('#saveBtn').on('click', function () {
+            var summary = $('#summaryText').text(); // Get the summary
+            var postData = {
+                name: 'Summaryss File',
+                user_id: 47, // Replace with actual user ID
+                folder_id: 75, // Replace with actual folder ID
+                content: JSON.stringify({ S: summary }),
+                created_at: new Date().toISOString(),
+                file_type: 2 // Assuming 2 corresponds to "Summary"
+            };
+
+            $.ajax({
+                url: 'sava_db_Q&A.php',
+                method: 'POST',
+                data: postData,
+                success: function (response) {
+                    $('#message').html(response);
+                },
+                error: function (xhr, status, error) {
+                    $('#message').html('Error saving summary: ' + error);
+                }
+            });
+        });
+    </script>
+</body>
+</html> -->
