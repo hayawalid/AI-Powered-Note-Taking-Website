@@ -1,6 +1,6 @@
- <?php 
+ <!-- <?php 
 // include '../includes/user_sidebar.php';
-include '../includes/config.php';
+//include '../includes/config.php';
 // include_once '../includes/session.php';
 
 // Set current page to update sidebar status
@@ -70,113 +70,138 @@ include '../includes/config.php';
   </div>
 </div>
 </body>
-</html> 
+</html>  -->
 
 
 
 <!-- the upcoming commented implement the logic of the generate summary and save summary in the db  -->
 
 <?php
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
+include '../includes/user_sidebar.php';
 
-// include '../includes/config.php';
-// require_once __DIR__ . '/../vendor/autoload.php'; 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// use GuzzleHttp\Client;
-// use Monolog\Logger;
-// use Monolog\Handler\StreamHandler;
+include '../includes/config.php';
+require_once __DIR__ . '/../vendor/autoload.php'; 
 
-// // Initialize Logger
-// $logger = new Logger('summarizer_logger');
-// $logger->pushHandler(new StreamHandler(__DIR__ . '/logs/app.log', Logger::DEBUG));
+// <?php
 
-// // Initialize the HTTP client
-// $client = new Client();
+use GuzzleHttp\Client;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
-// // Initialize variables
-// $summary = "";
-// $message = "";
+$logger = new Logger('summary_logger');
+$logger->pushHandler(new StreamHandler(__DIR__ . '/logs/app.log', Logger::DEBUG));
 
-// // Handle form submission for generating the summary
-// if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
-//     // Get original text from POST data
-//     $originalText = $_POST['originalText'] ?? '';
+$client = new Client();
+$summary = '';
+$message = '';
 
-//     // Construct the prompt for summarization
-//     $prompt = "summarize the following text: " . $originalText;
+// Handle POST request for summarization
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
+    $originalText = $_POST['originalText'] ?? '';
+    $prompt = "summarize the following text: " . $originalText;
 
-//     try {
-//         // Make the API request to the Node.js summarization service
-//         $response = $client->request('POST', 'http://localhost:3000/summarize', [
-//             'json' => [
-//                 'prompt' => $prompt
-//             ]
-//         ]);
-
-//         // Decode the JSON response
-//         $data = json_decode($response->getBody(), true);
-//         $summary = $data['summary'] ?? 'No summary available';
-//     } catch (Exception $e) {
-//         // Handle errors
-//         $message = "Error: " . $e->getMessage();
-//         $logger->error('Error in summarization', ['message' => $e->getMessage()]);
-//     }
-//}
+    try {
+        $response = $client->request('POST', 'http://localhost:3000/summarize', [
+            'json' => ['prompt' => $prompt]
+        ]);
+        $data = json_decode($response->getBody(), true);
+        $summary = $data['summary'] ?? 'No summary available';
+    } catch (Exception $e) {
+        $message = "Error: " . $e->getMessage();
+        $logger->error('Error during summarization', ['error' => $e->getMessage()]);
+    }
+}
 ?>
 
 
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Summarization</title>
-    <link rel="stylesheet" href="path/to/your/styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/user_style.css">
+    <!-- <script src="../assets/js/Note.js"></script> -->
+    <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.css'>
+    <link rel="stylesheet" href="../assets/css/Note.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div id="message"><?= htmlspecialchars($message) ?></div>
-    
-    <div id="summarization-section">
-        <form method="POST" id="summarizeForm">
-            <textarea id="originalText" name="originalText" rows="10" cols="50" placeholder="Enter text to summarize"><?= htmlspecialchars($_POST['originalText'] ?? '') ?></textarea>
-            <button type="submit" name="generate">Summarize</button>
-        </form>
-        <?php if (!empty($summary)): ?>
-        <div id="summaryResult">
-            <h3>Summary</h3>
-            <p id="summaryText"><?= htmlspecialchars($summary) ?></p>
+<body class="Bootstrap-body">
+<div id="container-fluid">
+  <div class="row come-in">
+    <!-- Input Section -->
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 note-content centered">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          Name your file
+          <button class="btn btn-primary Edit">Edit</button>
         </div>
-        <button id="saveBtn" >Save Summary</button>
-        <?php endif; ?>
+        <div class="panel-body">
+          <form method="POST" id="summarizeForm">
+            <textarea id="originalText" name="originalText" rows="5" cols="50" placeholder="Enter text to summarize"><?= htmlspecialchars($_POST['originalText'] ?? '') ?></textarea>
+            <button type="submit" name="generate" class="btn btn-info mt-3">Generate Summary</button>
+          </form>
+        </div>
+      </div>
     </div>
 
-    <script>
-        // AJAX handler for "Save Summary" if needed
-        $('#saveBtn').on('click', function () {
-            var summary = $('#summaryText').text(); // Get the summary
-            var postData = {
-                name: 'Summaryss File',
-                user_id: 47, // Replace with actual user ID
-                folder_id: 75, // Replace with actual folder ID
-                content: JSON.stringify({ S: summary }),
-                created_at: new Date().toISOString(),
-                file_type: 2 // Assuming 2 corresponds to "Summary"
-            };
+    <!-- Summary Section -->
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 summarized-class">
+      <?php if (!empty($summary)): ?>
+        <div class="panel panel-warning">
+          <div class="panel-heading">
+            Summarized Text
+          </div>
+          <div class="panel-body">
+            <p id="summaryText"><?= htmlspecialchars($summary) ?></p>
+          </div>
+          <!-- Save Summary Form -->
+          <form id="saveForm">
+            <button type="submit" id="save" class="btn btn-success" name="save" data-summary="<?= htmlspecialchars($summary) ?>">Save Summary</button>
+          </form>
+          <div id="message"><?= htmlspecialchars($message) ?></div>
+        </div>
+      <?php endif; ?>
+    </div>
+  </div>
+</div>
 
-            $.ajax({
-                url: 'sava_db_Q&A.php',
-                method: 'POST',
-                data: postData,
-                success: function (response) {
-                    $('#message').html(response);
-                },
-                error: function (xhr, status, error) {
-                    $('#message').html('Error saving summary: ' + error);
-                }
-            });
+<script>
+    // Prevent form submission and handle the save button logic
+    $('#saveForm').on('submit', function (event) {
+        event.preventDefault(); // Prevent the form from submitting (page reload)
+
+        // Get the summary from the button's data-summary attribute
+        var summary = $('#save').data('summary');
+        var jsonSummary = JSON.stringify({ Summary: summary });
+
+        // Prepare data for AJAX request
+        var postData = {
+            name: 'Summary File',
+            user_id: 47, // Replace with actual user ID
+            folder_id: 75, // Replace with actual folder ID
+            content: jsonSummary, // Send JSON-formatted summary
+            created_at: new Date().toISOString(),
+            file_type: 2 // Assuming 2 corresponds to "Summary"
+        };
+
+        // AJAX call to save the summary
+        $.ajax({
+            url: 'sava_db_Q&A.php', // Your save endpoint
+            method: 'POST',
+            data: postData,  // Send form data
+            success: function (response) {
+                $('#message').html('Summary saved successfully!').css('color', 'green');
+            },
+            error: function (xhr, status, error) {
+                $('#message').html('Error saving summary: ' + error).css('color', 'red');
+            }
         });
-    </script>
+    });
+</script>
+
 </body>
-</html> -->
+</html>
