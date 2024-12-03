@@ -16,7 +16,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-// Fetch all flashcards where file_type = 3 (assuming that file_type 3 is for flashcards)
+
+// Fetch Q&A pairs from the `files` table
 $sql = "SELECT id, name, content FROM files WHERE file_type = 3";
 $result = $conn->query($sql);
 
@@ -25,24 +26,40 @@ $flashcards = []; // Initialize an empty array to store flashcards
 if ($result->num_rows > 0) {
     // Loop through each flashcard
     while ($card = $result->fetch_assoc()) {
-        // Decode the content JSON to access question and answer
+        // Decode the content JSON to access Q_A field
         $content = json_decode($card['content'], true);
+        
+        if (isset($content['Q_A'])) {
+            // Split the Q_A field into an array of questions and answers
+            $q_a_pairs = explode("\n", $content['Q_A']);
+            
+            // Initialize empty arrays for questions and answers
+            $questions = [];
+            $answers = [];
+            
+            // Loop through each question-answer pair
+            foreach ($q_a_pairs as $pair) {
+                // Check if the pair starts with "Question" or "Answer"
+                if (strpos($pair, 'Question') === 0) {
+                    $questions[] = trim(str_replace("Question", "", $pair)); // Remove the "Question" part
+                } elseif (strpos($pair, 'Answer') === 0) {
+                    $answers[] = trim(str_replace("Answer", "", $pair)); // Remove the "Answer" part
+                }
+            }
 
-        if (isset($content['question']) && isset($content['answer'])) {
-            // Add the card data to the flashcards array with the question and answer
+            // Add the card data to the flashcards array
             $flashcards[] = [
                 'id' => $card['id'],
                 'name' => $card['name'],
-                'question' => $content['question'],
-                'answer' => $content['answer']
+                'questions' => $questions,
+                'answers' => $answers
             ];
         } else {
-            // Fallback if question or answer is missing
+            // Fallback if Q_A is missing
             $flashcards[] = [
-                'id' => $card['id'],
                 'name' => $card['name'],
-                'question' => 'No question available',
-                'answer' => 'No answer available'
+                'questions' => ['No question available'],
+                'answers' => ['No answer available']
             ];
         }
     }
@@ -287,8 +304,8 @@ a:hover, a:focus {
 <body>
 <?php include '../includes/sidebar.php'; ?>
 
-<!-- Display Flashcards -->
-<div class="container bootstrap snippets bootdeys">
+ <!-- Display Flashcards -->
+ <div class="container bootstrap snippets bootdeys">
     <div class="row">
         <?php foreach ($flashcards as $card): ?>
             <div class="col-md-4 col-sm-6 content-card">
@@ -298,9 +315,12 @@ a:hover, a:focus {
                         <div class="card card-just-text" data-background="color" data-color="blue" data-radius="none">
                             <div class="content">
                                 <h6 class="category"><?php echo htmlspecialchars($card['name']); ?></h6>
-                                <h4 class="title"><a href="#">Flashcard #<?php echo $card['id']; ?></a></h4>
+                                
                                 <p class="description">
-                                    <?php echo htmlspecialchars($card['question']); // Display question on the front ?>
+                                    <?php 
+                                    // Display first question on the front of the card
+                                    echo isset($card['questions'][0]) ? htmlspecialchars($card['questions'][0]) : 'No question available'; 
+                                    ?>
                                 </p>
                             </div>
                         </div>
@@ -308,7 +328,10 @@ a:hover, a:focus {
                         <div class="card card-back">
                             <h6 class="category">Answer</h6>
                             <p>
-                                <?php echo htmlspecialchars($card['answer']); // Display answer on the back ?>
+                                <?php 
+                                // Display corresponding answer on the back of the card
+                                echo isset($card['answers'][0]) ? htmlspecialchars($card['answers'][0]) : 'No answer available'; 
+                                ?>
                             </p>
                         </div>
                     </div>
