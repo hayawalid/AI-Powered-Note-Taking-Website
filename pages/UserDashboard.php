@@ -43,6 +43,7 @@ $current_page = 'User dashboard';
 
         .note {
             position: relative;
+            cursor: pointer;
         }
 
         .popover {
@@ -208,6 +209,7 @@ $current_page = 'User dashboard';
                             <?php if ($files): ?>
                                 <?php foreach ($files as $index => $file): ?>
                                     <div class="note <?php echo $colors[$index % 3]; ?>"
+                                        data-note-id="<?php echo $file['id']; ?>"
                                         data-created-at="<?php echo $file['created_at']; ?>">
                                         <span><?php echo date('d/m/Y', strtotime($file['created_at'])); ?></span>
                                         <h3 class="note-name">
@@ -231,33 +233,40 @@ $current_page = 'User dashboard';
                                     <div id="no-results" style="display: none; text-align: center; color: gray;">
                                         No results found.
                                     </div>
-
-
                                 <?php endforeach; ?>
                             <?php else: ?>
+                                <p>No files found.</p>
                             <?php endif; ?>
-                        </div>
 
-                    </section>
-                </section>
-            </main>
-        </div>
-    </div>
-    <?php include '../includes/survey.php' ?>
+                            <script>
+                                document.querySelectorAll('.note').forEach(note => {
+                                    note.addEventListener('click', function () {
+                                        const noteId = this.getAttribute('data-note-id');
+                                        if (noteId) {
+                                            window.location.href = `../pages/Note.php?id=${noteId}`;
+                                        } else {
+                                            console.error("Note ID is null or undefined.");
+                                        }
+                                    });
+                                });
+                            </script>
+
+
+                            <?php include '../includes/survey.php' ?>
 
 
 
-    <script src="../assets/js/sidebar.js"></script>
-    <script src="../assets/js/survey.js"></script>
-    <script src="../assets/js/core/jquery.min.js"></script>
-    <script src="../assets/js/core/popper.min.js"></script>
-    <script src="../assets/js/core/bootstrap.min.js"></script>
-    <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <script src="../assets/js/plugins/chartjs.min.js"></script>
-    <script src="../assets/js/plugins/bootstrap-notify.js"></script>
-    <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+                            <script src="../assets/js/sidebar.js"></script>
+                            <script src="../assets/js/survey.js"></script>
+                            <script src="../assets/js/core/jquery.min.js"></script>
+                            <script src="../assets/js/core/popper.min.js"></script>
+                            <script src="../assets/js/core/bootstrap.min.js"></script>
+                            <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+                            <script src="../assets/js/plugins/chartjs.min.js"></script>
+                            <script src="../assets/js/plugins/bootstrap-notify.js"></script>
+                            <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
 
-    <script src="../assets/js/SearchandFilters.js"></script>
+                            <script src="../assets/js/SearchandFilters.js"></script>
 
 
 

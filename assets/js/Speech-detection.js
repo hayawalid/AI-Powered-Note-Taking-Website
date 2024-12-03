@@ -207,24 +207,24 @@ window.addEventListener("load", () => {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: `content=${encodeURIComponent(content)}&user_id=${user_id}&folder_id=${folder_id}&file_type=${file_type}`  
+            body: `content=${encodeURIComponent(content)}&user_id=${user_id}&folder_id=${folder_id}&file_type=${file_type}`
         })
-        .then(response => {
-            if (response.redirected) {
-                window.location.href = response.url; // Handle redirection
-            } else {
-                return response.text();
-            }
-        })
-        .then(data => {
-            console.log('Server response:', data);
-            if (data.includes("Record updated successfully") || data.includes("Record created successfully")) {
-                console.log('Content saved successfully');
-            } else {
-                console.log('Failed to save content. Response:', data);
-            }
-        })
-        .catch(error => console.error('Error saving content:', error));
-        
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url; // Handle redirection
+                } else {
+                    return response.text();
+                }
+            })
+            .then(data => {
+                console.log('Server response:', data);
+                if (data.includes("Record updated successfully") || data.includes("Record created successfully")) {
+                    console.log('Content saved successfully');
+                } else {
+                    console.log('Failed to save content. Response:', data);
+                }
+            })
+            .catch(error => console.error('Error saving content:', error));
+
     }
 });

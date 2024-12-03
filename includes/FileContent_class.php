@@ -3,6 +3,7 @@ error_reporting(E_ALL); // Enable error reporting
 ini_set('display_errors', 1); // Display errors
 
 include '../includes/config.php';
+//include 'session.php';
 include_once 'file_class.php';
 
 $user_id = isset($_SESSION['UserID']) ? $_SESSION['UserID'] : null;
@@ -21,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = file::create($name, $user_id, $folder_id, $content, $file_type);
 
     if($result){
-        header("Location: ../pages/note.php?id=". $result);
+        header("Location: ../pages/Note.php?id=". $result);
         exit();
     }else{
         echo "Failed to create file";
