@@ -299,7 +299,14 @@ a:hover, a:focus {
     color: #555; /* Subtle color for category text */
     font-size: 14px;
 }
+.content-col {
+    margin-bottom: 30px; /* Adjust this value to your preference */
+}
 
+/* Add margin to the cards themselves if needed */
+.card-big-shadow {
+    margin: 10px; /* Adjust this value to control space between cards */
+}
 
     </style>
 </head>
