@@ -48,18 +48,20 @@ if ($result->num_rows > 0) {
             }
 
             // Add the card data to the flashcards array
-            $flashcards[] = [
-                'id' => $card['id'],
-                'name' => $card['name'],
-                'questions' => $questions,
-                'answers' => $answers
-            ];
+            foreach ($questions as $index => $question) {
+                $flashcards[] = [
+                    'id' => $card['id'],
+                    'name' => $card['name'],
+                    'question' => $question,
+                    'answer' => $answers[$index] ?? 'No answer available'
+                ];
+            }
         } else {
             // Fallback if Q_A is missing
             $flashcards[] = [
                 'name' => $card['name'],
-                'questions' => ['No question available'],
-                'answers' => ['No answer available']
+                'question' => 'No question available',
+                'answer' => 'No answer available'
             ];
         }
     }
@@ -304,43 +306,31 @@ a:hover, a:focus {
 <body>
 <?php include '../includes/sidebar.php'; ?>
 
- <!-- Display Flashcards -->
- <div class="container bootstrap snippets bootdeys">
+<!-- Display Flashcards -->
+<div class="container bootstrap snippets bootdeys">
     <div class="row">
         <?php 
-        // Loop through each flashcard
+        // Loop through each flashcard (now each flashcard is a single question)
         foreach ($flashcards as $card):
-            // Check how many questions are in the current flashcard
-            $num_flashcards = count($card['questions']);
         ?>
             <div class="col-md-4 col-sm-6 content-col">
                 <div class="card-big-shadow">
                     <div class="card-flip">
-                        <!-- Front of the Card (Card Name) -->
+                        <!-- Front of the Card (Question) -->
                         <div class="card card-just-text" data-background="color" data-color="blue" data-radius="none">
                             <div class="content">
                                 <h6 class="category"><?php echo htmlspecialchars($card['name']); ?></h6>
-                                <?php 
-                                // Display all questions in the current flashcard
-                                foreach ($card['questions'] as $index => $question): 
-                                ?>
-                                    <p class="description">
-                                        <strong>Question </strong><?php echo htmlspecialchars($question); ?>
-                                    </p>
-                                <?php endforeach; ?>
+                                <p class="description">
+                                    <strong>Question: </strong><?php echo htmlspecialchars($card['question']); ?>
+                                </p>
                             </div>
                         </div>
-                        <!-- Back of the Card (Answers) -->
+                        <!-- Back of the Card (Answer) -->
                         <div class="card card-back">
-                            <h6 class="category">Answers</h6>
-                            <?php 
-                            // Display all answers corresponding to the questions
-                            foreach ($card['answers'] as $index => $answer): 
-                            ?>
-                                <p>
-                                    <strong>Answer </strong><?php echo htmlspecialchars($answer); ?>
-                                </p>
-                            <?php endforeach; ?>
+                            <h6 class="category">Answer</h6>
+                            <p>
+                                <strong>Answer: </strong><?php echo htmlspecialchars($card['answer']); ?>
+                            </p>
                         </div>
                     </div>
                 </div>
