@@ -313,17 +313,17 @@ a:hover, a:focus {
 <body>
 <?php include '../includes/sidebar.php'; ?>
 
-<!-- Display Flashcards -->
+
 <div class="container bootstrap snippets bootdeys">
     <div class="row">
         <?php 
-        // Loop through each flashcard (now each flashcard is a single question)
+        
         foreach ($flashcards as $card):
         ?>
             <div class="col-md-4 col-sm-6 content-col">
                 <div class="card-big-shadow">
                     <div class="card-flip">
-                        <!-- Front of the Card (Question) -->
+                        <!-- Front -->
                         <div class="card card-just-text" data-background="color" data-color="blue" data-radius="none">
                             <div class="content">
                                 <h6 class="category"><?php echo htmlspecialchars($card['name']); ?></h6>
@@ -332,7 +332,7 @@ a:hover, a:focus {
                                 </p>
                             </div>
                         </div>
-                        <!-- Back of the Card (Answer) -->
+                        <!-- Back -->
                         <div class="card card-back">
                             <h6 class="category">Answer</h6>
                             <p>

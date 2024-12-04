@@ -92,6 +92,50 @@ if (isset($_POST['edit']) && isset($file_id)) {
   
   exit(); // Ensure no further processing occurs
 }
+
+
+//mcq and flashcards
+
+
+$mcq = "";
+$qa = "";
+
+// Handle the form submission for generating multiple-choice questions
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_mcq'])) {
+    $mcq_prompt = "Generate many multiple-choice questions and their answer based on the following text: " . $text;
+
+    try {
+        $response = $client->request('POST', 'http://localhost:3000/summarize', [
+            'json' => [
+                'prompt' => $mcq_prompt
+            ]
+        ]);
+        $data = json_decode($response->getBody(), true);
+        $mcq = $data['summary'] ?? 'No multiple-choice questions available';
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        $logger->error('Error in generating MCQs', ['message' => $e->getMessage()]);
+    }
+}
+
+// Handle the form submission for generating questions and answers
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_qa'])) {
+    $qa_prompt = "Generate questions and answers from the following text: " . $text . "\nPlease format the output as follows: \nQuestion 1: <question text>\nAnswer 1: <answer text>\nQuestion 2: <question text>\nAnswer 2: <answer text>";
+
+    try {
+        $response = $client->request('POST', 'http://localhost:3000/summarize', [
+            'json' => [
+                'prompt' => $qa_prompt
+            ]
+        ]);
+        $data = json_decode($response->getBody(), true);
+        $qa = $data['summary'] ?? 'No questions and answers available';
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        $logger->error('Error in generating Q&A', ['message' => $e->getMessage()]);
+    }
+}
+
 ?>
 
 
@@ -162,6 +206,28 @@ if (isset($_POST['edit']) && isset($file_id)) {
 
         <div id="message"></div>
 
+
+        <!-- Form for Generating MCQs -->
+    <form method="POST" id="generateMCQForm">
+        <button type="submit" name="generate_mcq">Generate MCQs</button>
+    </form>
+
+    <!-- Display MCQs -->
+    <?php if (!empty($mcq)): ?>
+        <p><strong>Multiple-Choice Questions:</strong></p>
+        <pre><?= htmlspecialchars($mcq) ?></pre>
+    <?php endif; ?>
+
+    <!-- Form for Generating Q&A -->
+    <form method="POST" id="generateQAForm">
+        <button type="submit" name="generate_qa">Generate Q&A</button>
+    </form>
+
+    <!-- Display Q&A -->
+    <?php if (!empty($qa)): ?>
+        <p><strong>Questions and Answers:</strong></p>
+        <pre><?= htmlspecialchars($qa) ?></pre>
+    <?php endif; ?>
       </div>
     </div>
   </div>
