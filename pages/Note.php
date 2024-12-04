@@ -21,11 +21,81 @@ if ($file_id !== null) {
 } else {
   $content = "Invalid file ID.";
 }
+$folder_sql = "SELECT folder_id FROM files WHERE id = $file_id";
+$folder_result = $conn->query($folder_sql);
+
+if ($folder_result->num_rows > 0) {
+  $folder_row = $folder_result->fetch_assoc();
+  $folder_id = $folder_row['folder_id'];
+
+  echo "Folder ID: " . $folder_id;
+} else {
+  echo "No folder found for the provided file ID.";
+}
+
+
+
+
 
 // Disable strict mode temporarily
 $conn->query("SET sql_mode = ''");
 
+
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// <?php
+
+use GuzzleHttp\Client;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+// Initialize Logger
+$logger = new Logger('gemini_logger');
+$logger->pushHandler(new StreamHandler(__DIR__ . '/logs/app.log', Logger::DEBUG));
+
+// Initialize the HTTP client
+$client = new Client();
+
+// Text to summarize
+$text = $content;
+
+// Initialize summary variable
+$summary = "";
+
+// Handle the form submission for generating the summary
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
+  // Construct the prompt for summarization
+  $prompt = "summarize the following text: " . $text;
+
+  try {
+    // Make the API request to the Node.js service
+    $response = $client->request('POST', 'http://localhost:3000/summarize', [
+      'json' => [
+        'prompt' => $prompt
+      ]
+    ]);
+    $data = json_decode($response->getBody(), true);
+    //echo json_encode($data); 
+    // Output the summary
+    $summary = $data['summary'] ?? 'No summary available';
+  } catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+    $logger->error('Error in summarization', ['message' => $e->getMessage()]);
+  }
+}
+if (isset($_POST['edit']) && isset($file_id)) {
+  // Redirect to the speech.php page with the file_id parameter
+  header("Location: ../pages/speech.php?id=". $file_id);
+  
+  exit(); // Ensure no further processing occurs
+}
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,40 +135,33 @@ $conn->query("SET sql_mode = ''");
       <?php include '../includes/sidebar.php'; ?>
       <div class="row come-in">
 
+        <h1>Text Summarization Result</h1>
 
+        <p><strong>Original Text:</strong> <?= htmlspecialchars($text) ?></p>
 
-        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 note-content centered">
-          <div class="panel panel-info">
-            <div class="panel-heading">Name your file
-              <button class="btn btn-primary Edit">Edit</button>
-              <button class="btn btn-primary summarize">Summerize ✨</button>
-            </div>
+        <!-- Form with Generate button -->
+        <form method="POST" id="generateForm">
+          <button type="submit" name="generate">Generate Summary</button>
+        </form>
 
-            <div class="panel-body">
-              <p> <?php include '../includes/FileContent_class.php';
-              echo $content; ?></p>
-            </div>
+        <?php if (!empty($summary)): ?>
+          <p><strong>Summary:</strong> <?= htmlspecialchars($summary) ?></p>
 
-          </div>
+          <!-- Save button with an AJAX submit -->
+          <form method="POST" id="saveForm">
+            <button type="submit" name="save" id="save" data-summary="<?= htmlspecialchars($summary) ?>">Save
+              Summary</button>
+          </form>
+        <?php endif; ?>
 
-        </div>
+        <form method="POST" id="editForm">
+          <button type="submit" name="edit">Edit</button>
+        </form>
 
-        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 summaried-class">
-          <div class="panel panel-warning">
-            <div class="panel-heading">Summarized Text
-              <button class="btn btn-primary save">Save</button>
-            </div>
-            <div class="panel-body">
-              <p>"Don't speak of it, I beg of you," replied the Woodman.
-                "I have no heart, you know, so I am careful to help all those who may need a friend,
-                even if it happens to be only a mouse."</p>
+        
 
+        <div id="message"></div>
 
-            </div>
-          </div>
-
-
-        </div>
       </div>
     </div>
   </div>
@@ -119,5 +182,45 @@ $conn->query("SET sql_mode = ''");
   <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
 
 </body>
+<script>
+
+  var sessionUserID = <?php echo json_encode($_SESSION['UserID']); ?>;
+ var ID = sessionUserID;
+  var folderId = <?php echo json_encode($folder_id); ?>;
+  // Prevent form submission and handle the save button logic
+  $('#saveForm').on('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            // Get the summary from the button data
+            var summary = $('#save').data('summary');
+            var jsonSummary = JSON.stringify({S: summary});
+
+            // Prepare the data for AJAX
+            var postData = {
+                name: 'Habibaazzz Summary',
+                user_id: ID,  // Example: replace with actual user ID
+                folder_id: folderId,  // Example: replace with actual folder ID
+                content: jsonSummary,
+                created_at: new Date().toISOString(),
+                file_type: 2  // Assuming 2 corresponds to "Summary"
+            };
+
+            // Send an AJAX request to save_file.php
+            $.ajax({
+                url: 'sava_db_Q&A.php',
+                method: 'POST',
+                data: postData,  // Send form data
+                success: function(response) {
+                    // Display the message from PHP
+                    $('#message').html(response);
+                    //console.log('API Response:', response);
+                },
+                error: function(xhr, status, error) {
+                    $('#message').html('Error: ' + error);
+                }
+            });
+        });
+</script>
+
 
 </html>
