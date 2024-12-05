@@ -3,6 +3,13 @@
 include '../includes/config.php';
 include_once '../includes/session.php';
 
+
+if (isset($_GET['id'])) {
+    $_SESSION['file_id'] = intval($_GET['id']);
+} else {
+    // Handle the case where no file_id is passed
+    $_SESSION['file_id'] = null; // or set a default value
+}
 //set current page to update sidebar status
 $current_page = 'My Note';
 $file_id = isset($_GET['id']) ? intval($_GET['id']) : null;
@@ -136,6 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_qa'])) {
     }
 }
 
+
+
 ?>
 
 
@@ -219,8 +228,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_qa'])) {
     <?php endif; ?>
 
     <!-- Form for Generating Q&A -->
-    <form method="POST" id="generateQAForm">
-        <button type="submit" name="generate_qa">Generate Q&A</button>
+    <form action="NEWflashcards.php" method="POST" id="generateQnA">
+    <!-- Hidden fields to pass session data -->
+    <input type="hidden" name="file_id" value="<?= isset($_SESSION['file_id']) ? $_SESSION['file_id'] : '' ?>">
+    
+    <!-- Pass the generated Q&A to the next page -->
+    <input type="hidden" name="qa" value="<?= htmlspecialchars($qa) ?>">
+    
+    <button type="submit" name="generate_mcq">Generate QnA</button>
     </form>
 
     <!-- Display Q&A -->
