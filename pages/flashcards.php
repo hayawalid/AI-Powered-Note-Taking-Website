@@ -26,48 +26,41 @@ $flashcards = []; // Initialize an empty array to store flashcards
 if ($result->num_rows > 0) {
     // Loop through each flashcard
     while ($card = $result->fetch_assoc()) {
-        // Decode the content JSON to access Q_A field
+        // Check if content is JSON or plain text
         $content = json_decode($card['content'], true);
-        
-        if (isset($content['Q_A'])) {
-            // Split the Q_A field into an array of questions and answers
-            $q_a_pairs = explode("\n", $content['Q_A']);
-            
-            // Initialize empty arrays for questions and answers
-            $questions = [];
-            $answers = [];
-            
-            // Loop through each question-answer pair
-            foreach ($q_a_pairs as $pair) {
-                // Check if the pair starts with "Question" or "Answer"
-                if (strpos($pair, 'Question') === 0) {
-                    $questions[] = trim(str_replace("Question", "", $pair)); // Remove the "Question" part
-                } elseif (strpos($pair, 'Answer') === 0) {
-                    $answers[] = trim(str_replace("Answer", "", $pair)); // Remove the "Answer" part
-                }
-            }
 
-            // Add the card data to the flashcards array
-            foreach ($questions as $index => $question) {
+        if (is_null($content)) {
+            // Handle plain text content
+            $q_a_pairs = explode("\n", $card['content']); // Split content into lines
+        } else {
+            // Handle JSON content with q_a key
+            $q_a_pairs = isset($content['q_a']) ? explode("\n", $content['q_a']) : [];
+        }
+
+        $current_question = null;
+
+        foreach ($q_a_pairs as $line) {
+            $line = trim($line); // Remove leading/trailing whitespace
+            if (stripos($line, 'Question') === 0) {
+                // If line starts with "Question", save it as the current question
+                $current_question = trim(preg_replace('/^Question\s\d*:/i', '', $line)); // Remove "Question X:"
+            } elseif (stripos($line, 'Answer') === 0 && $current_question !== null) {
+                // If line starts with "Answer", pair it with the current question
+                $answer = trim(preg_replace('/^Answer\s\d*:/i', '', $line)); // Remove "Answer X:"
                 $flashcards[] = [
                     'id' => $card['id'],
                     'name' => $card['name'],
-                    'question' => $question,
-                    'answer' => $answers[$index] ?? 'No answer available'
+                    'question' => $current_question,
+                    'answer' => $answer,
                 ];
+                $current_question = null; // Reset for the next pair
             }
-        } else {
-            // Fallback if Q_A is missing
-            $flashcards[] = [
-                'name' => $card['name'],
-                'question' => 'No question available',
-                'answer' => 'No answer available'
-            ];
         }
     }
 } else {
     echo "No flashcards found.";
 }
+
 
 $conn->close();
 ?>
