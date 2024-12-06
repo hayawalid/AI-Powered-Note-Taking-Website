@@ -14,10 +14,7 @@ if (isset($_SESSION['file_id']) && $_SESSION['file_id'] !== null) {
     exit; // Exit if file ID is missing
 }
 
-// Check if folder_id is set in session
 
-
-// Initialize the $qa variable and check for POST data
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['qa'])) {
     $qa = $_POST['qa'];
@@ -35,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['qa'])) {
             $flashcards[] = [
                 'question' => $question,
                 'answer' => $answer,
-                'name' => 'Flashcard ' . ($i + 1)
+                'name' => 'Flashcard ' . ($i+1)
             ];
             $i++; // Skip the next line as it's the answer
         }
@@ -160,127 +157,84 @@ a:hover, a:focus {
     color: #506568;
 }
 
-.card[data-color="green"] {
-    background: #d5e5a3;
-}
-.card[data-color="green"] .description {
-    color: #60773d;
-}
-.card[data-color="green"] .category {
-    color: #92ac56;
-}
 
-.card[data-color="yellow"] {
-    background: #ffe28c;
-}
-.card[data-color="yellow"] .description {
-    color: #b25825;
-}
-.card[data-color="yellow"] .category {
-    color: #d88715;
-}
-
-.card[data-color="brown"] {
-    background: #d6c1ab;
-}
-.card[data-color="brown"] .description {
-    color: #75442e;
-}
-.card[data-color="brown"] .category {
-    color: #a47e65;
-}
-
-.card[data-color="purple"] {
-    background: #baa9ba;
-}
-.card[data-color="purple"] .description {
-    color: #3a283d;
-}
-.card[data-color="purple"] .category {
-    color: #5a283d;
-}
-
-.card[data-color="orange"] {
-    background: #ff8f5e;
-}
-.card[data-color="orange"] .description {
-    color: #772510;
-}
-.card[data-color="orange"] .category {
-    color: #e95e37;
-}
 /* hena */
 
 
 
-
 .card-big-shadow {
+    max-width: 400px; /* Increase the card width */
+    margin: 15px auto; /* Center the cards horizontally */
     position: relative;
-    perspective: 1000px; /* Enables 3D flipping */
+    perspective: 1000px; /* Enables 3D flip effect */
 }
 
 .card-flip {
-    transform-style: preserve-3d; /* Maintains 3D effect for children */
-    transition: transform 0.6s ease-in-out; /* Smooth flipping animation */
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
     position: relative;
+    width: 100%;
+  
 }
 
 .card-flip.is-flipped {
-    transform: rotateY(180deg); /* Flipping effect */
+    transform: rotateY(180deg);
 }
-
-.card-front,
-.card-back {
-    backface-visibility: hidden; /* Hides the back face when not visible */
+.card-front, .card-back {
+    backface-visibility: hidden;
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px; /* Reduce padding inside cards */
 }
 
 .card-front {
-    /* Ensure the front card is shown initially */
-    display: flex; /* Enable flexbox for alignment */
-    flex-direction: column;
+    background-color: #b8d8d8; /* Light blue */
+    display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 20px;
-    box-sizing: border-box;
+    color: #506568;
 }
 
 .card-back {
-    /* Make sure the back card is hidden initially */
-    transform: rotateY(180deg); /* Rotate back card to hide it */
-    display: flex; /* Enable flexbox for alignment */
-    flex-direction: column; /* Stack elements vertically */
-    justify-content: center; /* Center content vertically */
-    align-items: center; /* Center content horizontally */
-    text-align: center; /* Center text alignment */
-    padding: 20px; /* Add spacing inside the back card */
-    height: 100%; /* Ensure it takes up full height of the card */
-    box-sizing: border-box; /* Include padding in height/width calculations */
-    background-color: #f4f4f4; /* Light background color for better readability */
-    color: #333; /* Dark text color for readability */
+    background-color: #f4f4f4; /* Light gray */
+    transform: rotateY(180deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #333;
 }
 
-.card-back .title, .card-back .description {
-    color: #333; /* Ensure text is readable */
-    font-size: 16px;
-}
-
-.card-back .category {
-    color: #555; /* Subtle color for category text */
+h6.category {
     font-size: 14px;
-}
-.content-col {
-    margin-bottom: 30px; /* Adjust this value to your preference */
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    color: #7a9e9f;
 }
 
-/* Add margin to the cards themselves if needed */
-.card-big-shadow {
-    margin: 10px; /* Adjust this value to control space between cards */
+p.description, .card-back p {
+    font-size: 16px;
+    margin: 0;
+    color: inherit;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center rows */
+    gap: 15px; /* Space between cards */
+}
+
+@media (max-width: 768px) {
+    .card-big-shadow {
+        max-width: 100%; /* Make cards responsive */
+    }
 }
 
     </style>
@@ -289,43 +243,37 @@ a:hover, a:focus {
 <?php include '../includes/sidebar.php'; ?>
 
 
-  <!-- Display flashcards -->
-  <div class="container">
-        <h1>Generated Flashcards</h1>
-
+<div class="container bootstrap snippets bootdeys">
+    <div class="row">
+        <?php 
         
-        <?php if (!empty($flashcards)): ?>
-        <div class="row">
-            <?php foreach ($flashcards as $card): ?>
-                <div class="col-md-4 col-sm-6 content-col">
-                    <div class="card-big-shadow">
-                        <div class="card-flip">
-                            <!-- Front -->
-                            <div class="card card-just-text" data-background="color" data-color="blue" data-radius="none">
-                                <div class="content">
-                                    <h6 class="category"><?= htmlspecialchars($card['name']) ?></h6>
-                                    <p class="description">
-                                        <strong>Question:</strong> <?= htmlspecialchars($card['question']) ?>
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- Back -->
-                            <div class="card card-back">
-                                <h6 class="category">Answer</h6>
-                                <p>
-                                    <strong>Answer:</strong> <?= htmlspecialchars($card['answer']) ?>
+        foreach ($flashcards as $card):
+        ?>
+            <div class="col-md-4 col-sm-6 content-col">
+                <div class="card-big-shadow">
+                    <div class="card-flip">
+                        <!-- Front -->
+                        <div class="card card-just-text" data-background="color" data-color="blue" data-radius="none">
+                            <div class="content">
+                                <h6 class="category"><?php echo htmlspecialchars($card['name']); ?></h6>
+                                <p class="description">
+                                    <strong>Question: </strong><?php echo htmlspecialchars($card['question']); ?>
                                 </p>
                             </div>
                         </div>
+                        <!-- Back -->
+                        <div class="card card-back">
+                            <h6 class="category">Answer</h6>
+                            <p>
+                                <strong>Answer: </strong><?php echo htmlspecialchars($card['answer']); ?>
+                            </p>
+                        </div>
                     </div>
                 </div>
-            <?php endforeach; ?>
-        </div>
-    <?php else: ?>
-        <p>No flashcards available. Ensure that Q&A data is properly passed and formatted.</p>
-    <?php endif; ?>
-        </div>
-
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript">
