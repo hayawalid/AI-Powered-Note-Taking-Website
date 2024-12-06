@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['qa'])) {
     echo "No Q&A data received.";
     exit;}
 
-    var_dump($qa);
+   
 ?>
 
 <!DOCTYPE html>
@@ -289,8 +289,8 @@ a:hover, a:focus {
 <?php include '../includes/sidebar.php'; ?>
 
 
- <!-- Display flashcards -->
- <div class="container">
+  <!-- Display flashcards -->
+  <div class="container">
         <h1>Generated Flashcards</h1>
 
         
@@ -326,14 +326,6 @@ a:hover, a:focus {
     <?php endif; ?>
         </div>
 
-        <!-- Back Button -->
-        <form action="Note.php" method="POST">
-    <!-- Hidden field to pass file_id -->
-    <input type="hidden" name="file_id" value="<?php echo $file_id; ?>" />
-    <button type="submit" class="btn btn-primary">Back to Note</button>
-</form>
-
-    </div>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript">

@@ -231,18 +231,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_qa'])) {
     <form action="NEWflashcards.php" method="POST" id="generateQnA">
     <!-- Hidden fields to pass session data -->
     <input type="hidden" name="file_id" value="<?= isset($_SESSION['file_id']) ? $_SESSION['file_id'] : '' ?>">
-    
     <!-- Pass the generated Q&A to the next page -->
     <input type="hidden" name="qa" value="<?= htmlspecialchars($qa) ?>">
     
-    <button type="submit" name="generate_mcq">Generate QnA</button>
+    <button type="submit" name="generate_qa">Generate QnA</button>
     </form>
 
     <!-- Display Q&A -->
-    <?php if (!empty($qa)): ?>
+    <!-- <?php if (!empty($qa)): ?>
         <p><strong>Questions and Answers:</strong></p>
         <pre><?= htmlspecialchars($qa) ?></pre>
-    <?php endif; ?>
+    <?php endif; ?> -->
       </div>
     </div>
   </div>
