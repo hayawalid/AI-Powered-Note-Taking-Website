@@ -273,7 +273,13 @@ p.description, .card-back p {
             </div>
         <?php endforeach; ?>
     </div>
+    <form id="saveFormQnA">
+    
+    <button type="submit" name="save" id="saveQnAButton" data-summary="<?= htmlspecialchars($qa) ?>">Save Q_A</button>
+    </form>
+    <button type="button" id="regenerateQnAButton">Regenerate Q&A</button>
 </div>
+
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript">
@@ -290,6 +296,90 @@ p.description, .card-back p {
         });
     });
 });
+$(document).ready(function () {
+    // Handle Q&A save
+    $('#saveFormQnA').on('submit', function (event) {
+        event.preventDefault(); // Prevent form from normal submission
+
+        // Retrieve Q&A data from the button's data-summary attribute
+        var q_a = $('#saveQnAButton').data('summary');
+
+        console.log('Q&A Data:', q_a); // Log Q&A data for debugging
+
+        // Check if q_a is defined
+        if (!q_a) {
+            console.error("Q&A data is missing.");
+            return;
+        }
+
+        // Send the raw Q&A data in the AJAX request (as-is)
+        $.ajax({
+            url: 'sava_db_Q&A.php',  // The PHP file that processes the request
+            method: 'POST',
+            data: {
+                name: 'Generated Q&A',
+                user_id: <?php echo json_encode($_SESSION['UserID']); ?>, // User ID from session
+                folder_id: 1, // Static folder ID or dynamic (you can change it as needed)
+                content: q_a, // Pass the raw Q&A data here
+                created_at: new Date().toISOString(), // Current timestamp
+                file_type: 3 // File type ID (you can change it as needed)
+            },
+            success: function (response) {
+                console.log('Server Response:', response); // Log the server response for debugging
+                $('#messageQnA').html(response); // Display the server response in the message div
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX Error:', error); // Log AJAX errors in the console
+                $('#messageQnA').html('Error: ' + error); // Display the error message in the message div
+            }
+        });
+    });
+
+    //ashan el regenerate 
+    $('#regenerateQnAButton').on('click', function () {
+        // Optionally, you could trigger a function to regenerate the Q&A content
+        $.ajax({
+            url: 'regenerate_qna.php',  // PHP file that regenerates the Q&A
+            method: 'POST',
+            data: {
+                // You can send additional data if needed
+                user_id: <?php echo json_encode($_SESSION['UserID']); ?>  // Pass User ID
+            },
+            success: function (response) {
+                // Handle the server response (new Q&A data)
+                console.log('Regenerated Q&A:', response); // Log the new Q&A for debugging
+                // Optionally update the Q&A data and refresh the page to reflect changes
+                $('#messageQnA').html(response); // Update the page with the new Q&A
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX Error:', error); // Log AJAX errors in the console
+                $('#messageQnA').html('Error: ' + error); // Display error message
+            }
+        });
+    });
+
+    $.ajax({
+    url: '/pages/regenerate_qna.php',  // Make sure the path is correct
+    method: 'POST',
+    success: function(response) {
+        var data = JSON.parse(response);
+
+        if (data.status === 'success') {
+            console.log("Q&A regenerated:", data.qa);
+            // Update your page with the new Q&A
+            $('#qaContent').html(data.qa);  // For example, update a div with id 'qaContent'
+        } else {
+            console.error("Error regenerating Q&A:", data.message);
+        }
+    },
+    error: function(xhr, status, error) {
+        console.error("AJAX Error:", error);
+    }
+});
+});
+
+
+
 
 </script>
 <script src="../assets/js/sidebar.js"></script>
