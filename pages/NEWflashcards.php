@@ -4,6 +4,46 @@ include_once '../includes/session.php';
 $current_page = 'Generated Flash Cards';
 require '../includes/config.php';
 require_once __DIR__ . '/../vendor/autoload.php';
+use GuzzleHttp\Client;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['regenerate_qa'])) {
+    $text = $_SESSION['text'] ?? "No text available."; // Get text from session
+
+    // Construct prompt for Q&A generation
+    $qa_prompt = "Generate questions and answers from the following text: " . $text . "\nPlease format the output as follows: \nQuestion 1: <question text>\nAnswer 1: <answer text>\nQuestion 2: <question text>\nAnswer 2: <answer text>";
+
+    $client = new Client();
+    $logger = new Logger('gemini_logger');
+    $logger->pushHandler(new StreamHandler(__DIR__ . '/logs/app.log', Logger::DEBUG));
+
+    try {
+        // API request to generate Q&A
+        $response = $client->request('POST', 'http://localhost:3000/summarize', [
+            'json' => [
+                'prompt' => $qa_prompt
+            ]
+        ]);
+        $data = json_decode($response->getBody(), true);
+
+        // Extract Q&A from the response
+        $qa = $data['summary'] ?? 'No questions and answers available';
+
+        if ($qa === 'No questions and answers available') {
+            echo "Error: Generated Q&A is empty.";
+        }
+
+        // Store the generated Q&A in the session
+        $_SESSION['qa'] = $qa;
+    } catch (Exception $e) {
+        // Handle errors
+        echo "Error during Q&A regeneration: " . $e->getMessage();
+        $logger->error('Error in regenerating Q&A', ['message' => $e->getMessage()]);
+    }
+}
 
 // Check if file_id is set in session
 if (isset($_SESSION['file_id']) && $_SESSION['file_id'] !== null) {
@@ -41,7 +81,7 @@ for ($i = 0; $i < count($qa_lines); $i++) {
     }
 }
 
-  
+
 ?>
 
 <!DOCTYPE html>
@@ -277,7 +317,9 @@ p.description, .card-back p {
     
     <button type="submit" name="save" id="saveQnAButton" data-summary="<?= htmlspecialchars($qa) ?>">Save Q_A</button>
     </form>
-    <button type="button" id="regenerateQnAButton">Regenerate Q&A</button>
+    <form method="POST" >
+    <button type="submit" name="regenerate_qa">Regenerate QnA</button>
+</form>
 </div>
 
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -335,47 +377,7 @@ $(document).ready(function () {
         });
     });
 
-    //ashan el regenerate 
-    $('#regenerateQnAButton').on('click', function () {
-        // Optionally, you could trigger a function to regenerate the Q&A content
-        $.ajax({
-            url: 'regenerate_qna.php',  // PHP file that regenerates the Q&A
-            method: 'POST',
-            data: {
-                // You can send additional data if needed
-                user_id: <?php echo json_encode($_SESSION['UserID']); ?>  // Pass User ID
-            },
-            success: function (response) {
-                // Handle the server response (new Q&A data)
-                console.log('Regenerated Q&A:', response); // Log the new Q&A for debugging
-                // Optionally update the Q&A data and refresh the page to reflect changes
-                $('#messageQnA').html(response); // Update the page with the new Q&A
-            },
-            error: function (xhr, status, error) {
-                console.error('AJAX Error:', error); // Log AJAX errors in the console
-                $('#messageQnA').html('Error: ' + error); // Display error message
-            }
-        });
-    });
-
-    $.ajax({
-    url: '/pages/regenerate_qna.php',  // Make sure the path is correct
-    method: 'POST',
-    success: function(response) {
-        var data = JSON.parse(response);
-
-        if (data.status === 'success') {
-            console.log("Q&A regenerated:", data.qa);
-            // Update your page with the new Q&A
-            $('#qaContent').html(data.qa);  // For example, update a div with id 'qaContent'
-        } else {
-            console.error("Error regenerating Q&A:", data.message);
-        }
-    },
-    error: function(xhr, status, error) {
-        console.error("AJAX Error:", error);
-    }
-});
+  
 });
 
 

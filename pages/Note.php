@@ -67,7 +67,7 @@ $client = new Client();
 
 // Text to summarize
 $text = $content;
-
+$_SESSION['text'] = $text;
 // Initialize summary variable
 $summary = "";
 
@@ -234,6 +234,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_qa'])) {
     <form action="" method="POST" id="generateQnA">
     <input type="hidden" name="file_id" value="<?= isset($_SESSION['file_id']) ? $_SESSION['file_id'] : '' ?>">
     <input type="hidden" name="qa" value="<?= htmlspecialchars($qa) ?>">
+    <input type="hidden" name="qa" value="<?= htmlspecialchars($text) ?>">
+
 
     <button type="submit" name="generate_qa">Generate QnA2</button>
 </form>
