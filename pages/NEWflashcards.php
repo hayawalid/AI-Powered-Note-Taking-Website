@@ -15,33 +15,33 @@ if (isset($_SESSION['file_id']) && $_SESSION['file_id'] !== null) {
 }
 
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['qa'])) {
-    $qa = $_POST['qa'];
-    
-    // Process the Q&A and generate flashcards
-    // For example, split the Q&A text into questions and answers
-    $qa_lines = explode("\n", $qa);
-    $flashcards = [];
-
-    for ($i = 0; $i < count($qa_lines); $i++) {
-        if (strpos($qa_lines[$i], 'Question') === 0) {
-            $question = trim(str_replace("Question " . ($i + 1) . ":", "", $qa_lines[$i]));
-            $answer = isset($qa_lines[$i + 1]) ? trim(str_replace("Answer " . ($i + 1) . ":", "", $qa_lines[$i + 1])) : "No answer available";
-            
-            $flashcards[] = [
-                'question' => $question,
-                'answer' => $answer,
-                'name' => 'Flashcard ' . ($i+1)
-            ];
-            $i++; // Skip the next line as it's the answer
-        }
-    }
+if (isset($_SESSION['qa'])) {
+    $qa = $_SESSION['qa'];
+    unset($_SESSION['qa']); // Optionally, clear the session to avoid showing old data
 } else {
-    echo "No Q&A data received.";
-    exit;}
+    echo "No Q&A data found.";
+    exit;
+}
 
-   
+// Parse the Q&A into flashcards
+$qa_lines = explode("\n", $qa);
+$flashcards = [];
+
+for ($i = 0; $i < count($qa_lines); $i++) {
+    if (strpos($qa_lines[$i], 'Question') === 0) {
+        $question = trim(str_replace("Question " . ($i + 1) . ":", "", $qa_lines[$i]));
+        $answer = isset($qa_lines[$i + 1]) ? trim(str_replace("Answer " . ($i + 1) . ":", "", $qa_lines[$i + 1])) : "No answer available";
+        
+        $flashcards[] = [
+            'question' => $question,
+            'answer' => $answer,
+            'name' => 'Flashcard ' . ($i+1)
+        ];
+        $i++; // Skip the next line as it's the answer
+    }
+}
+
+  
 ?>
 
 <!DOCTYPE html>

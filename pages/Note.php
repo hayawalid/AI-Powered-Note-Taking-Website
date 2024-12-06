@@ -3,7 +3,6 @@
 include '../includes/config.php';
 include_once '../includes/session.php';
 
-
 if (isset($_GET['id'])) {
     $_SESSION['file_id'] = intval($_GET['id']);
 } else {
@@ -137,6 +136,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_qa'])) {
         ]);
         $data = json_decode($response->getBody(), true);
         $qa = $data['summary'] ?? 'No questions and answers available';
+        $_SESSION['qa'] = $qa;
+        var_dump($_SESSION['qa']); // Debug to check the data being stored
+        header('Location: NEWflashcards.php');
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
         $logger->error('Error in generating Q&A', ['message' => $e->getMessage()]);
@@ -228,20 +230,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_qa'])) {
     <?php endif; ?>
 
     <!-- Form for Generating Q&A -->
-    <form action="NEWflashcards.php" method="POST" id="generateQnA">
-    <!-- Hidden fields to pass session data -->
-    <input type="hidden" name="file_id" value="<?= isset($_SESSION['file_id']) ? $_SESSION['file_id'] : '' ?>">
-    <!-- Pass the generated Q&A to the next page -->
-    <input type="hidden" name="qa" value="<?= htmlspecialchars($qa) ?>">
     
-    <button type="submit" name="generate_qa">Generate QnA</button>
-    </form>
+    <form action="" method="POST" id="generateQnA">
+    <input type="hidden" name="file_id" value="<?= isset($_SESSION['file_id']) ? $_SESSION['file_id'] : '' ?>">
+    <input type="hidden" name="qa" value="<?= htmlspecialchars($qa) ?>">
+
+    <button type="submit" name="generate_qa">Generate QnA2</button>
+</form>
 
     <!-- Display Q&A -->
-    <!-- <?php if (!empty($qa)): ?>
+    <?php if (!empty($qa)):     var_dump($qa);
+?>
+      
         <p><strong>Questions and Answers:</strong></p>
         <pre><?= htmlspecialchars($qa) ?></pre>
-    <?php endif; ?> -->
+
+    <?php endif; ?>
       </div>
     </div>
   </div>
