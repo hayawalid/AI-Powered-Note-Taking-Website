@@ -36,6 +36,13 @@ if (isset($_POST["submit"])) {
       // Call the create method for the file
       $new_file_id = file::create($name, $user_id, $parent_folder_id, $content, $file_type);
 
+      if ($new_file_id) {
+        // Redirect to another page with the new file ID in the URL
+        header("Location:../pages/speech.php?id=$new_file_id");
+        exit();
+      } else {
+        echo "ERROR!";
+      }
     } else {
       echo "<script>alert('Invalid selection! Please choose either a \"Folder\" or a \"File\".');</script>";
     }

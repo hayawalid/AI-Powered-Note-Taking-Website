@@ -13,7 +13,7 @@ include_once '../includes/session.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../assets/css/user_style.css">
-    <script src="../assets/js/Speech-detection.js" defer></script>
+    <!-- <script src="../assets/js/Speech-detection.js" defer></script> -->
     <script src="../assets/js/sidebar.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -98,7 +98,7 @@ include_once '../includes/session.php';
                     </div>
                     <!-- <button id="start-recognition" class="color">Start</button>
                 <button id="stop-recognition" class="color" disabled>Stop</button> -->
-                    <button id="edit-content" class="color">Save</button>
+                    <button id="update-content" class="color">Save</button>
                 </div>
                 <div class="btn-toolbar">
                     <button onclick="formatDoc('undo')"><i class='bx bx-undo'></i></button>
@@ -118,6 +118,7 @@ include_once '../includes/session.php';
                     <!-- <button id="show-code" data-active="false">&lt;/&gt;</button> -->
                 </div>
             </div>
+            <input type="hidden" id="userid" value="<?php echo $user_id; ?>">
             <div id="content" contenteditable="true" spellcheck="false">
                 <p> <?php include '../includes/FileContent_class.php';
                 echo $content; ?></p>
@@ -133,6 +134,7 @@ include_once '../includes/session.php';
 
 
         <script src="../assets/js/sidebar.js"></script>
+        <script src="../assets/js/word-editor.js"></script>
         <!--   Core JS Files   -->
         <script src="../assets/js/core/jquery.min.js"></script>
         <script src="../assets/js/core/popper.min.js"></script>

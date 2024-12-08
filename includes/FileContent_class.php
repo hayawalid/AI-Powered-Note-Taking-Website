@@ -12,23 +12,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Collect POST data
     $content = mysqli_real_escape_string($conn, $_POST['content']); // Sanitizing the input
     $user_id = intval($_POST['user_id']); // User ID passed from JS (make sure it's valid)
-    $folder_id = intval($_POST['folder_id']); // Folder ID passed from JS (make sure it's valid)
-    $file_type = $_POST['file_type']; // File type passed from JS
+    $folder_id = isset($_POST['folder_id']) ? intval($_POST['folder_id']) : null; // Folder ID passed from JS
+    $file_type = isset($_POST['file_type']) ? intval($_POST['file_type']) : null; // File type passed from JS
+    $file_id = isset($_POST['file_id']) ? intval($_POST['file_id']) : null; // File ID passed from JS
 
-    // Generate a file name or receive it from the front-end (you can customize this logic as needed)
-    $name = "speechToText" .$folder_id;
+    // Debugging statements
+    error_log("Content: $content");
+    error_log("User ID: $user_id");
+    error_log("Folder ID: $folder_id");
+    error_log("File Type: $file_type");
+    error_log("File ID: $file_id");
 
-    // Now call the create function from file_class.php
-    $result = file::create($name, $user_id, $folder_id, $content, $file_type);
+    if ($file_id) {
+        // Update the existing file
+        $sql = "UPDATE files SET content='$content' WHERE id=$file_id";
+        if ($conn->query($sql) === TRUE) {
+            echo "Record updated successfully";
+        } else {
+            echo "Error updating record: " . $conn->error;
+        }
+    } else {
+        // Generate a file name or receive it from the front-end (you can customize this logic as needed)
+        $name = "speechToText" . $folder_id;
 
-    if($result){
-        header("Location: ../pages/Note.php?id=". $result);
-        exit();
-    }else{
-        echo "Failed to create file";
+        // Now call the create function from file_class.php
+        $result = file::create($name, $user_id, $folder_id, $content, $file_type);
+
+        if ($result) {
+            header("Location: ../pages/Note.php?id=" . $result);
+            exit();
+        } else {
+            echo "Failed to create file";
+        }
     }
-    
 }
+
+
+
+
+
 
 // Fetch the content for the file with id 1
 $file_id = isset($_GET['id']) ? intval($_GET['id']) : 1;
