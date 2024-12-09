@@ -65,22 +65,42 @@ if (isset($_SESSION['qa'])) {
 
 // Parse the Q&A into flashcards
 $qa_lines = explode("\n", $qa);
+// $flashcards = [];
+
+// for ($i = 0; $i < count($qa_lines); $i++) {
+//     if (strpos($qa_lines[$i], 'Question') === 0) {
+//         $question = trim(str_replace("Question " . ($i + 1) . ":", "", $qa_lines[$i]));
+//         $answer = isset($qa_lines[$i + 1]) ? trim(str_replace("Answer " . ($i + 1) . ":", "", $qa_lines[$i + 1])) : "No answer available";
+        
+//         $flashcards[] = [
+//             'question' => $question,
+//             'answer' => $answer,
+//             'name' => 'Flashcard ' . ($i+1)
+//         ];
+//         $i++;
+//     }
+// }
 $flashcards = [];
+$card_number = 1; 
 
 for ($i = 0; $i < count($qa_lines); $i++) {
     if (strpos($qa_lines[$i], 'Question') === 0) {
-        $question = trim(str_replace("Question " . ($i + 1) . ":", "", $qa_lines[$i]));
-        $answer = isset($qa_lines[$i + 1]) ? trim(str_replace("Answer " . ($i + 1) . ":", "", $qa_lines[$i + 1])) : "No answer available";
+
+        $question = trim(preg_replace('/^Question \d+:/', '', $qa_lines[$i]));
+
+        $answer = isset($qa_lines[$i + 1]) ? trim(preg_replace('/^Answer \d+:/', '', $qa_lines[$i + 1])) : "No answer available";
+
         
         $flashcards[] = [
             'question' => $question,
             'answer' => $answer,
-            'name' => 'Flashcard ' . ($i+1)
+            'name' => 'Flashcard ' . $card_number 
         ];
-        $i++; // Skip the next line as it's the answer
+
+        $card_number++; 
+        $i++; 
     }
 }
-
 
 ?>
 
@@ -90,7 +110,7 @@ for ($i = 0; $i < count($qa_lines); $i++) {
     <meta charset="utf-8">
     <!--  This file has been downloaded from bootdey.com @bootdey on twitter -->
     <!--  All snippets are MIT license http://bootdey.com/license -->
-    <title>Note cards - Bootdey.com</title>
+    <title>Note cards</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../assets/css/user_style.css">
     
@@ -110,8 +130,15 @@ for ($i = 0; $i < count($qa_lines); $i++) {
     <style type="text/css">
     	body{margin-top:20px;}
         .container {
-        margin-left: 250px; /* Adjust this value according to the width of your sidebar */
+        margin-left: 150px; /* Adjust this value according to the width of your sidebar */
         float: right;
+        display: flex;
+        flex-direction: column; /* Stack elements vertically */
+        justify-content: space-between; /* Ensure buttons stay at the bottom */
+        height: 100%; /* Allow the container to occupy full height */
+        position: relative; /* For absolute positioning */
+        padding: 20px;
+        box-sizing: border-box;
     }
 .card-big-shadow {
     max-width: 320px;
@@ -200,10 +227,14 @@ a:hover, a:focus {
 
 /* hena */
 
-
+.col-md-4.col-sm-6.content-col {
+    flex: 0 0 calc(33.333% - 20px); /* Make each card take 1/3 width minus the gap */
+    max-width: calc(33.333% - 20px); /* Ensure it matches flex value */
+    box-sizing: border-box;
+}
 
 .card-big-shadow {
-    max-width: 400px; /* Increase the card width */
+    max-width: 600px; /* Increase the card width */
     margin: 15px auto; /* Center the cards horizontally */
     position: relative;
     perspective: 1000px; /* Enables 3D flip effect */
@@ -265,10 +296,43 @@ p.description, .card-back p {
 }
 
 .row {
-    display: flex;
+    /* display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Center rows */
-    gap: 15px; /* Space between cards */
+    justify-content: left; 
+    gap: 15px;  */
+
+
+    flex-grow: 1; /* Take up remaining space above the buttons */
+    display: flex; /* If needed, for layout inside the row */
+    flex-wrap: wrap; /* Allow wrapping if there are multiple elements */
+    gap: 15px; 
+}
+#saveFormQnA, form[method="POST"] {
+    display: inline-block; /* Ensure buttons stack */
+    margin: 10px 10px 0; /* Center align buttons and add spacing */
+    width: 100%; /* Buttons take full width inside their container */
+    text-align: center;
+}
+
+button {
+    width: 40%; /* Reduce button width */
+    max-width: 200px; /* Optional: limit button width */
+    padding: 8px 16px; /* Reduce button height and padding */
+    font-size: 14px; /* Make text size smaller */
+    margin: 0 5px; /* Reduce space between buttons */
+    border: none;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: center; /* Center align buttons horizontally */
+    gap: 0px; /* Reduced space between buttons */
+    margin-top: 20px;
 }
 
 @media (max-width: 768px) {
@@ -297,7 +361,7 @@ p.description, .card-back p {
                             <div class="content">
                                 <h6 class="category"><?php echo htmlspecialchars($card['name']); ?></h6>
                                 <p class="description">
-                                    <strong>Question: </strong><?php echo htmlspecialchars($card['question']); ?>
+                                    <?php echo htmlspecialchars($card['question']); ?>
                                 </p>
                             </div>
                         </div>
@@ -305,7 +369,7 @@ p.description, .card-back p {
                         <div class="card card-back">
                             <h6 class="category">Answer</h6>
                             <p>
-                                <strong>Answer: </strong><?php echo htmlspecialchars($card['answer']); ?>
+                                <?php echo htmlspecialchars($card['answer']); ?>
                             </p>
                         </div>
                     </div>
@@ -313,13 +377,19 @@ p.description, .card-back p {
             </div>
         <?php endforeach; ?>
     </div>
-    <form id="saveFormQnA">
-    
-    <button type="submit" name="save" id="saveQnAButton" data-summary="<?= htmlspecialchars($qa) ?>">Save Q_A</button>
-    </form>
-    <form method="POST" >
-    <button type="submit" name="regenerate_qa">Regenerate QnA</button>
-</form>
+    <div class="buttons-container">
+        <form id="saveFormQnA">
+            <button type="submit" name="save" id="saveQnAButton" data-summary="<?= htmlspecialchars($qa) ?>">
+                Save Q&A
+            </button>
+        </form>
+        <form method="POST">
+            <button type="submit" name="regenerate_qa">
+                Regenerate Q&A
+            </button>
+        </form>
+    </div>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
