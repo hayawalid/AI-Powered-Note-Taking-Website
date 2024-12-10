@@ -176,6 +176,60 @@ label {
     transform: translate(-8px);
 }
 
+/* new css */
+
+.answer-options {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: block; /* Ensure it's visible */
+}
+
+.answer-options input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.answer-options .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+}
+
+.answer-options input:checked ~ .checkmark {
+    background-color: #590995;
+    border-color: #590995;
+}
+
+.answer-options .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.answer-options input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.answer-options .checkmark:after {
+    top: 6px;
+    left: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+
+
+
 /* Mobile responsiveness */
 @media (max-width: 767px) {
     .quiz-container {

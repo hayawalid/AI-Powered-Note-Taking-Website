@@ -55,4 +55,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initial setup
     updateQuestions();
+
+
+    function navigateQuestion(index) {
+        const questions = document.querySelectorAll('.quiz-box');
+        questions.forEach((question, i) => {
+            question.style.left = i === index ? '0' : '650px';
+            question.style.opacity = i === index ? '1' : '0';
+            question.style.visibility = i === index ? 'visible' : 'hidden';
+            question.style.zIndex = i === index ? '1' : '0';
+        });
+    }
+    
 });

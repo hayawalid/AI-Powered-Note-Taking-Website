@@ -64,7 +64,6 @@ if (isset($_SESSION['qa'])) {
 }
 
 // Parse the Q&A into flashcards
-$qa_lines = explode("\n", $qa);
 // $flashcards = [];
 
 // for ($i = 0; $i < count($qa_lines); $i++) {
@@ -80,7 +79,11 @@ $qa_lines = explode("\n", $qa);
 //         $i++;
 //     }
 // }
+
+$qa_lines = explode("\n", $qa);
+
 $flashcards = [];
+
 $card_number = 1; 
 
 for ($i = 0; $i < count($qa_lines); $i++) {

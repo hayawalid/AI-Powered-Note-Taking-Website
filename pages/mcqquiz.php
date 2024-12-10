@@ -2,6 +2,101 @@
 include_once '../includes/session.php';
 
 $current_page = 'Quiz';
+
+if (isset($_SESSION['file_id']) && $_SESSION['file_id'] !== null) {
+    $file_id = $_SESSION['file_id'];
+    // Proceed with the SQL query
+} else {
+    echo "File ID is missing. Please go back and select a valid file.";
+    exit; // Exit if file ID is missing
+}
+
+
+if (isset($_SESSION['mcq'])) {
+    $mcq = $_SESSION['mcq'];
+    unset($_SESSION['mcq']); // Optionally, clear the session to avoid showing old data
+} else {
+    echo "No mcq data found.";
+    exit;
+}
+
+// $mcq = "";
+
+// // Handle the form submission for generating multiple-choice questions
+// if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['regenerate_mcq'])) {
+//     $mcq_prompt = "Generate many multiple-choice questions and their answers based on the following text: " . $text;
+
+//     try {
+//         $response = $client->request('POST', 'http://localhost:3000/summarize', [
+//             'json' => [
+//                 'prompt' => $mcq_prompt
+//             ]
+//         ]);
+//         $data = json_decode($response->getBody(), true);
+//         $mcq = $data['summary'] ?? 'No multiple-choice questions available';
+//     } catch (Exception $e) {
+//         echo "Error: " . $e->getMessage();
+//         $logger->error('Error in generating MCQs', ['message' => $e->getMessage()]);
+//     }
+// }
+
+// Parse the MCQs into an array
+$mcq_lines = explode("\n", $mcq); // Split the text into lines
+$questions = [];
+$question = '';
+$answers = [];
+$correct_answer = '';
+
+foreach ($mcq_lines as $line) {
+    $line = trim($line);
+
+    // Check for a new question line (e.g., "1. **Question text**")
+    if (preg_match('/^\d+\.\s*\*\*(.*?)\*\*/', $line, $matches)) {
+        // If a previous question exists, save it
+        if (!empty($question)) {
+            $questions[] = [
+                'question' => $question,
+                'answers' => $answers,
+                'correct_answer' => $correct_answer,
+            ];
+        }
+
+        // Start a new question
+        $question = $matches[1];
+        $answers = [];
+        $correct_answer = '';
+    }
+
+    // Check for answer options (e.g., "a) Option 1")
+    elseif (preg_match('/^[a-d]\)\s*(.+)/', $line, $matches)) {
+        $answers[] = $matches[1];
+    }
+
+    // Check for the correct answer line (e.g., "Answer: a")
+    elseif (preg_match('/^Answer:\s*([a-d])/', $line, $matches)) {
+        $correct_answer = $matches[1];
+    }
+}
+
+// Save the last question
+if (!empty($question)) {
+    $questions[] = [
+        'question' => $question,
+        'answers' => $answers,
+        'correct_answer' => $correct_answer,
+    ];
+}
+
+// Debug output
+echo "<pre>";
+print_r($questions);
+echo "</pre>";
+
+echo "<pre>";
+echo htmlspecialchars($mcq); // Escape HTML for readability
+echo "</pre>";
+
+
 ?>
 
 <!DOCTYPE html>
@@ -49,66 +144,42 @@ $current_page = 'Quiz';
 <?php include '../includes/sidebar.php'; ?>
 
 <div class="quiz-container">
-    <div class="quiz-box" id="question1">
+    <?php 
+        $counter = 1;
+        foreach ($questions as $question) {
+            $isActive = ($counter === 1) ? 'active' : ''; // Set the first question as active
+    ?>
+    <div class="quiz-box <?= $isActive ?>" id="question<?= $counter ?>">
         <div class="text-center pb-4">
-            <div class="h5 font-weight-bold">1 of 3 </div>
+            <h5 class="font-weight-bold"><?= $counter ?> of <?= count($questions) ?></h5>
         </div>
-        <div class="h4 font-weight-bold"> 1. Who is the Prime Minister of India?</div>
-        <div class="pt-4">
-            <form> 
-                <label class="answer-options">Rahul Gandhi<input type="radio" name="option"> <span class="checkmark"></span> </label> 
-                <label class="answer-options">Indira Gandhi<input type="radio" name="option"> <span class="checkmark"></span> </label> 
-                <label class="answer-options">Narendra Modi <input type="radio" name="option" id="correct-answer" checked> <span class="checkmark"></span> </label> 
-                <label class="answer-options">Ram Nath Kovind <input type="radio" name="option"> <span class="checkmark"></span> </label> 
-            </form>
-        </div>
-        <div class="d-flex justify-content-end pt-2"> 
-            <button class="btn1 btn1-primary" id="next-btn1">Next <span class="fas fa-arrow-right"></span> </button> 
+        <h4 class="font-weight-bold"><?= htmlspecialchars($question['question']) ?></h4>
+        <form>
+            <?php foreach ($question['answers'] as $answer): ?>
+                <label class="answer-options">
+                    <input type="radio" name="option<?= $counter ?>" value="<?= htmlspecialchars($answer) ?>"> 
+                    <span class="checkmark"></span> <?= htmlspecialchars($answer) ?>
+                </label>
+            <?php endforeach; ?>
+        </form>
+        <div class="d-flex">
+            <?php if ($counter > 1): ?>
+                <button class="btn1 btn-primary mx-3" onclick="navigateQuestion(<?= $counter - 1 ?>)">Previous</button>
+            <?php endif; ?>
+            <?php if ($counter < count($questions)): ?>
+                <button class="btn1 btn-primary" onclick="navigateQuestion(<?= $counter + 1 ?>)">Next</button>
+            <?php else: ?>
+                <button class="btn1 btn-primary" onclick="submitQuiz()">Submit</button>
+            <?php endif; ?>
         </div>
     </div>
-    <div class="quiz-box" id="question2">
-        <div class="text-center pb-4">
-            <div class="h5 font-weight-bold"> <span id="quiz-counter"> </span>2 of 3 </div>
-        </div>
-        <div class="h4 font-weight-bold"> 2. IPV4 stand's for?</div>
-        <div class="pt-4">
-            <form> 
-                <label class="answer-options">Internet Protocol <input type="radio" name="option2"> <span class="checkmark"></span> </label> 
-                <label class="answer-options">Intranet Protocol <input type="radio" name="option2" checked> <span class="checkmark"></span> </label> 
-                <label class="answer-options">internet Protocol <input type="radio" name="option2" id="correct-answer2"> <span class="checkmark"></span> </label> 
-                <label class="answer-options">None of the above <input type="radio" name="option2"> <span class="checkmark"></span> </label> 
-            </form>
-        </div>
-        <div class="d-flex justify-content-end pt-2"> 
-            <button class="btn1 btn1-primary mx-3" id="back-btn1"> <span class="fas fa-arrow-left pr-1"></span>Previous </button> 
-            <button class="btn1 btn1-primary" id="next-btn2">Next <span class="fas fa-arrow-right"></span> </button> 
-        </div>
-    </div>
-    <div class="quiz-box" id="question3">
-        <div class="text-center pb-4">
-            <div class="h5 font-weight-bold"> <span id="quiz-counter"> </span>3 of 3 </div>
-        </div>
-        <div class="h4 font-weight-bold"> 3. What is the full form of CSS?</div>
-        <div class="pt-4">
-            <form> 
-                <label class="answer-options">Clarity Style Sheets <input type="radio" name="option3"> <span class="checkmark"></span> </label> 
-                <label class="answer-options">Cascading Style Sheets <input type="radio" name="option3"> <span class="checkmark"></span> </label> 
-                <label class="answer-options">Confirm Style Sheets <input type="radio" name="option3" id="correct-answer3" checked> <span class="checkmark"></span> </label> 
-                <label class="answer-options">Canvas Style Sheets <input type="radio" name="option3"> <span class="checkmark"></span> </label> 
-            </form>
-        </div>
-        <div class="d-flex justify-content-end pt-2"> 
-            <button class="btn1 btn1-primary mx-3" id="back-btn2"> <span class="fas fa-arrow-left pr-2"></span>Previous </button> 
-            <button class="btn1 btn1-primary" id="submit-btn">Submit </button> 
-        </div>
-    </div>
+    <?php 
+            $counter++;
+        } 
+    ?>
 </div>
-<div class="go_dark">
-<div class="d-flex flex-column ">
-    <div class="h3 text-black">Go Dark</div> 
-    <label class="switch"> <input type="checkbox"> <span class="slider round"></span> </label>
-</div>
-</div>
+
+
 <script src="../assets/js/sidebar.js"></script>
 <script src="../assets/js/mcqquiz.js"></script>
 

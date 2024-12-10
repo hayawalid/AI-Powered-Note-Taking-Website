@@ -108,20 +108,24 @@ $qa = "";
 
 // Handle the form submission for generating multiple-choice questions
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_mcq'])) {
-    $mcq_prompt = "Generate many multiple-choice questions and their answer based on the following text: " . $text;
-
-    try {
-        $response = $client->request('POST', 'http://localhost:3000/summarize', [
-            'json' => [
-                'prompt' => $mcq_prompt
-            ]
-        ]);
-        $data = json_decode($response->getBody(), true);
-        $mcq = $data['summary'] ?? 'No multiple-choice questions available';
-    } catch (Exception $e) {
-        echo "Error: " . $e->getMessage();
-        $logger->error('Error in generating MCQs', ['message' => $e->getMessage()]);
-    }
+  $mcq_prompt = "Generate many multiple-choice questions and their answers based on the following text: " . $text;
+  try {
+      $response = $client->request('POST', 'http://localhost:3000/summarize', [
+          'json' => [
+              'prompt' => $mcq_prompt
+          ]
+      ]);
+      $data = json_decode($response->getBody(), true);
+      $mcq = $data['summary'] ?? 'No multiple-choice questions available';
+      
+      // Store the MCQs in the session
+      $_SESSION['mcq'] = $mcq;
+      var_dump($_SESSION['mcq']); // Debug to check the data being stored
+      header('Location: mcqquiz.php');
+  } catch (Exception $e) {
+      echo "Error: " . $e->getMessage();
+      $logger->error('Error in generating MCQs', ['message' => $e->getMessage()]);
+  }
 }
 
 // Handle the form submission for generating questions and answers
@@ -219,9 +223,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_qa'])) {
 
 
         <!-- Form for Generating MCQs -->
-    <form method="POST" id="generateMCQForm">
+    <!-- <form method="POST" id="generateMCQForm">
         <button type="submit" name="generate_mcq">Generate MCQs</button>
-    </form>
+    </form> -->
+
+    <form action="" method="POST" id="generateMCQForm">
+      
+    <input type="hidden" name="file_id" value="<?= isset($_SESSION['file_id']) ? $_SESSION['file_id'] : '' ?>">
+    <input type="hidden" name="mcq" value="<?= htmlspecialchars($mcq) ?>">
+    <input type="hidden" name="text" value="<?= htmlspecialchars($text) ?>">
+
+    <button type="submit" name="generate_mcq">Generate MCQs2</button>
+</form>
 
     <!-- Display MCQs -->
     <?php if (!empty($mcq)): ?>
@@ -234,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_qa'])) {
     <form action="" method="POST" id="generateQnA">
     <input type="hidden" name="file_id" value="<?= isset($_SESSION['file_id']) ? $_SESSION['file_id'] : '' ?>">
     <input type="hidden" name="qa" value="<?= htmlspecialchars($qa) ?>">
-    <input type="hidden" name="qa" value="<?= htmlspecialchars($text) ?>">
+    <input type="hidden" name="text" value="<?= htmlspecialchars($text) ?>">
 
 
     <button type="submit" name="generate_qa">Generate QnA2</button>
