@@ -134,11 +134,13 @@ if (!empty($question)) {
             <h4 class="font-weight-bold"><?= htmlspecialchars($question['question']) ?></h4>
             <form>
                 <?php foreach ($question['answers'] as $key => $answer): ?>
+                    <div class="answer-options-container">
                     <label class="answer-options">
                         <input type="radio" name="option<?= $counter ?>" value="<?= htmlspecialchars($answer) ?>">
                         <?= htmlspecialchars($answer) ?>
                         <span class="checkmark"></span>
                     </label>
+                    </div>
                 <?php endforeach; ?>
             </form>
             <div class="d-flex justify-content-between mt-3">
