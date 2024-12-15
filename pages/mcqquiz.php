@@ -21,14 +21,12 @@ if (isset($_SESSION['mcq'])) {
 }
 
 // Assuming $mcq is a string that contains your MCQs
-// Parse the MCQs into an array
 $mcq_lines = explode("\n", $mcq);
 $questions = [];
 $question = '';
 $answers = [];
 $correct_answer = '';
 
-// Improved regex pattern for capturing questions and answers
 $question_pattern = '/^\d+\.\s*(.*)$/';
 $answer_pattern = '/^([a-d])\)\s*(.*)$/';
 $correct_answer_pattern = '/^\*\*Answer:\s*([a-d])\*\*$/';
@@ -36,51 +34,45 @@ $correct_answer_pattern = '/^\*\*Answer:\s*([a-d])\*\*$/';
 foreach ($mcq_lines as $line) {
     $line = trim($line);
 
-    // Match question
     if (preg_match($question_pattern, $line, $matches)) {
         if (!empty($question)) {
-            // Save previous question data
             $questions[] = [
-                'question' => $question,
+                'question' => trim($question, "**"),
                 'answers' => $answers,
-                'correct_answer' => $correct_answer,
+                'correct_answer' => trim($correct_answer, "**"),
             ];
         }
-        // Set current question
         $question = $matches[1];
         $answers = [];
         $correct_answer = '';
-    }
-    // Match answers
-    elseif (preg_match($answer_pattern, $line, $matches)) {
-        $answers[] = $matches[2];
-    }
-    // Match correct answer
-    elseif (preg_match($correct_answer_pattern, $line, $matches)) {
+    } elseif (preg_match($answer_pattern, $line, $matches)) {
+        $answers[] = trim($matches[2], "**");
+    } elseif (preg_match($correct_answer_pattern, $line, $matches)) {
         $correct_answer = $matches[1];
     }
 }
-// Add the last question if any
+
 if (!empty($question)) {
     $questions[] = [
-        'question' => $question,
+        'question' => trim($question, "**"),
         'answers' => $answers,
-        'correct_answer' => $correct_answer,
+        'correct_answer' => trim($correct_answer, "**"),
     ];
 }
 
+
 // Debugging: Check the parsed output
-echo "<pre>";
-print_r($questions);
-echo "</pre>";
-
-
 // echo "<pre>";
-// echo htmlspecialchars($mcq); // Escape HTML for readability
+// print_r($questions);
 // echo "</pre>";
-echo "<pre>";
-print_r($mcq_lines);  // Print the lines to check for any unexpected variations in format
-echo "</pre>";
+
+
+// // echo "<pre>";
+// // echo htmlspecialchars($mcq); // Escape HTML for readability
+// // echo "</pre>";
+// echo "<pre>";
+// print_r($mcq_lines);  // Print the lines to check for any unexpected variations in format
+// echo "</pre>";
 
 
 ?>
@@ -129,7 +121,81 @@ echo "</pre>";
 <body>
 <?php include '../includes/sidebar.php'; ?>
 
-<div class="quiz-container"> <?php $counter = 1; foreach ($questions as $question) { $isActive = ($counter === 1) ? 'active' : ''; // Set the first question as active ?> <div class="quiz-box <?= $isActive ?>" id="question<?= $counter ?>" data-correct-answer="<?= htmlspecialchars($question['correct_answer']) ?>"> <div class="text-center pb-4"> <h5 class="font-weight-bold">Question <?= $counter ?> of <?= count($questions) ?></h5> </div> <h4 class="font-weight-bold"><?= htmlspecialchars($question['question']) ?></h4> <form> <?php foreach ($question['answers'] as $key => $answer): ?> <label class="answer-options"> <input type="radio" name="option<?= $counter ?>" value="<?= htmlspecialchars($answer) ?>"> <?= htmlspecialchars($answer) ?> <span class="checkmark"></span> </label> <?php endforeach; ?> </form> <div class="d-flex justify-content-between mt-3"> <?php if ($counter > 1): ?> <button type="button" class="btn btn-primary" onclick="navigateQuestion(-1)">Previous</button> <?php endif; ?> <?php if ($counter < count($questions)): ?> <button type="button" class="btn btn-primary" onclick="navigateQuestion(1)">Next</button> <?php else: ?> <button type="button" class="btn btn-success" onclick="submitQuiz()">Submit</button> <?php endif; ?> </div> </div> <?php $counter++; } ?> </div> <script> document.addEventListener('DOMContentLoaded', function () { const questions = document.querySelectorAll('.quiz-box'); // All question boxes let currentQuestionIndex = 0; // Display only the first question on page load function showQuestion(index) { questions.forEach((question, idx) => { question.classList.remove('active'); // Hide all questions if (idx === index) { question.classList.add('active'); // Show current question } }); } // Function for "Next" button window.navigateQuestion = function (direction) { currentQuestionIndex += direction; // Increment or decrement question index // Prevent out-of-bounds navigation if (currentQuestionIndex < 0) { currentQuestionIndex = 0; } else if (currentQuestionIndex >= questions.length) { currentQuestionIndex = questions.length - 1; } showQuestion(currentQuestionIndex); }; // Function to handle quiz submission window.submitQuiz = function () { let score = 0; questions.forEach((question, index) => { const correctAnswer = question.dataset.correctAnswer.trim(); const selectedOption = document.querySelector(`input[name="option${index + 1}"]:checked`); if (selectedOption && selectedOption.value.trim() === correctAnswer) { score++; } }); alert(`You scored ${score} out of ${questions.length}!`); }; // Initialize the first question showQuestion(currentQuestionIndex); }); </script>
+<div class="quiz-container">
+    <?php
+    $counter = 1;
+    foreach ($questions as $question) {
+        $isActive = ($counter === 1) ? 'active' : '';
+    ?>
+        <div class="quiz-box <?= $isActive ?>" id="question<?= $counter ?>" data-correct-answer="<?= htmlspecialchars($question['correct_answer']) ?>">
+            <div class="text-center pb-4">
+                <h5 class="font-weight-bold">Question <?= $counter ?> of <?= count($questions) ?></h5>
+            </div>
+            <h4 class="font-weight-bold"><?= htmlspecialchars($question['question']) ?></h4>
+            <form>
+                <?php foreach ($question['answers'] as $key => $answer): ?>
+                    <label class="answer-options">
+                        <input type="radio" name="option<?= $counter ?>" value="<?= htmlspecialchars($answer) ?>">
+                        <?= htmlspecialchars($answer) ?>
+                        <span class="checkmark"></span>
+                    </label>
+                <?php endforeach; ?>
+            </form>
+            <div class="d-flex justify-content-between mt-3">
+                <?php if ($counter > 1): ?>
+                    <button type="button" class="btn btn-primary" onclick="navigateQuestion(-1)">Previous</button>
+                <?php endif; ?>
+                <?php if ($counter < count($questions)): ?>
+                    <button type="button" class="btn btn-primary" onclick="navigateQuestion(1)">Next</button>
+                <?php else: ?>
+                    <button type="button" class="btn btn-success" onclick="submitQuiz()">Submit</button>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php
+        $counter++;
+    }
+    ?>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const questions = document.querySelectorAll('.quiz-box');
+    let currentQuestionIndex = 0;
+
+    function showQuestion(index) {
+        questions.forEach((question, idx) => {
+            question.classList.remove('active');
+            if (idx === index) {
+                question.classList.add('active');
+            }
+        });
+    }
+
+    window.navigateQuestion = function (direction) {
+        currentQuestionIndex += direction;
+        if (currentQuestionIndex < 0) {
+            currentQuestionIndex = 0;
+        } else if (currentQuestionIndex >= questions.length) {
+            currentQuestionIndex = questions.length - 1;
+        }
+        showQuestion(currentQuestionIndex);
+    };
+
+    window.submitQuiz = function () {
+        let score = 0;
+        questions.forEach((question, index) => {
+            const correctAnswer = question.dataset.correctAnswer.trim();
+            const selectedOption = document.querySelector(`input[name="option${index + 1}"]:checked`);
+            if (selectedOption && selectedOption.value.trim() === correctAnswer) {
+                score++;
+            }
+        });
+        alert(`You scored ${score} out of ${questions.length}!`);
+    };
+
+    showQuestion(currentQuestionIndex);
+});
+</script>
 
 <script src="../assets/js/sidebar.js"></script>
 <script src="../assets/js/mcqquiz.js"></script>
