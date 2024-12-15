@@ -1,70 +1,47 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const questions = document.querySelectorAll('.quiz-box');
-    const nextBtns = document.querySelectorAll('[id^=next-btn]');
-    const backBtns = document.querySelectorAll('[id^=back-btn]');
-    const main = document.querySelector('body');
-    const toggleSwitch = document.querySelector('.slider');
+    const questions = document.querySelectorAll('.quiz-box'); // All question boxes
     let currentQuestionIndex = 0;
 
-    // Function to update question visibility
-    function updateQuestions() {
+    // Display only the first question on page load
+    function showQuestion(index) {
+        questions.forEach((question, idx) => {
+            question.classList.remove('active'); // Hide all questions
+            if (idx === index) {
+                question.classList.add('active'); // Show current question
+            }
+        });
+    }
+
+    // Function for "Next" button
+    window.navigateQuestion = function (direction) {
+        currentQuestionIndex += direction; // Increment or decrement question index
+
+        // Prevent out-of-bounds navigation
+        if (currentQuestionIndex < 0) {
+            currentQuestionIndex = 0;
+        } else if (currentQuestionIndex >= questions.length) {
+            currentQuestionIndex = questions.length - 1;
+        }
+
+        showQuestion(currentQuestionIndex);
+    };
+
+    // Function to handle quiz submission
+    window.submitQuiz = function () {
+        let score = 0;
+
         questions.forEach((question, index) => {
-            if (index === currentQuestionIndex) {
-                question.style.left = "50px"; // Active question
-                question.style.opacity = "1";
-                question.style.visibility = "visible";
-                question.style.zIndex = "1";
-            } else {
-                question.style.left = index < currentQuestionIndex ? "-650px" : "650px"; // Move off-screen
-                question.style.opacity = "0";
-                question.style.visibility = "hidden";
-                question.style.zIndex = "0";
+            const correctAnswer = question.dataset.correctAnswer.trim();
+            const selectedOption = document.querySelector(`input[name="option${index + 1}"]:checked`);
+
+            if (selectedOption && selectedOption.value.trim() === correctAnswer) {
+                score++;
             }
         });
-    }
 
-    // Event listeners for navigation buttons
-    nextBtns.forEach((btn, idx) => {
-        btn.addEventListener('click', () => {
-            if (currentQuestionIndex < questions.length - 1) {
-                currentQuestionIndex++;
-                updateQuestions();
-            }
-        });
-    });
+        alert(`You scored ${score} out of ${questions.length}!`);
+    };
 
-    backBtns.forEach((btn, idx) => {
-        btn.addEventListener('click', () => {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                updateQuestions();
-            }
-        });
-    });
-
-    // Uncheck radio buttons function
-    function uncheck() {
-        const radios = document.querySelectorAll('input[type="radio"]:checked');
-        radios.forEach((radio) => radio.checked = false);
-    }
-
-    // Dark mode toggle
-    toggleSwitch.addEventListener('click', () => {
-        main.classList.toggle('dark-theme');
-    });
-
-    // Initial setup
-    updateQuestions();
-
-
-    function navigateQuestion(index) {
-        const questions = document.querySelectorAll('.quiz-box');
-        questions.forEach((question, i) => {
-            question.style.left = i === index ? '0' : '650px';
-            question.style.opacity = i === index ? '1' : '0';
-            question.style.visibility = i === index ? 'visible' : 'hidden';
-            question.style.zIndex = i === index ? '1' : '0';
-        });
-    }
-    
+    // Initialize the first question
+    showQuestion(currentQuestionIndex);
 });

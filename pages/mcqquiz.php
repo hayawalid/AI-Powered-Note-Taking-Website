@@ -20,65 +20,47 @@ if (isset($_SESSION['mcq'])) {
     exit;
 }
 
-// $mcq = "";
-
-// // Handle the form submission for generating multiple-choice questions
-// if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['regenerate_mcq'])) {
-//     $mcq_prompt = "Generate many multiple-choice questions and their answers based on the following text: " . $text;
-
-//     try {
-//         $response = $client->request('POST', 'http://localhost:3000/summarize', [
-//             'json' => [
-//                 'prompt' => $mcq_prompt
-//             ]
-//         ]);
-//         $data = json_decode($response->getBody(), true);
-//         $mcq = $data['summary'] ?? 'No multiple-choice questions available';
-//     } catch (Exception $e) {
-//         echo "Error: " . $e->getMessage();
-//         $logger->error('Error in generating MCQs', ['message' => $e->getMessage()]);
-//     }
-// }
-
+// Assuming $mcq is a string that contains your MCQs
 // Parse the MCQs into an array
-$mcq_lines = explode("\n", $mcq); // Split the text into lines
+$mcq_lines = explode("\n", $mcq);
 $questions = [];
 $question = '';
 $answers = [];
 $correct_answer = '';
 
+// Improved regex pattern for capturing questions and answers
+$question_pattern = '/^\d+\.\s*(.*)$/';
+$answer_pattern = '/^([a-d])\)\s*(.*)$/';
+$correct_answer_pattern = '/^\*\*Answer:\s*([a-d])\*\*$/';
+
 foreach ($mcq_lines as $line) {
     $line = trim($line);
 
-    // Check for a new question line (e.g., "1. **Question text**")
-    if (preg_match('/^\d+\.\s*\*\*(.*?)\*\*/', $line, $matches)) {
-        // If a previous question exists, save it
+    // Match question
+    if (preg_match($question_pattern, $line, $matches)) {
         if (!empty($question)) {
+            // Save previous question data
             $questions[] = [
                 'question' => $question,
                 'answers' => $answers,
                 'correct_answer' => $correct_answer,
             ];
         }
-
-        // Start a new question
+        // Set current question
         $question = $matches[1];
         $answers = [];
         $correct_answer = '';
     }
-
-    // Check for answer options (e.g., "a) Option 1")
-    elseif (preg_match('/^[a-d]\)\s*(.+)/', $line, $matches)) {
-        $answers[] = $matches[1];
+    // Match answers
+    elseif (preg_match($answer_pattern, $line, $matches)) {
+        $answers[] = $matches[2];
     }
-
-    // Check for the correct answer line (e.g., "Answer: a")
-    elseif (preg_match('/^Answer:\s*([a-d])/', $line, $matches)) {
+    // Match correct answer
+    elseif (preg_match($correct_answer_pattern, $line, $matches)) {
         $correct_answer = $matches[1];
     }
 }
-
-// Save the last question
+// Add the last question if any
 if (!empty($question)) {
     $questions[] = [
         'question' => $question,
@@ -87,13 +69,17 @@ if (!empty($question)) {
     ];
 }
 
-// Debug output
+// Debugging: Check the parsed output
 echo "<pre>";
 print_r($questions);
 echo "</pre>";
 
+
+// echo "<pre>";
+// echo htmlspecialchars($mcq); // Escape HTML for readability
+// echo "</pre>";
 echo "<pre>";
-echo htmlspecialchars($mcq); // Escape HTML for readability
+print_r($mcq_lines);  // Print the lines to check for any unexpected variations in format
 echo "</pre>";
 
 
@@ -143,42 +129,7 @@ echo "</pre>";
 <body>
 <?php include '../includes/sidebar.php'; ?>
 
-<div class="quiz-container">
-    <?php 
-        $counter = 1;
-        foreach ($questions as $question) {
-            $isActive = ($counter === 1) ? 'active' : ''; // Set the first question as active
-    ?>
-    <div class="quiz-box <?= $isActive ?>" id="question<?= $counter ?>">
-        <div class="text-center pb-4">
-            <h5 class="font-weight-bold"><?= $counter ?> of <?= count($questions) ?></h5>
-        </div>
-        <h4 class="font-weight-bold"><?= htmlspecialchars($question['question']) ?></h4>
-        <form>
-            <?php foreach ($question['answers'] as $answer): ?>
-                <label class="answer-options">
-                    <input type="radio" name="option<?= $counter ?>" value="<?= htmlspecialchars($answer) ?>"> 
-                    <span class="checkmark"></span> <?= htmlspecialchars($answer) ?>
-                </label>
-            <?php endforeach; ?>
-        </form>
-        <div class="d-flex">
-            <?php if ($counter > 1): ?>
-                <button class="btn1 btn-primary mx-3" onclick="navigateQuestion(<?= $counter - 1 ?>)">Previous</button>
-            <?php endif; ?>
-            <?php if ($counter < count($questions)): ?>
-                <button class="btn1 btn-primary" onclick="navigateQuestion(<?= $counter + 1 ?>)">Next</button>
-            <?php else: ?>
-                <button class="btn1 btn-primary" onclick="submitQuiz()">Submit</button>
-            <?php endif; ?>
-        </div>
-    </div>
-    <?php 
-            $counter++;
-        } 
-    ?>
-</div>
-
+<div class="quiz-container"> <?php $counter = 1; foreach ($questions as $question) { $isActive = ($counter === 1) ? 'active' : ''; // Set the first question as active ?> <div class="quiz-box <?= $isActive ?>" id="question<?= $counter ?>" data-correct-answer="<?= htmlspecialchars($question['correct_answer']) ?>"> <div class="text-center pb-4"> <h5 class="font-weight-bold">Question <?= $counter ?> of <?= count($questions) ?></h5> </div> <h4 class="font-weight-bold"><?= htmlspecialchars($question['question']) ?></h4> <form> <?php foreach ($question['answers'] as $key => $answer): ?> <label class="answer-options"> <input type="radio" name="option<?= $counter ?>" value="<?= htmlspecialchars($answer) ?>"> <?= htmlspecialchars($answer) ?> <span class="checkmark"></span> </label> <?php endforeach; ?> </form> <div class="d-flex justify-content-between mt-3"> <?php if ($counter > 1): ?> <button type="button" class="btn btn-primary" onclick="navigateQuestion(-1)">Previous</button> <?php endif; ?> <?php if ($counter < count($questions)): ?> <button type="button" class="btn btn-primary" onclick="navigateQuestion(1)">Next</button> <?php else: ?> <button type="button" class="btn btn-success" onclick="submitQuiz()">Submit</button> <?php endif; ?> </div> </div> <?php $counter++; } ?> </div> <script> document.addEventListener('DOMContentLoaded', function () { const questions = document.querySelectorAll('.quiz-box'); // All question boxes let currentQuestionIndex = 0; // Display only the first question on page load function showQuestion(index) { questions.forEach((question, idx) => { question.classList.remove('active'); // Hide all questions if (idx === index) { question.classList.add('active'); // Show current question } }); } // Function for "Next" button window.navigateQuestion = function (direction) { currentQuestionIndex += direction; // Increment or decrement question index // Prevent out-of-bounds navigation if (currentQuestionIndex < 0) { currentQuestionIndex = 0; } else if (currentQuestionIndex >= questions.length) { currentQuestionIndex = questions.length - 1; } showQuestion(currentQuestionIndex); }; // Function to handle quiz submission window.submitQuiz = function () { let score = 0; questions.forEach((question, index) => { const correctAnswer = question.dataset.correctAnswer.trim(); const selectedOption = document.querySelector(`input[name="option${index + 1}"]:checked`); if (selectedOption && selectedOption.value.trim() === correctAnswer) { score++; } }); alert(`You scored ${score} out of ${questions.length}!`); }; // Initialize the first question showQuestion(currentQuestionIndex); }); </script>
 
 <script src="../assets/js/sidebar.js"></script>
 <script src="../assets/js/mcqquiz.js"></script>
