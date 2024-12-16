@@ -27,9 +27,9 @@ $question = '';
 $answers = [];
 $correct_answer = '';
 
-$question_pattern = '/^\d+\.\s*(.*)$/';
+$question_pattern = '/^\*\*Question \d+:\s*(.*)$/';
 $answer_pattern = '/^([a-d])\)\s*(.*)$/';
-$correct_answer_pattern = '/^\*\*Answer:\s*([a-d])\*\*$/';
+$correct_answer_pattern = '/^\*\*Answer:\s*([a-d])\)\s*$/';
 
 foreach ($mcq_lines as $line) {
     $line = trim($line);
@@ -37,28 +37,28 @@ foreach ($mcq_lines as $line) {
     if (preg_match($question_pattern, $line, $matches)) {
         if (!empty($question)) {
             $questions[] = [
-                'question' => trim($question, "**"),
+                'question' => $question,
                 'answers' => $answers,
-                'correct_answer' => trim($correct_answer, "**"),
+                'correct_answer' => $correct_answer, // Store the correct answer letter
             ];
         }
-        $question = $matches[1];
+        $question = trim($matches[1], "*"); // Remove asterisks from the question
         $answers = [];
         $correct_answer = '';
     } elseif (preg_match($answer_pattern, $line, $matches)) {
-        $answers[] = trim($matches[2], "**");
+        $answers[$matches[1]] = $matches[2]; // Store answer with its letter key (a, b, c, d)
     } elseif (preg_match($correct_answer_pattern, $line, $matches)) {
-        $correct_answer = $matches[1];
+        $correct_answer = $matches[1]; // Store the correct answer letter
     }
 }
-
 if (!empty($question)) {
     $questions[] = [
-        'question' => trim($question, "**"),
+        'question' => $question,
         'answers' => $answers,
-        'correct_answer' => trim($correct_answer, "**"),
+        'correct_answer' => $correct_answer,
     ];
 }
+
 
 
 // Debugging: Check the parsed output
@@ -67,10 +67,16 @@ if (!empty($question)) {
 // echo "</pre>";
 
 
-// // echo "<pre>";
-// // echo htmlspecialchars($mcq); // Escape HTML for readability
-// // echo "</pre>";
+// Debugging: Check the parsed output
 // echo "<pre>";
+// print_r($answers);
+// echo "</pre>";
+
+
+// echo "<pre>";
+// echo htmlspecialchars($mcq); // Escape HTML for readability
+// echo "</pre>";
+// // echo "<pre>";
 // print_r($mcq_lines);  // Print the lines to check for any unexpected variations in format
 // echo "</pre>";
 
@@ -135,11 +141,11 @@ if (!empty($question)) {
             <form>
                 <?php foreach ($question['answers'] as $key => $answer): ?>
                     <div class="answer-options-container">
-                    <label class="answer-options">
-                        <input type="radio" name="option<?= $counter ?>" value="<?= htmlspecialchars($answer) ?>">
-                        <?= htmlspecialchars($answer) ?>
-                        <span class="checkmark"></span>
-                    </label>
+                        <label class="answer-options">
+                            <input type="radio" name="option<?= $counter ?>" value="<?= htmlspecialchars($answer) ?>" data-key="<?= htmlspecialchars($key) ?>">
+                            <?= htmlspecialchars($answer) ?>
+                            <span class="checkmark"></span>
+                        </label>
                     </div>
                 <?php endforeach; ?>
             </form>
@@ -159,7 +165,10 @@ if (!empty($question)) {
     }
     ?>
 </div>
-<script>
+
+
+
+<!-- <script>
 document.addEventListener('DOMContentLoaded', function () {
     const questions = document.querySelectorAll('.quiz-box');
     let currentQuestionIndex = 0;
@@ -195,9 +204,27 @@ document.addEventListener('DOMContentLoaded', function () {
         alert(`You scored ${score} out of ${questions.length}!`);
     };
 
+    questions.forEach((question, idx) => {
+        const options = question.querySelectorAll('input[type="radio"]');
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                const correctAnswer = question.dataset.correctAnswer.trim();
+                options.forEach(opt => {
+                    const label = opt.parentElement;
+                    if (opt.value.trim() === correctAnswer) {
+                        label.style.color = 'green';
+                    } else {
+                        label.style.color = 'red';
+                    }
+                });
+            });
+        });
+    });
+
     showQuestion(currentQuestionIndex);
 });
-</script>
+</script> -->
+
 
 <script src="../assets/js/sidebar.js"></script>
 <script src="../assets/js/mcqquiz.js"></script>

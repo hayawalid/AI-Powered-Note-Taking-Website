@@ -107,8 +107,36 @@ $mcq = "";
 $qa = "";
 
 // Handle the form submission for generating multiple-choice questions
+// if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_mcq'])) {
+//   $mcq_prompt = "Generate many multiple-choice questions and their answers based on the following text: " . $text;
+//   try {
+//       $response = $client->request('POST', 'http://localhost:3000/summarize', [
+//           'json' => [
+//               'prompt' => $mcq_prompt
+//           ]
+//       ]);
+//       $data = json_decode($response->getBody(), true);
+//       $mcq = $data['summary'] ?? 'No multiple-choice questions available';
+      
+//       // Store the MCQs in the session
+//       $_SESSION['mcq'] = $mcq;
+//       var_dump($_SESSION['mcq']); // Debug to check the data being stored
+//       header('Location: mcqquiz.php');
+//   } catch (Exception $e) {
+//       echo "Error: " . $e->getMessage();
+//       $logger->error('Error in generating MCQs', ['message' => $e->getMessage()]);
+//   }
+// }
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_mcq'])) {
-  $mcq_prompt = "Generate many multiple-choice questions and their answers based on the following text: " . $text;
+  $mcq_prompt = "Generate multiple-choice questions and their answers based on the following text: " . $text . " Format: 
+  **Question x:** 
+  - Question text 
+  a) Option A 
+  b) Option B 
+  c) Option C 
+  d) Option D 
+  **Answer: c)**";
+  
   try {
       $response = $client->request('POST', 'http://localhost:3000/summarize', [
           'json' => [

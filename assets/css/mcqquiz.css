@@ -58,6 +58,9 @@ body {
     padding-bottom: 5px;
     margin-bottom: 0;
 }
+.quiz-box h4 {
+    margin-bottom: 40px; /* Increase distance between question and choices */
+}
 
 label {
     display: flex;
@@ -174,6 +177,13 @@ button:hover {
 
 .btn.btn-primary:hover .fa-arrow-left {
     transform: translate(-8px);
+}
+label.answer-options.correct {
+    color: green; /* Correct answer text color */
+}
+
+label.answer-options.wrong {
+    color: red; /* Wrong answer text color */
 }
 
 /* Mobile responsiveness */

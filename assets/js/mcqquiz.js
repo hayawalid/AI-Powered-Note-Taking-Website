@@ -1,47 +1,56 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const questions = document.querySelectorAll('.quiz-box'); // All question boxes
+    const questions = document.querySelectorAll('.quiz-box');
     let currentQuestionIndex = 0;
 
-    // Display only the first question on page load
     function showQuestion(index) {
         questions.forEach((question, idx) => {
-            question.classList.remove('active'); // Hide all questions
+            question.classList.remove('active');
             if (idx === index) {
-                question.classList.add('active'); // Show current question
+                question.classList.add('active');
             }
         });
     }
 
-    // Function for "Next" button
     window.navigateQuestion = function (direction) {
-        currentQuestionIndex += direction; // Increment or decrement question index
-
-        // Prevent out-of-bounds navigation
+        currentQuestionIndex += direction;
         if (currentQuestionIndex < 0) {
             currentQuestionIndex = 0;
         } else if (currentQuestionIndex >= questions.length) {
             currentQuestionIndex = questions.length - 1;
         }
-
         showQuestion(currentQuestionIndex);
     };
 
-    // Function to handle quiz submission
     window.submitQuiz = function () {
         let score = 0;
-
         questions.forEach((question, index) => {
-            const correctAnswer = question.dataset.correctAnswer.trim();
+            const correctAnswerKey = question.dataset.correctAnswer.trim();
             const selectedOption = document.querySelector(`input[name="option${index + 1}"]:checked`);
-
-            if (selectedOption && selectedOption.value.trim() === correctAnswer) {
+            if (selectedOption && selectedOption.dataset.key.trim() === correctAnswerKey) {
                 score++;
             }
         });
-
         alert(`You scored ${score} out of ${questions.length}!`);
     };
 
-    // Initialize the first question
+    questions.forEach((question, idx) => {
+        const options = question.querySelectorAll('input[type="radio"]');
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                const correctAnswerKey = question.dataset.correctAnswer.trim();
+                options.forEach(opt => {
+                    const label = opt.parentElement;
+                    if (opt.dataset.key.trim() === correctAnswerKey) {
+                        label.classList.add('correct');
+                    } else {
+                        label.classList.add('wrong');
+                    }
+                });
+                // Disable options after selection
+                options.forEach(opt => opt.disabled = true);
+            });
+        });
+    });
+
     showQuestion(currentQuestionIndex);
 });
