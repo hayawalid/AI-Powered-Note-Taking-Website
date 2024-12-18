@@ -5,20 +5,23 @@ $current_page = 'Quiz';
 
 if (isset($_SESSION['file_id']) && $_SESSION['file_id'] !== null) {
     $file_id = $_SESSION['file_id'];
-    // Proceed with the SQL query
 } else {
     echo "File ID is missing. Please go back and select a valid file.";
-    exit; // Exit if file ID is missing
+    exit;
 }
-
 
 if (isset($_SESSION['mcq'])) {
     $mcq = $_SESSION['mcq'];
-    unset($_SESSION['mcq']); // Optionally, clear the session to avoid showing old data
+    unset($_SESSION['mcq']);
 } else {
     echo "No mcq data found.";
     exit;
 }
+
+// Debugging: Display raw MCQ data
+echo "<pre>";
+echo htmlspecialchars($mcq); // Escape HTML for readability
+echo "</pre>";
 
 // Assuming $mcq is a string that contains your MCQs
 $mcq_lines = explode("\n", $mcq);
@@ -29,28 +32,34 @@ $correct_answer = '';
 
 $question_pattern = '/^\*\*Question \d+:\s*(.*)$/';
 $answer_pattern = '/^([a-d])\)\s*(.*)$/';
-$correct_answer_pattern = '/^\*\*Answer:\s*([a-d])\)\s*$/';
+$correct_answer_pattern = '/^\*\*Answer:\s*([a-d])\)/i';
 
 foreach ($mcq_lines as $line) {
     $line = trim($line);
 
+    if (empty($line)) {
+        continue; // Skip empty lines
+    }
+
     if (preg_match($question_pattern, $line, $matches)) {
+        // If a new question starts, save the current one
         if (!empty($question)) {
             $questions[] = [
                 'question' => $question,
                 'answers' => $answers,
-                'correct_answer' => $correct_answer, // Store the correct answer letter
+                'correct_answer' => $correct_answer,
             ];
         }
-        $question = trim($matches[1], "*"); // Remove asterisks from the question
+        $question = trim($matches[1], "*");
         $answers = [];
         $correct_answer = '';
     } elseif (preg_match($answer_pattern, $line, $matches)) {
-        $answers[$matches[1]] = $matches[2]; // Store answer with its letter key (a, b, c, d)
+        $answers[$matches[1]] = $matches[2];
     } elseif (preg_match($correct_answer_pattern, $line, $matches)) {
-        $correct_answer = $matches[1]; // Store the correct answer letter
+        $correct_answer = $matches[1];
     }
 }
+
 if (!empty($question)) {
     $questions[] = [
         'question' => $question,
@@ -59,29 +68,20 @@ if (!empty($question)) {
     ];
 }
 
-
-
 // Debugging: Check the parsed output
-// echo "<pre>";
-// print_r($questions);
-// echo "</pre>";
+echo "<pre>";
+print_r($questions);
+echo "</pre>";
 
-
-// Debugging: Check the parsed output
-// echo "<pre>";
-// print_r($answers);
-// echo "</pre>";
-
-
-// echo "<pre>";
-// echo htmlspecialchars($mcq); // Escape HTML for readability
-// echo "</pre>";
-// // echo "<pre>";
-// print_r($mcq_lines);  // Print the lines to check for any unexpected variations in format
-// echo "</pre>";
-
-
+foreach ($questions as $question) {
+    echo "Question: " . htmlspecialchars($question['question']) . "<br>";
+    echo "Correct Answer: " . htmlspecialchars($question['correct_answer']) . "<br>";
+}
 ?>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -125,105 +125,53 @@ if (!empty($question)) {
 </head>
 
 <body>
-<?php include '../includes/sidebar.php'; ?>
-
-<div class="quiz-container">
-    <?php
-    $counter = 1;
-    foreach ($questions as $question) {
-        $isActive = ($counter === 1) ? 'active' : '';
-    ?>
-        <div class="quiz-box <?= $isActive ?>" id="question<?= $counter ?>" data-correct-answer="<?= htmlspecialchars($question['correct_answer']) ?>">
-            <div class="text-center pb-4">
-                <h5 class="font-weight-bold">Question <?= $counter ?> of <?= count($questions) ?></h5>
+    <?php include '../includes/sidebar.php'; ?>
+    <div class="quiz-container">
+        <?php 
+        $counter = 1;
+        foreach ($questions as $question) {
+            $isActive = ($counter === 1) ? 'active' : ''; 
+        ?>
+            <div class="quiz-box <?= $isActive ?>" id="question<?= $counter ?>" data-correct-answer="<?= htmlspecialchars($question['correct_answer']) ?>">
+                <div class="text-center pb-4">
+                    <h5 class="font-weight-bold">Question <?= $counter ?> of <?= count($questions) ?></h5>
+                </div>
+                <h4 class="font-weight-bold"><?= htmlspecialchars($question['question']) ?></h4>
+                <form>
+                    <?php foreach ($question['answers'] as $key => $answer): ?>
+                        <div class="answer-options-container">
+                            <label class="answer-options">
+                                <input type="radio" name="option<?= $counter ?>" value="<?= htmlspecialchars($answer) ?>" data-key="<?= htmlspecialchars($key) ?>">
+                                <?= htmlspecialchars($answer) ?>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    <?php endforeach; ?>
+                </form>
+                <div class="d-flex justify-content-between mt-3">
+                    <?php if ($counter > 1): ?>
+                        <button type="button" class="btn btn-primary" onclick="navigateQuestion(-1)">Previous</button>
+                    <?php endif; ?>
+                    <?php if ($counter < count($questions)): ?>
+                        <button type="button" class="btn btn-primary" onclick="navigateQuestion(1)">Next</button>
+                    <?php else: ?>
+                        <button type="button" class="btn btn-success" onclick="submitQuiz()">Submit</button>
+                    <?php endif; ?>
+                </div>
             </div>
-            <h4 class="font-weight-bold"><?= htmlspecialchars($question['question']) ?></h4>
-            <form>
-                <?php foreach ($question['answers'] as $key => $answer): ?>
-                    <div class="answer-options-container">
-                        <label class="answer-options">
-                            <input type="radio" name="option<?= $counter ?>" value="<?= htmlspecialchars($answer) ?>" data-key="<?= htmlspecialchars($key) ?>">
-                            <?= htmlspecialchars($answer) ?>
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                <?php endforeach; ?>
-            </form>
-            <div class="d-flex justify-content-between mt-3">
-                <?php if ($counter > 1): ?>
-                    <button type="button" class="btn btn-primary" onclick="navigateQuestion(-1)">Previous</button>
-                <?php endif; ?>
-                <?php if ($counter < count($questions)): ?>
-                    <button type="button" class="btn btn-primary" onclick="navigateQuestion(1)">Next</button>
-                <?php else: ?>
-                    <button type="button" class="btn btn-success" onclick="submitQuiz()">Submit</button>
-                <?php endif; ?>
-            </div>
-        </div>
-    <?php
-        $counter++;
-    }
-    ?>
-</div>
+        <?php 
+            $counter++;
+        } 
+        ?>
+    </div>
+
+    
+</body>
 
 
 
-<!-- <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const questions = document.querySelectorAll('.quiz-box');
-    let currentQuestionIndex = 0;
+   
 
-    function showQuestion(index) {
-        questions.forEach((question, idx) => {
-            question.classList.remove('active');
-            if (idx === index) {
-                question.classList.add('active');
-            }
-        });
-    }
-
-    window.navigateQuestion = function (direction) {
-        currentQuestionIndex += direction;
-        if (currentQuestionIndex < 0) {
-            currentQuestionIndex = 0;
-        } else if (currentQuestionIndex >= questions.length) {
-            currentQuestionIndex = questions.length - 1;
-        }
-        showQuestion(currentQuestionIndex);
-    };
-
-    window.submitQuiz = function () {
-        let score = 0;
-        questions.forEach((question, index) => {
-            const correctAnswer = question.dataset.correctAnswer.trim();
-            const selectedOption = document.querySelector(`input[name="option${index + 1}"]:checked`);
-            if (selectedOption && selectedOption.value.trim() === correctAnswer) {
-                score++;
-            }
-        });
-        alert(`You scored ${score} out of ${questions.length}!`);
-    };
-
-    questions.forEach((question, idx) => {
-        const options = question.querySelectorAll('input[type="radio"]');
-        options.forEach(option => {
-            option.addEventListener('click', () => {
-                const correctAnswer = question.dataset.correctAnswer.trim();
-                options.forEach(opt => {
-                    const label = opt.parentElement;
-                    if (opt.value.trim() === correctAnswer) {
-                        label.style.color = 'green';
-                    } else {
-                        label.style.color = 'red';
-                    }
-                });
-            });
-        });
-    });
-
-    showQuestion(currentQuestionIndex);
-});
-</script> -->
 
 
 <script src="../assets/js/sidebar.js"></script>

@@ -38,12 +38,15 @@ document.addEventListener('DOMContentLoaded', function () {
         options.forEach(option => {
             option.addEventListener('click', () => {
                 const correctAnswerKey = question.dataset.correctAnswer.trim();
+                const selectedKey = option.dataset.key.trim();
+                console.log(`Correct Answer: ${correctAnswerKey}`); // Debugging
+                console.log(`Selected Answer: ${selectedKey}`); // Debugging
                 options.forEach(opt => {
                     const label = opt.parentElement;
                     if (opt.dataset.key.trim() === correctAnswerKey) {
-                        label.classList.add('correct');
-                    } else {
-                        label.classList.add('wrong');
+                        label.style.color = 'green'; // Correct answer turns green
+                    } else if (selectedKey === opt.dataset.key.trim()) {
+                        label.style.color = 'red'; // Incorrect answers turn red if selected
                     }
                 });
                 // Disable options after selection
