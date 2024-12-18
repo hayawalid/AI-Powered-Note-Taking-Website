@@ -18,11 +18,6 @@ if (isset($_SESSION['mcq'])) {
     exit;
 }
 
-// Debugging: Display raw MCQ data
-echo "<pre>";
-echo htmlspecialchars($mcq); // Escape HTML for readability
-echo "</pre>";
-
 // Assuming $mcq is a string that contains your MCQs
 $mcq_lines = explode("\n", $mcq);
 $questions = [];
@@ -69,15 +64,9 @@ if (!empty($question)) {
 }
 
 // Debugging: Check the parsed output
-echo "<pre>";
-print_r($questions);
-echo "</pre>";
 
-foreach ($questions as $question) {
-    echo "Question: " . htmlspecialchars($question['question']) . "<br>";
-    echo "Correct Answer: " . htmlspecialchars($question['correct_answer']) . "<br>";
-}
 ?>
+
 
 
 
