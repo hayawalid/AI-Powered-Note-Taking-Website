@@ -1,7 +1,45 @@
 <?php
 include_once '../includes/session.php';
-
+require '../includes/config.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+use GuzzleHttp\Client;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 $current_page = 'Quiz';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['regenerate_mcq'])) {
+    $text = $_SESSION['text'] ?? "No text available.";
+
+    $mcq_prompt = "Generate multiple-choice questions and their answers based on the following text: " . $text . " Format: 
+    **Question x:** 
+    - Question text 
+    a) Option A 
+    b) Option B 
+    c) Option C 
+    d) Option D 
+    **Answer: c)**";
+
+    $client = new Client();
+    $logger = new Logger('gemini_logger');
+    $logger->pushHandler(new StreamHandler(__DIR__ . '/logs/app.log', Logger::DEBUG));
+    
+    try {
+        $response = $client->request('POST', 'http://localhost:3000/summarize', [
+            'json' => [
+                'prompt' => $mcq_prompt
+            ]
+        ]);
+        $data = json_decode($response->getBody(), true);
+        $mcq = $data['summary'] ?? 'No multiple-choice questions available';
+        
+        // Store the MCQs in the session
+        $_SESSION['mcq'] = $mcq;
+        
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        $logger->error('Error in generating MCQs', ['message' => $e->getMessage()]);
+    }
+  }
 
 if (isset($_SESSION['file_id']) && $_SESSION['file_id'] !== null) {
     $file_id = $_SESSION['file_id'];
@@ -64,6 +102,19 @@ if (!empty($question)) {
 }
 
 // Debugging: Check the parsed output
+// echo "<pre>";
+// echo htmlspecialchars($mcq); // Escape HTML for readability
+// echo "</pre>";
+
+// echo "<pre>Parsed Questions:\n";
+// print_r($questions);
+// echo "</pre>";
+
+// // Display parsed questions and answers
+// foreach ($questions as $q) {
+//     echo "Question: " . htmlspecialchars($q['question']) . "<br>";
+//     echo "Correct Answer: " . htmlspecialchars($q['correct_answer']) . "<br>";
+// }
 
 ?>
 
@@ -80,7 +131,7 @@ if (!empty($question)) {
 
     <title>MCQ Quiz</title>
     <link href="../assets/css/mcqquiz.css" rel="stylesheet">
-    <!--     Fonts and icons     -->
+    <!-- Fonts and icons -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -90,7 +141,6 @@ if (!empty($question)) {
 
     <link href="../assets/css/now-ui-dashboard.css" rel="stylesheet" />
     <link href="../assets/css/demo.css" rel="stylesheet" />
-   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         button:not(:enabled) {
@@ -109,12 +159,24 @@ if (!empty($question)) {
             color: black !important; 
             opacity: 1;
         }
+        .buttons-container {
+            text-align: center; /* Center-align the button */
+            margin-bottom: 20px; /* Add some space below the button */
+        }
     </style>
-
 </head>
 
 <body>
     <?php include '../includes/sidebar.php'; ?>
+
+    <div class="buttons-container">
+        <form method="POST">
+            <button type="submit" name="regenerate_mcq" class="btn btn-primary">
+                Regenerate
+            </button>
+        </form>
+    </div>
+
     <div class="quiz-container">
         <?php 
         $counter = 1;
@@ -153,10 +215,7 @@ if (!empty($question)) {
         } 
         ?>
     </div>
-
-    
 </body>
-
 
 
    

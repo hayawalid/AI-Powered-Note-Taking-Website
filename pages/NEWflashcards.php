@@ -63,22 +63,7 @@ if (isset($_SESSION['qa'])) {
     exit;
 }
 
-// Parse the Q&A into flashcards
-// $flashcards = [];
 
-// for ($i = 0; $i < count($qa_lines); $i++) {
-//     if (strpos($qa_lines[$i], 'Question') === 0) {
-//         $question = trim(str_replace("Question " . ($i + 1) . ":", "", $qa_lines[$i]));
-//         $answer = isset($qa_lines[$i + 1]) ? trim(str_replace("Answer " . ($i + 1) . ":", "", $qa_lines[$i + 1])) : "No answer available";
-        
-//         $flashcards[] = [
-//             'question' => $question,
-//             'answer' => $answer,
-//             'name' => 'Flashcard ' . ($i+1)
-//         ];
-//         $i++;
-//     }
-// }
 
 $qa_lines = explode("\n", $qa);
 
@@ -133,7 +118,7 @@ for ($i = 0; $i < count($qa_lines); $i++) {
     <style type="text/css">
     	body{margin-top:20px;}
         .container {
-        margin-left: 150px; /* Adjust this value according to the width of your sidebar */
+        margin-left: 100px; /* Adjust this value according to the width of your sidebar */
         float: right;
         display: flex;
         flex-direction: column; /* Stack elements vertically */
@@ -299,11 +284,7 @@ p.description, .card-back p {
 }
 
 .row {
-    /* display: flex;
-    flex-wrap: wrap;
-    justify-content: left; 
-    gap: 15px;  */
-
+    
 
     flex-grow: 1; /* Take up remaining space above the buttons */
     display: flex; /* If needed, for layout inside the row */

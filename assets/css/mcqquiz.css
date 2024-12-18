@@ -186,6 +186,34 @@ label.answer-options.wrong {
     color: red; /* Wrong answer text color */
 }
 
+
+#saveFormQnA, form[method="POST"] {
+    display: inline-block; /* Ensure buttons stack */
+    margin: 10px 10px 0; /* Center align buttons and add spacing */
+    width: 100%; /* Buttons take full width inside their container */
+    text-align: center;
+}
+
+button {
+    width: 40%; /* Reduce button width */
+    max-width: 200px; /* Optional: limit button width */
+    padding: 8px 16px; /* Reduce button height and padding */
+    font-size: 14px; /* Make text size smaller */
+    margin: 0 5px; /* Reduce space between buttons */
+    border: none;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: center; /* Center align buttons horizontally */
+    gap: 0px; /* Reduced space between buttons */
+    margin-top: 20px;
+}
 /* Mobile responsiveness */
 @media (max-width: 767px) {
     .quiz-container {
