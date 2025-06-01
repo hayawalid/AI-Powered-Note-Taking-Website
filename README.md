@@ -2,7 +2,7 @@
 
 **AI-Powered Note-Taking Assistant for Students**
 
-SmartNotes is a web-based application designed to help students study more effectively. It leverages AI to transcribe lectures, summarize documents, and generate Q&A from study materials—making learning more interactive, personalized, and efficient.
+SmartNotes is a web-based application designed to help students study more effectively. It leverages AI to transcribe lectures, summarize documents, and generate Q&A from study materials, making learning more interactive, personalized, and efficient.
 
 ---
 
