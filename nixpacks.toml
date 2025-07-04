@@ -1,0 +1,10 @@
+[phases.setup]
+nixPkgs = ["php82", "nodejs_18", "mysql80"]
+
+[phases.install]
+cmds = [
+  "npm install"
+]
+
+[start]
+cmd = "php -S 0.0.0.0:$PORT -t pages"
