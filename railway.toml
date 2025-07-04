@@ -2,7 +2,7 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "php -S 0.0.0.0:$PORT -t pages"
+startCommand = "php -S 0.0.0.0:$PORT -t pages -d auto_prepend_file=router.php"
 healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
