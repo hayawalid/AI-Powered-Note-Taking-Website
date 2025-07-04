@@ -43,7 +43,7 @@
 
       <a href="index.php" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <!-- <img src="assets/img/logo.png" alt=""> --> 
         <h1 class="sitename">SmartNotes</h1>
       </a>
 
@@ -53,7 +53,7 @@
           <li><a href="#about">About</a></li>
           <li><a href="#faq">FAQ</a></li>
           
-          <li><a href="#contact1">Contact</a></li>
+          <li><a href="./login.php">Sign In</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -65,12 +65,12 @@
 
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
-      <img src="../assets/images/hero-bg-2.jpg" alt="" class="hero-bg">
+      <img src="../assets/images/background_index8.jpg" alt="" class="hero-bg">
 
       <div class="container">
         <div class="row gy-4 justify-content-between">
           <div class="col-lg-4 order-lg-last hero-img" data-aos="zoom-out" data-aos-delay="100">
-            <img src="../assets/images/hero-imgedited.png" class="img-fluid animated" alt="">
+            <img src="../assets/images/cards.png" class="img-fluid animated" alt="">
           </div>
 
           <div class="col-lg-6  d-flex flex-column justify-content-center" data-aos="fade-in">
@@ -118,7 +118,7 @@
             <div class="row gy-4 icon-boxes">
 
               <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <div class="icon-box">
+                <div class="icon-box pink">
                   <i class="bi bi-mic-fill"></i>
                   <h3>Speech to Text</h3>
                   <p>Convert your spoken words into written notes effortlessly with our integrated speech recognition feature.</p>
@@ -126,7 +126,7 @@
               </div> <!-- End Icon Box -->
 
               <div class="col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <div class="icon-box">
+                <div class="icon-box blue">
                   <i class="bi bi-journal-text"></i>
                   <h3>Note Taking</h3>
                   <p>Easily jot down and organize your thoughts or class notes in an intuitive and user-friendly interface.</p>
@@ -134,7 +134,7 @@
               </div> <!-- End Icon Box -->
 
               <div class="col-md-6" data-aos="fade-up" data-aos-delay="400">
-                <div class="icon-box">
+                <div class="icon-box yellow">
                   <i class="bi bi-question-diamond"></i>
                   <h3>Questions and Answers</h3>
                   <p>Automatically generate relevant questions and answers based on your notes to help reinforce understanding and retention.</p>
@@ -142,7 +142,7 @@
               </div> <!-- End Icon Box -->
 
               <div class="col-md-6" data-aos="fade-up" data-aos-delay="500">
-                <div class="icon-box">
+                <div class="icon-box green">
                   <i class="bi bi-journals"></i>
                   <h3>Summarizing</h3>
                   <p>Quickly generate concise summaries of your notes or lengthy content, saving you time on review and revision.</p>
@@ -218,7 +218,7 @@
           </div>
 
           <div class="col-lg-5 order-1 order-lg-2">
-            <img src="../assets/images/faq.jpg" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="100">
+            <img src="../assets/images/FAQ2.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="100">
           </div>
         </div>
 
@@ -228,11 +228,9 @@
 
    
   </main>
-<section id="contact1">
   <?php
    include 'footer.php';
   ?>
-</section>
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

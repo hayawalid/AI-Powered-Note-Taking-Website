@@ -90,7 +90,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row">
             <div class="col-sm-6 col-md-7 intro-section">
                 <div class="brand-wrapper">
-                    <h1 ><a href="https://stackfindover.com/">SmartNotes</a></h1>
+                    <h1 ><a href="./index.php">SmartNotes</a></h1>
+                    <!-- <h5>Capture ideas. Unlock potential.</h5> -->
                 </div>
                 <div class="intro-content-wrapper">
                     <h3 class="intro-title">Welcome to SmartNotes!</h3>
@@ -120,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input name="login" id="login-btn" class="btn login-btn" type="submit" value="Login">
             </div>
         </form>
-        <p class="login-wrapper-footer-text">Need an account? <a href="#" id="signup-toggle">Signup here</a></p>
+        <p class="login-wrapper-footer-text">Need an account? <a href="#" id="signup-toggle" style="color: #171a59;"> Signup here</a></p>
     </div>
 
                 <!-- Sign Up Form -->

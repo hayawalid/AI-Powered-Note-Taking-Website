@@ -124,81 +124,121 @@ class folder
     }
 
 
-    public static function moveToTrash($id)
+        public static function moveToTrash($id) {
+            global $con;
+    
+            // Retrieve the user_id from session
+            session_start();
+            $user_id = $_SESSION['UserID'];
+    
+            // Find all child folders and move them to trash recursively
+            $sql = "SELECT ID FROM folders WHERE folder_id = $id AND user_id = $user_id";
+            $result = mysqli_query($con, $sql);
+    
+            while ($child = mysqli_fetch_assoc($result)) {
+                self::moveToTrash($child['ID']);
+            }
+    
+            // Get the folder details
+            $sql = "SELECT * FROM folders WHERE ID = $id AND user_id = $user_id";
+            $result = mysqli_query($con, $sql);
+            if ($folder = mysqli_fetch_assoc($result)) {
+                // Assign the parent folder ID and name correctly
+                $parent_folder_id = $folder['folder_id'];
+                $folder_name = $folder['name'];
+    
+                // Begin transaction
+                mysqli_begin_transaction($con);
+    
+                try {
+                    // Move to trash
+                    $trash_sql = "INSERT INTO trash (folder_id, name, user_id) VALUES (?, ?, ?)";
+                    $stmt_trash = $con->prepare($trash_sql);
+                    $stmt_trash->bind_param("isi", $parent_folder_id, $folder_name, $user_id);
+    
+                    if (!$stmt_trash->execute()) {
+                        throw new Exception("Error moving folder to trash: " . $stmt_trash->error);
+                    }
+    
+                    // Delete from folders
+                    $delete_sql = "DELETE FROM folders WHERE ID = ? AND user_id = ?";
+                    $stmt_delete = $con->prepare($delete_sql);
+                    $stmt_delete->bind_param("ii", $id, $user_id);
+    
+                    if (!$stmt_delete->execute()) {
+                        throw new Exception("Error deleting folder: " . $stmt_delete->error);
+                    }
+    
+                    // Commit transaction
+                    mysqli_commit($con);
+                    return true;
+                } catch (Exception $e) {
+                    // Rollback transaction on error
+                    mysqli_rollback($con);
+                    error_log("Error during transaction: " . $e->getMessage());
+                    return false;
+                }
+            } else {
+                error_log("Folder not found: ID = $id, user_id = $user_id");
+                return false;
+            }
+        }
+    
+
+    public function delete()
     {
         global $con;
-
-        // Retrieve the user_id from session
-        session_start();
-        $user_id = $_SESSION['UserID'];
-
-        // Find all child folders and move them to trash recursively
-        $sql = "SELECT ID FROM folders WHERE folder_id = $id AND user_id = $user_id";
-        $result = mysqli_query($con, $sql);
-
-        while ($child = mysqli_fetch_assoc($result)) {
-            self::moveToTrash($child['ID']);
-        }
-
-        // Get the folder details
-        $sql = "SELECT * FROM folders WHERE ID = $id AND user_id = $user_id";
-        $result = mysqli_query($con, $sql);
-        if ($folder = mysqli_fetch_assoc($result)) {
-            echo "Folder found: " . json_encode($folder) . "<br>";
-
-            // Assign the parent folder ID and name correctly
-            $parent_folder_id = $folder['folder_id'];
-            $folder_name = $folder['name'];
-
-            // Begin transaction
-            mysqli_begin_transaction($con);
-
-            try {
-                // Move to trash
-                $trash_sql = "INSERT INTO trash (folder_id, name, user_id) VALUES ($parent_folder_id, '$folder_name', $user_id)";
-                echo $trash_sql . "<br>";
-                if (!mysqli_query($con, $trash_sql)) {
-                    throw new Exception("Error moving folder to trash: " . mysqli_error($con));
-                }
-
-                // Delete from folders
-                $delete_sql = "DELETE FROM folders WHERE ID = $id AND user_id = $user_id";
-                echo $delete_sql . "<br>";
-                if (!mysqli_query($con, $delete_sql)) {
-                    throw new Exception("Error deleting folder: " . mysqli_error($con));
-                }
-
-                // Commit transaction
-                mysqli_commit($con);
-                echo "Deleted from folders<br>";
+        if ($this->ID != 0) {
+            $sql = "DELETE FROM trash WHERE ID = $this->ID";
+            if (mysqli_query($con, $sql)) {
+                echo "Folder permanently deleted from trash.<br>";
                 return true;
-            } catch (Exception $e) {
-                // Rollback transaction on error
-                mysqli_rollback($con);
-                echo $e->getMessage() . "<br>";
+            } else {
+                echo "Error deleting folder: " . mysqli_error($con) . "<br>";
                 return false;
             }
         } else {
-            echo "Error: Folder not found.<br>";
+            echo "Invalid ID. Cannot delete.<br>";
             return false;
         }
     }
-
-
-    public static function readTrash($user_id)
-    {
-        global $con;
-        $sql = "SELECT folder_id, name, DATE_FORMAT(deleted_at, '%Y-%m-%d %H:%i:%s') as deleted_at FROM trash WHERE user_id = $user_id";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $trash = [];
-            while ($row = mysqli_fetch_assoc($result)) {
-                $trash[] = $row;
-            }
-            return $trash;
-        } else {
-            echo "Error: " . mysqli_error($con);
-            return false;
+    public static function readFiltered($user_id, $parent_folder_id, $startDate, $endDate) {
+        global $con; // Assuming $con is the global mysqli connection
+    
+        // Prepare the query
+        $query = "SELECT * FROM folders 
+                  WHERE user_id = ? 
+                  AND folder_id = ? 
+                  AND created_at BETWEEN ? AND ?
+                  ORDER BY created_at DESC";
+    
+        // Use a prepared statement to avoid SQL injection
+        $stmt = $con->prepare($query);
+        if ($stmt === false) {
+            die("Error preparing statement: " . $con->error);
         }
+    
+        // Bind parameters
+        $stmt->bind_param("iiss", $user_id, $parent_folder_id, $startDate, $endDate);
+    
+        // Execute the statement
+        if (!$stmt->execute()) {
+            die("Error executing statement: " . $stmt->error);
+        }
+    
+        // Get the result
+        $result = $stmt->get_result();
+        $folders = [];
+    
+        // Fetch all rows as an associative array
+        while ($row = $result->fetch_assoc()) {
+            $folders[] = $row;
+        }
+    
+        // Close the statement
+        $stmt->close();
+    
+        return $folders;
     }
+    
 }

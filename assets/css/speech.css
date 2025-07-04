@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 
-/* body {
-	background: #ddd;
+body {
+	background: #ebecef  !important;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	min-height: 100vh;
-} */
+}
 
 li {
 	margin-left: 16px;
@@ -18,7 +18,7 @@ a {
 }
 
 .page-title{
-    transform: translatey(-30px);
+	margin-top:5vh;
     margin-left:40vh;
     padding-bottom:5vh;
 }
@@ -34,8 +34,9 @@ a {
 .textArea-container {
 	max-width: 991px;
 	width: 100%;
-	background: #fff;
-	/* border-radius: 8px; */
+	background: #F9F8F8;
+	border-radius: 8px;
+	border: 1px solid #000;
 	overflow: hidden;
     position: absolute;
     margin-left:20%;
@@ -43,7 +44,7 @@ a {
 }
 .toolbar {
 	padding: 16px;
-	background: #dae7ee;
+	background: #d4d5d9;
 }
 .toolbar .head {
 	display: flex !important;
@@ -124,6 +125,34 @@ a {
 	overflow: auto;
     height:45vh;
 }
-#show-code[data-active="true"] {
-	background: #eee;
+
+@media screen and (max-width: 768px) {
+	.toolbar .head {
+		flex-direction: column; /* Stack elements vertically */
+		align-items: flex-start; /* Align to the start of the container */
+	}
+ 
+	.toolbar .head > input,
+	.toolbar .head select,
+	.toolbar .head .color {
+		width: 100%; /* Make child elements take full width */
+		margin-bottom: 8px; /* Add spacing between stacked items */
+	}
+
+	.page-title{
+		margin-top:5vh;
+		margin-left:20vh;
+		padding-bottom:2vh;
+		font-size: 10px;
+	}
+	
 }
+
+
+
+
+
+
+
+
+  

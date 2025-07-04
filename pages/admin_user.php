@@ -2,9 +2,7 @@
   //connect to database
   include '../includes/config.php';
   include '../includes/User.php';
-
-  //resume user session
-  session_start();
+  include_once '../includes/session.php';
 
   //set current page to update sidebar status
   $current_page = 'Admin Profile';
@@ -86,6 +84,7 @@
   <link href="../assets/css/now-ui-dashboard.css" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="../assets/css/demo.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/user_style.css">
   <style>
     .is-invalid-label {
       color: red;
@@ -101,7 +100,7 @@
 
 <body class="user-profile">
   <div class="wrapper ">
-    <?php include '../includes/admin_sidebar.php'; ?>
+    <?php include '../includes/sidebar.php'; ?>
     <div class="main-panel" id="main-panel">
       <!-- Navbar -->
       <?php include '../includes/admin_navbar.php'; ?>
@@ -206,7 +205,7 @@
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table">
+                  <table class="table" id="dataTable">
                     <thead class=" text-primary">
                       <th>
                         Full Name
@@ -249,14 +248,16 @@
   <script src="../assets/js/core/popper.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
   <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!-- Chart JS -->
   <script src="../assets/js/plugins/chartjs.min.js"></script>
   <!--  Notifications Plugin    -->
   <script src="../assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
-  <script src="../assets/js/now-ui-dashboard.js" type="text/javascript"></script>
+  <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
   <script src="../assets/js/demo.js"></script>
   <script src="../assets/js/admin_form_validation.js"></script>
   <script src="../assets/js/delete_user.js"></script>
+  <script src="../assets/js/searchAdmin.js"></script>
 </body>
 </html>
