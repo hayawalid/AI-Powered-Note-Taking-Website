@@ -38,13 +38,9 @@ SmartNotes is a web-based application designed to help students study more effec
 ---
 ![WhatsApp Image 2025-10-23 at 8 50 46 PM-2](https://github.com/user-attachments/assets/5eac5740-2ab6-413a-87d4-8dae91df4760)
 ---
-![WhatsApp Image 2025-10-23 at 8 50 46 PM](https://github.com/user-attachments/assets/83e6de4b-826f-446d-8976-a9abdfce08ab)
----
 ![WhatsApp Image 2025-10-23 at 8 50 47 PM-3](https://github.com/user-attachments/assets/5ee688ea-e27e-4a54-ad26-3269a2ffe6f7)
 ---
 ![WhatsApp Image 2025-10-23 at 8 50 47 PM](https://github.com/user-attachments/assets/0a523847-e1de-4219-9bdf-4ddf761d7356)
----
-![WhatsApp Image 2025-10-23 at 8 50 48 PM-2](https://github.com/user-attachments/assets/bb5a7365-7cdb-4a9f-a028-dc091115952d)
 ---
 ![WhatsApp Image 2025-10-23 at 8 50 48 PM](https://github.com/user-attachments/assets/ca12435b-d767-422c-92a1-7ed54bb729da)
 ---
